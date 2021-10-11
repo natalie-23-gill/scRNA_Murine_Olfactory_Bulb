@@ -9,30 +9,21 @@
 #/projects/bgmp/shared/2021_projects/Yu/BGMP_2021/flowcell_1
 #/projects/bgmp/shared/2021_projects/Yu/BGMP_2021/flowcell_2
 
-# specify the directories of the flowcells 
-f1="/mnt/c/Users/natal/BGMP/bioinformatics/Yu_Project_2021/Preprocessing/combine_files/test_files/flowcell_1/"
-f2="/mnt/c/Users/natal/BGMP/bioinformatics/Yu_Project_2021/Preprocessing/combine_files/test_files/flowcell_2/"
+dir="/projects/bgmp/nelphick/bioinfo/Yu_project/Yu_Project_2021/Preprocessing/combine_files/test_files/"
+f1="flowcell_1"
+f2="flowcell_2"
+samples="$(ls -1 $dir$f1 | grep -v '.txt$')"
+out_dir="combined_files_output"
 
-out_dir="/mnt/c/Users/natal/BGMP/bioinformatics/Yu_Project_2021/Preprocessing/combine_files/output"
-
+cd $dir
 mkdir $out_dir
 
-for dir in $f1 $f2
+for flowcell in $f1 $f2
     do
-    cd $dir
-    # List of LibraryIDs 
-    samples="$(ls -1 $dir | grep -v '.txt$')"
     for sample in $samples
         do
-        cd $sample
-        files=$(ls -1 $dir$sample | grep -v '.txt$')
-        for file in $files
-            do
-            zcat *R1* >> "${out_dir}/${sample}_R1.fq"
-
-        done
+        zcat "${flowcell}/${sample}/"*R1* >> "${out_dir}/${sample}_R1.fastq"
+        zcat "${flowcell}/${sample}/"*R2* >> "${out_dir}/${sample}_R2.fastq"
     done
-    
 done
-
 

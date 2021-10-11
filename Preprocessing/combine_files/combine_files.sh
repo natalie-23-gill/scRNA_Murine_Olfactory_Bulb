@@ -1,18 +1,38 @@
 #!/bin/bash
 
-#SBATCH --partition=bgmp        ### Partition (like a queue in PBS)
-#SBATCH --job-name=combine_files  ### Job Name
-#SBATCH --output=combine_files_%j.out         ### File in which to store job output
-#SBATCH --error=combine_files_%j.err          ### File in which to store job error messages
-#SBATCH --time=0-01:01:00       ### Wall clock time limit in Days-HH:MM:SS
-#SBATCH --nodes=1              ### Number of nodes needed for the job
-#SBATCH --ntasks-per-node=8     ### Number of tasks to be launched per node
-#SBATCH --account=bgmp      ### Account used for job submission
-
-
-
-
+#Created: 10/08/2021
+#Author: Natalie Elphick
+#Script to combine files across lanes and flow-cells so all Read 1s and Read 2s
+#from Library LXXXXX are within a single FASTQ file.
 
 
 #/projects/bgmp/shared/2021_projects/Yu/BGMP_2021/flowcell_1
 #/projects/bgmp/shared/2021_projects/Yu/BGMP_2021/flowcell_2
+
+# specify the directories of the flowcells 
+f1="/mnt/c/Users/natal/BGMP/bioinformatics/Yu_Project_2021/Preprocessing/combine_files/test_files/flowcell_1/"
+f2="/mnt/c/Users/natal/BGMP/bioinformatics/Yu_Project_2021/Preprocessing/combine_files/test_files/flowcell_2/"
+
+out_dir="/mnt/c/Users/natal/BGMP/bioinformatics/Yu_Project_2021/Preprocessing/combine_files/output"
+
+mkdir $out_dir
+
+for dir in $f1 $f2
+    do
+    cd $dir
+    # List of LibraryIDs 
+    samples="$(ls -1 $dir | grep -v '.txt$')"
+    for sample in $samples
+        do
+        cd $sample
+        files=$(ls -1 $dir$sample | grep -v '.txt$')
+        for file in $files
+            do
+            zcat *R1* >> "${out_dir}/${sample}_R1.fq"
+
+        done
+    done
+    
+done
+
+

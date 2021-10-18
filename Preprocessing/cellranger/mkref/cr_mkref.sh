@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Created: 10/17/2021
+# Author: Christina Zakarian
+# Script to run cellranger mkref to perform build of the mouse reference genome to be used for alignment 
+
 #SBATCH --account=bgmp
 #SBATCH --partition=bgmp
 #SBATCH --cpus-per-task=8

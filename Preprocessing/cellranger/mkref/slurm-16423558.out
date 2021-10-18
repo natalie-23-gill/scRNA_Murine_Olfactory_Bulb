@@ -1,0 +1,66 @@
+['/gpfs/projects/bgmp/czakari2/bioinformatics/yu_project/cellranger/cellranger-6.1.1/bin/rna/mkref', '--genome=Mus_musculus.GRCm39.dna.ens104', '--fasta=/projects/bgmp/shared/2021_projects/Yu/mus_musculus/Mus_musculus.GRCm39.dna.primary_assembly.fa', '--genes=/projects/bgmp/shared/2021_projects/Yu/mus_musculus/Mus_musculus.GRCm39.104.gtf', '--nthreads=8']
+Oct 17 17:37:48 ..... started STAR run
+Oct 17 17:37:48 ... starting to generate Genome files
+Oct 17 17:38:50 ... starting to sort Suffix Array. This may take a long time...
+Oct 17 17:38:55 ... sorting Suffix Array chunks and saving them to disk...
+Oct 17 17:43:02 ... loading chunks from disk, packing SA...
+Oct 17 17:43:21 ... finished generating suffix array
+Oct 17 17:43:21 ... generating Suffix Array index
+Oct 17 17:45:00 ... completed Suffix Array index
+Oct 17 17:45:00 ..... processing annotations GTF
+Oct 17 17:45:15 ..... inserting junctions into the genome indices
+Oct 17 17:46:51 ... writing Genome to disk ...
+Oct 17 17:46:52 ... writing Suffix Array to disk ...
+Oct 17 17:46:57 ... writing SAindex to disk
+Oct 17 17:46:58 ..... finished successfully
+Creating new reference folder at /gpfs/projects/bgmp/shared/2021_projects/Yu/cellranger_build/Mus_musculus.GRCm39.dna.ens104
+...done
+
+Writing genome FASTA file into reference folder...
+...done
+
+Indexing genome FASTA file...
+...done
+
+Writing genes GTF file into reference folder...
+...done
+
+Generating STAR genome index (may take over 8 core hours for a 3Gb genome)...
+...done.
+
+Writing genome metadata JSON file into reference folder...
+Computing hash of genome FASTA file...
+...done
+
+Computing hash of genes GTF file...
+...done
+
+...done
+
+>>> Reference successfully created! <<<
+
+You can now specify this reference on the command line:
+cellranger --transcriptome=/gpfs/projects/bgmp/shared/2021_projects/Yu/cellranger_build/Mus_musculus.GRCm39.dna.ens104 ...
+	Command being timed: "cellranger mkref --genome=Mus_musculus.GRCm39.dna.ens104 --fasta=/projects/bgmp/shared/2021_projects/Yu/mus_musculus/Mus_musculus.GRCm39.dna.primary_assembly.fa --genes=/projects/bgmp/shared/2021_projects/Yu/mus_musculus/Mus_musculus.GRCm39.104.gtf --nthreads=8"
+	User time (seconds): 2211.64
+	System time (seconds): 33.61
+	Percent of CPU this job got: 335%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 11:09.89
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 18024456
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 1014277
+	Voluntary context switches: 18940
+	Involuntary context switches: 4082
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

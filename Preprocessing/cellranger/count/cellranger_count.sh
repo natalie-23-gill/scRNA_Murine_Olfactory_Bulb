@@ -6,6 +6,8 @@
 
 #SBATCH --account=bgmp
 #SBATCH --partition=bgmp
+#SBATCH --output=cr_count_%j.out
+#SBATCH --error=cr_count_%j.err
 #SBATCH --cpus-per-task=16
 #SBATCH --nodes=1
 #SBATCH --time=1-00:00:00
@@ -24,4 +26,4 @@ cd $out_dir
 --sample=L35463 \
 --localcores=16
 
-pigz -p 16 sample_L35463
+pigz -p 16 -r sample_L35463

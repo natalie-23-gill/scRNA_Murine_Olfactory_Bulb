@@ -66,8 +66,6 @@ http://ftp.ensembl.org/pub/release-104/fasta/mus_musculus/dna/Mus_musculus.GRCm3
 
 Unzipped fasta and gtf files using gunzip before running mkref command.
 
-#### What version of STAR does cell ranger use??
-
 #### Generate the genome reference using mkref (STAR: 2.7.2a):
 ```
 cd /projects/bgmp/shared/2021_projects/Yu/cellranger_build

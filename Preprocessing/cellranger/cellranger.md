@@ -68,7 +68,7 @@ Unzipped fasta and gtf files using gunzip before running mkref command.
 
 #### What version of STAR does cell ranger use??
 
-#### Generate the genome reference using mkref:
+#### Generate the genome reference using mkref (STAR: 2.7.2a):
 ```
 cd /projects/bgmp/shared/2021_projects/Yu/cellranger_build
 
@@ -88,8 +88,5 @@ cellranger count --id=sample_L35463 \
 --sample=L35463 \
 --localcores=16
 ```
-Full slurm script (cellranger_count.sh) can be found in repo under .../cellranger/count/
+Full slurm script (cellranger_count.sh) and output files can be found in repo under .../cellranger/count/
 
-#### Output from cellranger count test run
-
-???

@@ -1,0 +1,390 @@
+[2021-10-23 21:03:03,868]    INFO [count] Using index /projects/bgmp/nelphick/bioinfo/Yu_project/kallisto/mus_musculus_index/transcriptome.idx to generate BUS file to sample_L35463 from
+[2021-10-23 21:03:03,868]    INFO [count]         /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35463_S1_L001_R1_001.fastq.gz
+[2021-10-23 21:03:03,868]    INFO [count]         /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35463_S1_L001_R2_001.fastq.gz
+[2021-10-23 21:05:44,670]    INFO [count] Sorting BUS file sample_L35463/output.bus to sample_L35463/tmp/output.s.bus
+[2021-10-23 21:05:56,180]    INFO [count] Whitelist not provided
+[2021-10-23 21:05:56,181]    INFO [count] Copying pre-packaged 10XV2 whitelist to sample_L35463
+[2021-10-23 21:05:56,243]    INFO [count] Inspecting BUS file sample_L35463/tmp/output.s.bus
+[2021-10-23 21:06:01,245]    INFO [count] Correcting BUS records in sample_L35463/tmp/output.s.bus to sample_L35463/tmp/output.s.c.bus with whitelist sample_L35463/10x_version2_whitelist.txt
+[2021-10-23 21:06:04,715]    INFO [count] Sorting BUS file sample_L35463/tmp/output.s.c.bus to sample_L35463/output.unfiltered.bus
+[2021-10-23 21:06:10,941]    INFO [count] Generating count matrix sample_L35463/counts_unfiltered/cells_x_genes from BUS file sample_L35463/output.unfiltered.bus
+[2021-10-23 21:06:31,051]    INFO [count] Writing matrix in cellranger format to sample_L35463/counts_unfiltered/cellranger
+[2021-10-23 21:06:52,908]    INFO [count] Filtering with bustools
+[2021-10-23 21:06:52,908]    INFO [count] Generating whitelist sample_L35463/filter_barcodes.txt from BUS file sample_L35463/output.unfiltered.bus
+[2021-10-23 21:06:53,046]    INFO [count] Correcting BUS records in sample_L35463/output.unfiltered.bus to sample_L35463/tmp/output.unfiltered.c.bus with whitelist sample_L35463/filter_barcodes.txt
+[2021-10-23 21:06:57,485]    INFO [count] Sorting BUS file sample_L35463/tmp/output.unfiltered.c.bus to sample_L35463/output.filtered.bus
+[2021-10-23 21:07:01,151]    INFO [count] Generating count matrix sample_L35463/counts_filtered/cells_x_genes from BUS file sample_L35463/output.filtered.bus
+	Command being timed: "kb count -i /projects/bgmp/nelphick/bioinfo/Yu_project/kallisto/mus_musculus_index/transcriptome.idx -g /projects/bgmp/nelphick/bioinfo/Yu_project/kallisto/mus_musculus_index/transcripts_to_genes.txt -x 10xv2 -t 16 --cellranger --filter -o sample_L35463 /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35463_S1_L001_R1_001.fastq.gz /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35463_S1_L001_R2_001.fastq.gz"
+	User time (seconds): 782.94
+	System time (seconds): 16.40
+	Percent of CPU this job got: 323%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 4:07.29
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 4195032
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 1197865
+	Voluntary context switches: 6138
+	Involuntary context switches: 852
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+[2021-10-23 21:07:11,170]    INFO [count] Using index /projects/bgmp/nelphick/bioinfo/Yu_project/kallisto/mus_musculus_index/transcriptome.idx to generate BUS file to sample_L35464 from
+[2021-10-23 21:07:11,170]    INFO [count]         /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35464_S1_L001_R1_001.fastq.gz
+[2021-10-23 21:07:11,170]    INFO [count]         /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35464_S1_L001_R2_001.fastq.gz
+[2021-10-23 21:09:56,136]    INFO [count] Sorting BUS file sample_L35464/output.bus to sample_L35464/tmp/output.s.bus
+[2021-10-23 21:10:08,800]    INFO [count] Whitelist not provided
+[2021-10-23 21:10:08,800]    INFO [count] Copying pre-packaged 10XV2 whitelist to sample_L35464
+[2021-10-23 21:10:08,863]    INFO [count] Inspecting BUS file sample_L35464/tmp/output.s.bus
+[2021-10-23 21:10:13,868]    INFO [count] Correcting BUS records in sample_L35464/tmp/output.s.bus to sample_L35464/tmp/output.s.c.bus with whitelist sample_L35464/10x_version2_whitelist.txt
+[2021-10-23 21:10:17,412]    INFO [count] Sorting BUS file sample_L35464/tmp/output.s.c.bus to sample_L35464/output.unfiltered.bus
+[2021-10-23 21:10:24,079]    INFO [count] Generating count matrix sample_L35464/counts_unfiltered/cells_x_genes from BUS file sample_L35464/output.unfiltered.bus
+[2021-10-23 21:10:41,697]    INFO [count] Writing matrix in cellranger format to sample_L35464/counts_unfiltered/cellranger
+[2021-10-23 21:11:00,029]    INFO [count] Filtering with bustools
+[2021-10-23 21:11:00,029]    INFO [count] Generating whitelist sample_L35464/filter_barcodes.txt from BUS file sample_L35464/output.unfiltered.bus
+[2021-10-23 21:11:00,174]    INFO [count] Correcting BUS records in sample_L35464/output.unfiltered.bus to sample_L35464/tmp/output.unfiltered.c.bus with whitelist sample_L35464/filter_barcodes.txt
+[2021-10-23 21:11:03,757]    INFO [count] Sorting BUS file sample_L35464/tmp/output.unfiltered.c.bus to sample_L35464/output.filtered.bus
+[2021-10-23 21:11:08,229]    INFO [count] Generating count matrix sample_L35464/counts_filtered/cells_x_genes from BUS file sample_L35464/output.filtered.bus
+	Command being timed: "kb count -i /projects/bgmp/nelphick/bioinfo/Yu_project/kallisto/mus_musculus_index/transcriptome.idx -g /projects/bgmp/nelphick/bioinfo/Yu_project/kallisto/mus_musculus_index/transcripts_to_genes.txt -x 10xv2 -t 16 --cellranger --filter -o sample_L35464 /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35464_S1_L001_R1_001.fastq.gz /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35464_S1_L001_R2_001.fastq.gz"
+	User time (seconds): 711.22
+	System time (seconds): 17.05
+	Percent of CPU this job got: 293%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 4:08.28
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 4195032
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 1194253
+	Voluntary context switches: 6606
+	Involuntary context switches: 700
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+[2021-10-23 21:11:19,476]    INFO [count] Using index /projects/bgmp/nelphick/bioinfo/Yu_project/kallisto/mus_musculus_index/transcriptome.idx to generate BUS file to sample_L35465 from
+[2021-10-23 21:11:19,476]    INFO [count]         /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35465_S1_L001_R1_001.fastq.gz
+[2021-10-23 21:11:19,476]    INFO [count]         /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35465_S1_L001_R2_001.fastq.gz
+[2021-10-23 21:14:04,000]    INFO [count] Sorting BUS file sample_L35465/output.bus to sample_L35465/tmp/output.s.bus
+[2021-10-23 21:14:16,491]    INFO [count] Whitelist not provided
+[2021-10-23 21:14:16,491]    INFO [count] Copying pre-packaged 10XV2 whitelist to sample_L35465
+[2021-10-23 21:14:16,554]    INFO [count] Inspecting BUS file sample_L35465/tmp/output.s.bus
+[2021-10-23 21:14:22,378]    INFO [count] Correcting BUS records in sample_L35465/tmp/output.s.bus to sample_L35465/tmp/output.s.c.bus with whitelist sample_L35465/10x_version2_whitelist.txt
+[2021-10-23 21:14:26,362]    INFO [count] Sorting BUS file sample_L35465/tmp/output.s.c.bus to sample_L35465/output.unfiltered.bus
+[2021-10-23 21:14:33,634]    INFO [count] Generating count matrix sample_L35465/counts_unfiltered/cells_x_genes from BUS file sample_L35465/output.unfiltered.bus
+[2021-10-23 21:14:56,495]    INFO [count] Writing matrix in cellranger format to sample_L35465/counts_unfiltered/cellranger
+[2021-10-23 21:15:21,311]    INFO [count] Filtering with bustools
+[2021-10-23 21:15:21,312]    INFO [count] Generating whitelist sample_L35465/filter_barcodes.txt from BUS file sample_L35465/output.unfiltered.bus
+[2021-10-23 21:15:21,473]    INFO [count] Correcting BUS records in sample_L35465/output.unfiltered.bus to sample_L35465/tmp/output.unfiltered.c.bus with whitelist sample_L35465/filter_barcodes.txt
+[2021-10-23 21:15:26,200]    INFO [count] Sorting BUS file sample_L35465/tmp/output.unfiltered.c.bus to sample_L35465/output.filtered.bus
+[2021-10-23 21:15:30,835]    INFO [count] Generating count matrix sample_L35465/counts_filtered/cells_x_genes from BUS file sample_L35465/output.filtered.bus
+	Command being timed: "kb count -i /projects/bgmp/nelphick/bioinfo/Yu_project/kallisto/mus_musculus_index/transcriptome.idx -g /projects/bgmp/nelphick/bioinfo/Yu_project/kallisto/mus_musculus_index/transcripts_to_genes.txt -x 10xv2 -t 16 --cellranger --filter -o sample_L35465 /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35465_S1_L001_R1_001.fastq.gz /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35465_S1_L001_R2_001.fastq.gz"
+	User time (seconds): 797.56
+	System time (seconds): 17.64
+	Percent of CPU this job got: 308%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 4:24.36
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 4195032
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 1199061
+	Voluntary context switches: 6868
+	Involuntary context switches: 933
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+[2021-10-23 21:15:43,846]    INFO [count] Using index /projects/bgmp/nelphick/bioinfo/Yu_project/kallisto/mus_musculus_index/transcriptome.idx to generate BUS file to sample_L35466 from
+[2021-10-23 21:15:43,846]    INFO [count]         /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35466_S1_L001_R1_001.fastq.gz
+[2021-10-23 21:15:43,846]    INFO [count]         /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35466_S1_L001_R2_001.fastq.gz
+[2021-10-23 21:18:08,651]    INFO [count] Sorting BUS file sample_L35466/output.bus to sample_L35466/tmp/output.s.bus
+[2021-10-23 21:18:19,559]    INFO [count] Whitelist not provided
+[2021-10-23 21:18:19,559]    INFO [count] Copying pre-packaged 10XV2 whitelist to sample_L35466
+[2021-10-23 21:18:19,622]    INFO [count] Inspecting BUS file sample_L35466/tmp/output.s.bus
+[2021-10-23 21:18:24,311]    INFO [count] Correcting BUS records in sample_L35466/tmp/output.s.bus to sample_L35466/tmp/output.s.c.bus with whitelist sample_L35466/10x_version2_whitelist.txt
+[2021-10-23 21:18:27,505]    INFO [count] Sorting BUS file sample_L35466/tmp/output.s.c.bus to sample_L35466/output.unfiltered.bus
+[2021-10-23 21:18:33,351]    INFO [count] Generating count matrix sample_L35466/counts_unfiltered/cells_x_genes from BUS file sample_L35466/output.unfiltered.bus
+[2021-10-23 21:18:51,349]    INFO [count] Writing matrix in cellranger format to sample_L35466/counts_unfiltered/cellranger
+[2021-10-23 21:19:10,481]    INFO [count] Filtering with bustools
+[2021-10-23 21:19:10,481]    INFO [count] Generating whitelist sample_L35466/filter_barcodes.txt from BUS file sample_L35466/output.unfiltered.bus
+[2021-10-23 21:19:10,610]    INFO [count] Correcting BUS records in sample_L35466/output.unfiltered.bus to sample_L35466/tmp/output.unfiltered.c.bus with whitelist sample_L35466/filter_barcodes.txt
+[2021-10-23 21:19:14,073]    INFO [count] Sorting BUS file sample_L35466/tmp/output.unfiltered.c.bus to sample_L35466/output.filtered.bus
+[2021-10-23 21:19:18,445]    INFO [count] Generating count matrix sample_L35466/counts_filtered/cells_x_genes from BUS file sample_L35466/output.filtered.bus
+	Command being timed: "kb count -i /projects/bgmp/nelphick/bioinfo/Yu_project/kallisto/mus_musculus_index/transcriptome.idx -g /projects/bgmp/nelphick/bioinfo/Yu_project/kallisto/mus_musculus_index/transcripts_to_genes.txt -x 10xv2 -t 16 --cellranger --filter -o sample_L35466 /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35466_S1_L001_R1_001.fastq.gz /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35466_S1_L001_R2_001.fastq.gz"
+	User time (seconds): 684.93
+	System time (seconds): 15.65
+	Percent of CPU this job got: 309%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 3:46.24
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 4195032
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 1159012
+	Voluntary context switches: 5873
+	Involuntary context switches: 690
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+[2021-10-23 21:19:30,099]    INFO [count] Using index /projects/bgmp/nelphick/bioinfo/Yu_project/kallisto/mus_musculus_index/transcriptome.idx to generate BUS file to sample_L35467 from
+[2021-10-23 21:19:30,099]    INFO [count]         /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35467_S1_L001_R1_001.fastq.gz
+[2021-10-23 21:19:30,099]    INFO [count]         /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35467_S1_L001_R2_001.fastq.gz
+[2021-10-23 21:22:18,317]    INFO [count] Sorting BUS file sample_L35467/output.bus to sample_L35467/tmp/output.s.bus
+[2021-10-23 21:22:29,963]    INFO [count] Whitelist not provided
+[2021-10-23 21:22:29,963]    INFO [count] Copying pre-packaged 10XV2 whitelist to sample_L35467
+[2021-10-23 21:22:30,029]    INFO [count] Inspecting BUS file sample_L35467/tmp/output.s.bus
+[2021-10-23 21:22:35,056]    INFO [count] Correcting BUS records in sample_L35467/tmp/output.s.bus to sample_L35467/tmp/output.s.c.bus with whitelist sample_L35467/10x_version2_whitelist.txt
+[2021-10-23 21:22:38,487]    INFO [count] Sorting BUS file sample_L35467/tmp/output.s.c.bus to sample_L35467/output.unfiltered.bus
+[2021-10-23 21:22:44,746]    INFO [count] Generating count matrix sample_L35467/counts_unfiltered/cells_x_genes from BUS file sample_L35467/output.unfiltered.bus
+[2021-10-23 21:23:04,766]    INFO [count] Writing matrix in cellranger format to sample_L35467/counts_unfiltered/cellranger
+[2021-10-23 21:23:26,144]    INFO [count] Filtering with bustools
+[2021-10-23 21:23:26,144]    INFO [count] Generating whitelist sample_L35467/filter_barcodes.txt from BUS file sample_L35467/output.unfiltered.bus
+[2021-10-23 21:23:26,279]    INFO [count] Correcting BUS records in sample_L35467/output.unfiltered.bus to sample_L35467/tmp/output.unfiltered.c.bus with whitelist sample_L35467/filter_barcodes.txt
+[2021-10-23 21:23:30,452]    INFO [count] Sorting BUS file sample_L35467/tmp/output.unfiltered.c.bus to sample_L35467/output.filtered.bus
+[2021-10-23 21:23:34,244]    INFO [count] Generating count matrix sample_L35467/counts_filtered/cells_x_genes from BUS file sample_L35467/output.filtered.bus
+	Command being timed: "kb count -i /projects/bgmp/nelphick/bioinfo/Yu_project/kallisto/mus_musculus_index/transcriptome.idx -g /projects/bgmp/nelphick/bioinfo/Yu_project/kallisto/mus_musculus_index/transcripts_to_genes.txt -x 10xv2 -t 16 --cellranger --filter -o sample_L35467 /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35467_S1_L001_R1_001.fastq.gz /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35467_S1_L001_R2_001.fastq.gz"
+	User time (seconds): 844.78
+	System time (seconds): 16.63
+	Percent of CPU this job got: 337%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 4:15.04
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 4195032
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 1189801
+	Voluntary context switches: 6220
+	Involuntary context switches: 1107
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+[2021-10-23 21:23:45,141]    INFO [count] Using index /projects/bgmp/nelphick/bioinfo/Yu_project/kallisto/mus_musculus_index/transcriptome.idx to generate BUS file to sample_L35468 from
+[2021-10-23 21:23:45,141]    INFO [count]         /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35468_S1_L001_R1_001.fastq.gz
+[2021-10-23 21:23:45,141]    INFO [count]         /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35468_S1_L001_R2_001.fastq.gz
+[2021-10-23 21:26:23,181]    INFO [count] Sorting BUS file sample_L35468/output.bus to sample_L35468/tmp/output.s.bus
+[2021-10-23 21:26:35,331]    INFO [count] Whitelist not provided
+[2021-10-23 21:26:35,331]    INFO [count] Copying pre-packaged 10XV2 whitelist to sample_L35468
+[2021-10-23 21:26:35,395]    INFO [count] Inspecting BUS file sample_L35468/tmp/output.s.bus
+[2021-10-23 21:26:42,108]    INFO [count] Correcting BUS records in sample_L35468/tmp/output.s.bus to sample_L35468/tmp/output.s.c.bus with whitelist sample_L35468/10x_version2_whitelist.txt
+[2021-10-23 21:26:46,484]    INFO [count] Sorting BUS file sample_L35468/tmp/output.s.c.bus to sample_L35468/output.unfiltered.bus
+[2021-10-23 21:26:54,719]    INFO [count] Generating count matrix sample_L35468/counts_unfiltered/cells_x_genes from BUS file sample_L35468/output.unfiltered.bus
+[2021-10-23 21:27:23,580]    INFO [count] Writing matrix in cellranger format to sample_L35468/counts_unfiltered/cellranger
+[2021-10-23 21:27:54,984]    INFO [count] Filtering with bustools
+[2021-10-23 21:27:54,984]    INFO [count] Generating whitelist sample_L35468/filter_barcodes.txt from BUS file sample_L35468/output.unfiltered.bus
+[2021-10-23 21:27:55,162]    INFO [count] Correcting BUS records in sample_L35468/output.unfiltered.bus to sample_L35468/tmp/output.unfiltered.c.bus with whitelist sample_L35468/filter_barcodes.txt
+[2021-10-23 21:28:01,345]    INFO [count] Sorting BUS file sample_L35468/tmp/output.unfiltered.c.bus to sample_L35468/output.filtered.bus
+[2021-10-23 21:28:05,601]    INFO [count] Generating count matrix sample_L35468/counts_filtered/cells_x_genes from BUS file sample_L35468/output.filtered.bus
+	Command being timed: "kb count -i /projects/bgmp/nelphick/bioinfo/Yu_project/kallisto/mus_musculus_index/transcriptome.idx -g /projects/bgmp/nelphick/bioinfo/Yu_project/kallisto/mus_musculus_index/transcripts_to_genes.txt -x 10xv2 -t 16 --cellranger --filter -o sample_L35468 /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35468_S1_L001_R1_001.fastq.gz /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35468_S1_L001_R2_001.fastq.gz"
+	User time (seconds): 800.29
+	System time (seconds): 17.98
+	Percent of CPU this job got: 299%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 4:33.62
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 4195032
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 1202905
+	Voluntary context switches: 6956
+	Involuntary context switches: 1236
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+[2021-10-23 21:28:18,777]    INFO [count] Using index /projects/bgmp/nelphick/bioinfo/Yu_project/kallisto/mus_musculus_index/transcriptome.idx to generate BUS file to sample_L35469 from
+[2021-10-23 21:28:18,777]    INFO [count]         /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35469_S1_L001_R1_001.fastq.gz
+[2021-10-23 21:28:18,777]    INFO [count]         /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35469_S1_L001_R2_001.fastq.gz
+[2021-10-23 21:31:08,235]    INFO [count] Sorting BUS file sample_L35469/output.bus to sample_L35469/tmp/output.s.bus
+[2021-10-23 21:31:20,406]    INFO [count] Whitelist not provided
+[2021-10-23 21:31:20,406]    INFO [count] Copying pre-packaged 10XV2 whitelist to sample_L35469
+[2021-10-23 21:31:20,470]    INFO [count] Inspecting BUS file sample_L35469/tmp/output.s.bus
+[2021-10-23 21:31:25,775]    INFO [count] Correcting BUS records in sample_L35469/tmp/output.s.bus to sample_L35469/tmp/output.s.c.bus with whitelist sample_L35469/10x_version2_whitelist.txt
+[2021-10-23 21:31:29,363]    INFO [count] Sorting BUS file sample_L35469/tmp/output.s.c.bus to sample_L35469/output.unfiltered.bus
+[2021-10-23 21:31:36,024]    INFO [count] Generating count matrix sample_L35469/counts_unfiltered/cells_x_genes from BUS file sample_L35469/output.unfiltered.bus
+[2021-10-23 21:31:56,336]    INFO [count] Writing matrix in cellranger format to sample_L35469/counts_unfiltered/cellranger
+[2021-10-23 21:32:17,616]    INFO [count] Filtering with bustools
+[2021-10-23 21:32:17,616]    INFO [count] Generating whitelist sample_L35469/filter_barcodes.txt from BUS file sample_L35469/output.unfiltered.bus
+[2021-10-23 21:32:17,761]    INFO [count] Correcting BUS records in sample_L35469/output.unfiltered.bus to sample_L35469/tmp/output.unfiltered.c.bus with whitelist sample_L35469/filter_barcodes.txt
+[2021-10-23 21:32:21,645]    INFO [count] Sorting BUS file sample_L35469/tmp/output.unfiltered.c.bus to sample_L35469/output.filtered.bus
+[2021-10-23 21:32:26,247]    INFO [count] Generating count matrix sample_L35469/counts_filtered/cells_x_genes from BUS file sample_L35469/output.filtered.bus
+	Command being timed: "kb count -i /projects/bgmp/nelphick/bioinfo/Yu_project/kallisto/mus_musculus_index/transcriptome.idx -g /projects/bgmp/nelphick/bioinfo/Yu_project/kallisto/mus_musculus_index/transcripts_to_genes.txt -x 10xv2 -t 16 --cellranger --filter -o sample_L35469 /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35469_S1_L001_R1_001.fastq.gz /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35469_S1_L001_R2_001.fastq.gz"
+	User time (seconds): 823.67
+	System time (seconds): 17.40
+	Percent of CPU this job got: 322%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 4:20.57
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 4195032
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 1202637
+	Voluntary context switches: 6670
+	Involuntary context switches: 987
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+[2021-10-23 21:32:39,365]    INFO [count] Using index /projects/bgmp/nelphick/bioinfo/Yu_project/kallisto/mus_musculus_index/transcriptome.idx to generate BUS file to sample_L35470 from
+[2021-10-23 21:32:39,365]    INFO [count]         /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35470_S1_L001_R1_001.fastq.gz
+[2021-10-23 21:32:39,365]    INFO [count]         /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35470_S1_L001_R2_001.fastq.gz
+[2021-10-23 21:35:34,586]    INFO [count] Sorting BUS file sample_L35470/output.bus to sample_L35470/tmp/output.s.bus
+[2021-10-23 21:35:48,183]    INFO [count] Whitelist not provided
+[2021-10-23 21:35:48,183]    INFO [count] Copying pre-packaged 10XV2 whitelist to sample_L35470
+[2021-10-23 21:35:48,247]    INFO [count] Inspecting BUS file sample_L35470/tmp/output.s.bus
+[2021-10-23 21:35:54,482]    INFO [count] Correcting BUS records in sample_L35470/tmp/output.s.bus to sample_L35470/tmp/output.s.c.bus with whitelist sample_L35470/10x_version2_whitelist.txt
+[2021-10-23 21:35:58,862]    INFO [count] Sorting BUS file sample_L35470/tmp/output.s.c.bus to sample_L35470/output.unfiltered.bus
+[2021-10-23 21:36:06,774]    INFO [count] Generating count matrix sample_L35470/counts_unfiltered/cells_x_genes from BUS file sample_L35470/output.unfiltered.bus
+[2021-10-23 21:36:31,663]    INFO [count] Writing matrix in cellranger format to sample_L35470/counts_unfiltered/cellranger
+[2021-10-23 21:36:58,231]    INFO [count] Filtering with bustools
+[2021-10-23 21:36:58,231]    INFO [count] Generating whitelist sample_L35470/filter_barcodes.txt from BUS file sample_L35470/output.unfiltered.bus
+[2021-10-23 21:36:58,598]    INFO [count] Correcting BUS records in sample_L35470/output.unfiltered.bus to sample_L35470/tmp/output.unfiltered.c.bus with whitelist sample_L35470/filter_barcodes.txt
+[2021-10-23 21:37:03,952]    INFO [count] Sorting BUS file sample_L35470/tmp/output.unfiltered.c.bus to sample_L35470/output.filtered.bus
+[2021-10-23 21:37:08,877]    INFO [count] Generating count matrix sample_L35470/counts_filtered/cells_x_genes from BUS file sample_L35470/output.filtered.bus
+	Command being timed: "kb count -i /projects/bgmp/nelphick/bioinfo/Yu_project/kallisto/mus_musculus_index/transcriptome.idx -g /projects/bgmp/nelphick/bioinfo/Yu_project/kallisto/mus_musculus_index/transcripts_to_genes.txt -x 10xv2 -t 16 --cellranger --filter -o sample_L35470 /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35470_S1_L001_R1_001.fastq.gz /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35470_S1_L001_R2_001.fastq.gz"
+	User time (seconds): 848.10
+	System time (seconds): 18.58
+	Percent of CPU this job got: 305%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 4:43.49
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 4195032
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 1208754
+	Voluntary context switches: 7563
+	Involuntary context switches: 1161
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+[2021-10-23 21:37:22,855]    INFO [count] Using index /projects/bgmp/nelphick/bioinfo/Yu_project/kallisto/mus_musculus_index/transcriptome.idx to generate BUS file to sample_L35472 from
+[2021-10-23 21:37:22,856]    INFO [count]         /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35472_S1_L001_R1_001.fastq.gz
+[2021-10-23 21:37:22,856]    INFO [count]         /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35472_S1_L001_R2_001.fastq.gz
+[2021-10-23 21:40:00,988]    INFO [count] Sorting BUS file sample_L35472/output.bus to sample_L35472/tmp/output.s.bus
+[2021-10-23 21:40:11,572]    INFO [count] Whitelist not provided
+[2021-10-23 21:40:11,572]    INFO [count] Copying pre-packaged 10XV2 whitelist to sample_L35472
+[2021-10-23 21:40:11,635]    INFO [count] Inspecting BUS file sample_L35472/tmp/output.s.bus
+[2021-10-23 21:40:16,322]    INFO [count] Correcting BUS records in sample_L35472/tmp/output.s.bus to sample_L35472/tmp/output.s.c.bus with whitelist sample_L35472/10x_version2_whitelist.txt
+[2021-10-23 21:40:19,502]    INFO [count] Sorting BUS file sample_L35472/tmp/output.s.c.bus to sample_L35472/output.unfiltered.bus
+[2021-10-23 21:40:25,412]    INFO [count] Generating count matrix sample_L35472/counts_unfiltered/cells_x_genes from BUS file sample_L35472/output.unfiltered.bus
+[2021-10-23 21:40:43,806]    INFO [count] Writing matrix in cellranger format to sample_L35472/counts_unfiltered/cellranger
+[2021-10-23 21:41:03,014]    INFO [count] Filtering with bustools
+[2021-10-23 21:41:03,014]    INFO [count] Generating whitelist sample_L35472/filter_barcodes.txt from BUS file sample_L35472/output.unfiltered.bus
+[2021-10-23 21:41:03,138]    INFO [count] Correcting BUS records in sample_L35472/output.unfiltered.bus to sample_L35472/tmp/output.unfiltered.c.bus with whitelist sample_L35472/filter_barcodes.txt
+[2021-10-23 21:41:06,747]    INFO [count] Sorting BUS file sample_L35472/tmp/output.unfiltered.c.bus to sample_L35472/output.filtered.bus
+[2021-10-23 21:41:10,386]    INFO [count] Generating count matrix sample_L35472/counts_filtered/cells_x_genes from BUS file sample_L35472/output.filtered.bus
+	Command being timed: "kb count -i /projects/bgmp/nelphick/bioinfo/Yu_project/kallisto/mus_musculus_index/transcriptome.idx -g /projects/bgmp/nelphick/bioinfo/Yu_project/kallisto/mus_musculus_index/transcripts_to_genes.txt -x 10xv2 -t 16 --cellranger --filter -o sample_L35472 /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35472_S1_L001_R1_001.fastq.gz /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35472_S1_L001_R2_001.fastq.gz"
+	User time (seconds): 809.29
+	System time (seconds): 15.76
+	Percent of CPU this job got: 347%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 3:57.64
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 4195032
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 1161604
+	Voluntary context switches: 5738
+	Involuntary context switches: 947
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+[2021-10-23 21:41:20,505]    INFO [count] Using index /projects/bgmp/nelphick/bioinfo/Yu_project/kallisto/mus_musculus_index/transcriptome.idx to generate BUS file to sample_L35471 from
+[2021-10-23 21:41:20,505]    INFO [count]         /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35471_S1_L001_R1_001.fastq.gz
+[2021-10-23 21:41:20,505]    INFO [count]         /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35471_S1_L001_R2_001.fastq.gz
+[2021-10-23 21:43:53,993]    INFO [count] Sorting BUS file sample_L35471/output.bus to sample_L35471/tmp/output.s.bus
+[2021-10-23 21:44:04,413]    INFO [count] Whitelist not provided
+[2021-10-23 21:44:04,413]    INFO [count] Copying pre-packaged 10XV2 whitelist to sample_L35471
+[2021-10-23 21:44:04,476]    INFO [count] Inspecting BUS file sample_L35471/tmp/output.s.bus
+[2021-10-23 21:44:08,467]    INFO [count] Correcting BUS records in sample_L35471/tmp/output.s.bus to sample_L35471/tmp/output.s.c.bus with whitelist sample_L35471/10x_version2_whitelist.txt
+[2021-10-23 21:44:11,222]    INFO [count] Sorting BUS file sample_L35471/tmp/output.s.c.bus to sample_L35471/output.unfiltered.bus
+[2021-10-23 21:44:17,152]    INFO [count] Generating count matrix sample_L35471/counts_unfiltered/cells_x_genes from BUS file sample_L35471/output.unfiltered.bus
+[2021-10-23 21:44:31,282]    INFO [count] Writing matrix in cellranger format to sample_L35471/counts_unfiltered/cellranger
+[2021-10-23 21:44:46,051]    INFO [count] Filtering with bustools
+[2021-10-23 21:44:46,051]    INFO [count] Generating whitelist sample_L35471/filter_barcodes.txt from BUS file sample_L35471/output.unfiltered.bus
+[2021-10-23 21:44:46,158]    INFO [count] Correcting BUS records in sample_L35471/output.unfiltered.bus to sample_L35471/tmp/output.unfiltered.c.bus with whitelist sample_L35471/filter_barcodes.txt
+[2021-10-23 21:44:48,830]    INFO [count] Sorting BUS file sample_L35471/tmp/output.unfiltered.c.bus to sample_L35471/output.filtered.bus
+[2021-10-23 21:44:52,190]    INFO [count] Generating count matrix sample_L35471/counts_filtered/cells_x_genes from BUS file sample_L35471/output.filtered.bus
+	Command being timed: "kb count -i /projects/bgmp/nelphick/bioinfo/Yu_project/kallisto/mus_musculus_index/transcriptome.idx -g /projects/bgmp/nelphick/bioinfo/Yu_project/kallisto/mus_musculus_index/transcripts_to_genes.txt -x 10xv2 -t 16 --cellranger --filter -o sample_L35471 /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35471_S1_L001_R1_001.fastq.gz /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/L35471_S1_L001_R2_001.fastq.gz"
+	User time (seconds): 739.04
+	System time (seconds): 14.95
+	Percent of CPU this job got: 343%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 3:39.81
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 4195032
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 1125798
+	Voluntary context switches: 5495
+	Involuntary context switches: 878
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

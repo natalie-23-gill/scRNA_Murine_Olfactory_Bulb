@@ -27,7 +27,9 @@ for sample in $samples
     do
     kb count -i /projects/bgmp/nelphick/bioinfo/Yu_project/kallisto/mus_musculus_index/transcriptome.idx \
     -g /projects/bgmp/nelphick/bioinfo/Yu_project/kallisto/mus_musculus_index/transcripts_to_genes.txt \
-    -x 10xv2 -t 16 --report \
+    -x 10xv2 -t 16 --report -o $out_dir/sample_$sample \
     /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/$sample_S1_L001_R1_001.fastq.gz \
     /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/$sample_S1_L001_R2_001.fastq.gz
 done
+
+pigz -p 16 -r sample_*

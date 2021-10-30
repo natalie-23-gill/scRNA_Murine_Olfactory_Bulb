@@ -14,8 +14,8 @@
 
 conda activate scRNA
 
-/usr/bin/time -v kb ref -i /projects/bgmp/nelphick/bioinfo/Yu_project/kallisto/mus_musculus_index/transcriptome.idx \
--g /projects/bgmp/nelphick/bioinfo/Yu_project/kallisto/mus_musculus_index/transcripts_to_genes.txt \
--f1 /projects/bgmp/nelphick/bioinfo/Yu_project/kallisto/mus_musculus_index/cdna.fa \
+/usr/bin/time -v kb ref -i /projects/bgmp/shared/2021_projects/Yu/kb_ref_index/transcriptome.idx \
+-g /projects/bgmp/shared/2021_projects/Yu/kb_ref_index/transcripts_to_genes.txt \
+-f1 /projects/bgmp/shared/2021_projects/Yu/kb_ref_index/cdna.fa \
 /projects/bgmp/shared/2021_projects/Yu/mus_musculus/Mus_musculus.GRCm39.dna.primary_assembly.fa \
 /projects/bgmp/shared/2021_projects/Yu/mus_musculus/Mus_musculus.GRCm39.104.gtf

@@ -26,11 +26,11 @@ cd $out_dir
 for sample in $samples
     do
     mkdir sample_$sample
-    /usr/bin/time -v kb count -i /projects/bgmp/nelphick/bioinfo/Yu_project/kallisto/mus_musculus_index/transcriptome.idx \
-    -g /projects/bgmp/nelphick/bioinfo/Yu_project/kallisto/mus_musculus_index/transcripts_to_genes.txt \
-    -x 10xv2 -t 16 --cellranger --filter -o sample_$sample \
+    /usr/bin/time -v kb count -i /projects/bgmp/shared/2021_projects/Yu/kb_ref_index/transcriptome.idx \
+    -g /projects/bgmp/shared/2021_projects/Yu/kb_ref_index/transcripts_to_genes.txt \
+    -x 10xv2 -t 16 --filter -o sample_$sample \
     /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/${sample}_S1_L001_R1_001.fastq.gz \
     /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output/${sample}_S1_L001_R2_001.fastq.gz
 done
 
-pigz -p 16 -r sample_*
+/usr/bin/time -v pigz -p 16 -r sample_*

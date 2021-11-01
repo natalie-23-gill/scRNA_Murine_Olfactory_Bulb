@@ -1,0 +1,117 @@
+---
+title: "Preprocessing Pipeline Comparison"
+author: "Natalie Elphick, Laura Paez, Christina Zakarian"
+date: "10/31/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      warning = FALSE,
+                      message = FALSE)
+library(Seurat)
+library(tidyverse)
+```
+
+```{r}
+samples = read_delim("samples.txt", delim="\n",col_names=FALSE) %>% pull(X1)
+
+cr_total_cells = c()
+cr_total_genes = c()
+cr_med_gene_count = c()
+cr_med_umi_count = c()
+
+kb_total_cells = c()
+kb_total_genes = c()
+kb_med_gene_count = c()
+kb_med_umi_count = c()
+
+for (i in 1:length(samples)) {
+
+  
+  seurat_obj_cr = readRDS(paste0("cr_rds/sample_",samples[i],"_cr.rds"))
+  seurat_obj_kb = readRDS(paste0("kb_rds/sample_",samples[i],"_kb.rds"))
+  #seurat_obj_kb = readRDS(paste0())
+  
+  cr_total_cells[i] = ncol(seurat_obj_cr@assays[["RNA"]]@counts)
+  cr_total_genes [i] = nrow(seurat_obj_cr@assays[["RNA"]]@counts)
+
+  cr_genes_per_cell = seurat_obj_cr@meta.data$nFeature_RNA
+  cr_umis_per_cell = seurat_obj_cr@meta.data$nCount_RNA
+
+  cr_med_gene_count[i] = median(cr_genes_per_cell)
+  cr_med_umi_count[i] = median(cr_umis_per_cell)
+
+  kb_total_cells[i] = ncol(seurat_obj_kb@assays[["RNA"]]@counts)
+  kb_total_genes [i] = nrow(seurat_obj_kb@assays[["RNA"]]@counts)
+
+  kb_genes_per_cell = seurat_obj_kb@meta.data$nFeature_RNA
+  kb_umis_per_cell = seurat_obj_kb@meta.data$nCount_RNA
+
+  kb_med_gene_count[i] = median(kb_genes_per_cell)
+  kb_med_umi_count[i] = median(kb_umis_per_cell)
+  
+}
+```
+
+```{r}
+
+timepoints = readxl::read_xlsx("Olfactory_Bulb_Summary.xlsx",sheet = 4) %>%
+  rename_all(list(~make.names(.))) %>%
+  separate(Sample.Name, sep = "-",into = c("Tissue","Timepoint")) %>%
+  select(Timepoint,Library.ID) %>%
+  rename(Sample = Library.ID)
+
+
+#strrep
+cr_df = tibble(Sample = samples,
+               Pipeline = "CellRanger",
+               Total_Cells = cr_total_cells,
+               Total_Genes = cr_total_genes,
+               Median_Gene_Count = cr_med_gene_count,
+               Median_UMI_Count = cr_med_umi_count)
+
+kb_df = tibble(Sample = samples,
+               Pipeline = "Kallisto",
+               Total_Cells = kb_total_cells,
+               Total_Genes = kb_total_genes,
+               Median_Gene_Count = kb_med_gene_count,
+               Median_UMI_Count = kb_med_umi_count)
+
+pipeline_comparison = cr_df %>%
+  full_join(kb_df) %>%
+  full_join(timepoints) %>%
+  select(Timepoint,Sample,everything()) %>%
+  mutate(Timepoint = factor(Timepoint,
+                            levels = c("E14","E18","P0","P3","P5","P7","P10","P14","P21","Adult"))) %>%
+  arrange(Timepoint)
+
+write_csv(pipeline_comparison,"pipeline_comparison.csv")
+
+```
+
+```{r}
+pipeline_comparison %>%
+  ggplot(aes(x=Timepoint,y=Total_Cells,fill=Pipeline))+
+  geom_bar(stat = "identity",position = "dodge")
+```
+```{r}
+pipeline_comparison %>%
+  ggplot(aes(x=Timepoint,y=Total_Genes,fill=Pipeline))+
+  geom_bar(stat = "identity",position = "dodge")
+```
+
+
+```{r}
+pipeline_comparison %>%
+  ggplot(aes(x=Timepoint,y=Median_Gene_Count,fill=Pipeline))+
+  geom_bar(stat = "identity",position = "dodge")
+```
+
+```{r}
+pipeline_comparison %>%
+  ggplot(aes(x=Timepoint,y=Median_UMI_Count,fill=Pipeline))+
+  geom_bar(stat = "identity",position = "dodge")
+```
+
+

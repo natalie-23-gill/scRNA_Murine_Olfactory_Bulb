@@ -138,12 +138,14 @@ genes_cr = list()
 genes_kb = list()
 genes_cr_only = list()
 genes_kb_only = list()
+genes_both = list()
 
 for (i in 1:length(samples)) {
   genes_cr[[i]] = rownames(seurat_obj_cr[[i]]@assays[["RNA"]]@counts)
   genes_kb[[i]] = rownames(seurat_obj_kb[[i]]@assays[["RNA"]]@counts)
   genes_cr_only[[i]] = setdiff(genes_cr[[i]], genes_kb[[i]])
   genes_kb_only[[i]] = setdiff(genes_kb[[i]], genes_cr[[i]])
+  genes_both[[i]] = intersect(genes_kb[[i]], genes_cr[[i]])
 }
 
 # Get set of genes that are present across all 10 samples for each group
@@ -151,7 +153,25 @@ genes_across_samples_cr = Reduce(intersect, genes_cr)
 genes_across_samples_kb = Reduce(intersect, genes_kb)
 genes_across_samples_cr_only = Reduce(intersect, genes_cr_only)
 genes_across_samples_kb_only = Reduce(intersect, genes_kb_only)
+genes_across_samples_both = Reduce(intersect, genes_both)
 ```
+
+```{r}
+
+
+# Loop through the samples, getting the counts for the genes that are in genes_across_samples_both and storing each in a matrix
+
+rowSums(seurat_obj_cr[[1]]@assays[["RNA"]]@counts)->m 
+
+as.matrix(rowSums(seurat_obj_cr[[1]]))->m
+
+as.matrix(m[rownames(m) %in% genes_across_samples_both,])->x
+
+
+
+
+```
+
 
 ```{r biomart}
 # Select Ensembl BioMart database and dataset
@@ -170,14 +190,44 @@ genes_cr_tib = inner_join(bm_tib, tibble(Gene_Name=genes_across_samples_cr))
 genes_kb_tib = inner_join(bm_tib, tibble(Gene_Name=genes_across_samples_kb))
 genes_cr_only_tib = inner_join(bm_tib, tibble(Gene_Name=genes_across_samples_cr_only))
 genes_kb_only_tib = inner_join(bm_tib, tibble(Gene_Name=genes_across_samples_kb_only))
+
+
+# Genes with no gene names kb (only 52, mostly miRNAs)
+#inner_join(bm_tib, tibble(Gene_ID=genes_across_samples_kb)) %>%
+#  view()
+# Genes with no gene names cr (only 9)
+#inner_join(bm_tib, tibble(Gene_ID=genes_across_samples_cr)) %>%
+#  view()
+
 ```
 
 ```{r}
 # Get counts for gene types (protein coding, lncRNA, etc)
-gene_type_count_cr = genes_cr_tib %>% group_by(Gene_Type) %>% summarize("count_cr" = n())
-gene_type_count_kb = genes_kb_tib %>% group_by(Gene_Type) %>% summarize("count_kb" = n())
-gene_type_count_cr_only = genes_cr_only_tib %>% group_by(Gene_Type) %>% summarize("count_cr_only" = n())
-gene_type_count_kb_only = genes_kb_only_tib %>% group_by(Gene_Type) %>% summarize("count_kb_only" = n())
+gene_type_count_cr = genes_cr_tib %>%
+  group_by(Gene_Type) %>%
+  summarize("count" = n()) %>%
+  ungroup() %>%
+  mutate(Pipeline = "Cellranger")
+
+gene_type_count_kb = genes_kb_tib %>%
+  group_by(Gene_Type) %>%
+  summarize("count" = n()) %>%
+  ungroup() %>%
+  mutate(Pipeline = "Kallisto")
+
+gene_type_count_cr_only = genes_cr_only_tib %>%
+  group_by(Gene_Type) %>%
+  summarize("count" = n()) %>%
+  ungroup() %>%
+  mutate(Pipeline = "Cellranger Only")
+
+
+
+gene_type_count_kb_only = genes_kb_only_tib %>%
+  group_by(Gene_Type) %>%
+  summarize("count" = n()) %>%
+  ungroup() %>%
+  mutate(Pipeline = "Kallisto Only")
 
 gene_type_count_tib = gene_type_count_cr %>%
   full_join(gene_type_count_kb) %>%
@@ -185,5 +235,15 @@ gene_type_count_tib = gene_type_count_cr %>%
   full_join(gene_type_count_kb_only)
 
 ```
+```{r}
+gene_type_count_tib %>%
+  filter(Pipeline == "Cellranger Only" | Pipeline == "Kallisto Only") %>%
+  filter(Gene_Type == "protein_coding" | Gene_Type == "lncRNA" | Gene_Type == "processed_pseudogene") %>%
+  ggplot(aes(x=count,y=Gene_Type,fill=Pipeline)) +
+  geom_bar(stat = "identity",position = "dodge")
+```
+```{r}
+genes_kb_only_tib %>%
+  filter(Gene_Type == "protein_coding") %>% view()
+```
 
-# detected genes that dont have a gene name?

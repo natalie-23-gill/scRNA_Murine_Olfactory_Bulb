@@ -11,10 +11,13 @@ knitr::opts_chunk$set(echo = FALSE,
                       message = FALSE)
 library(Seurat)
 library(tidyverse)
+library(ggpubr)
 ```
 
 ```{r}
+# Read in the samples.txt file 
 samples = read_delim("samples.txt", delim="\n",col_names=FALSE) %>% pull(X1)
+
 
 cr_total_cells = c()
 cr_total_genes = c()
@@ -28,11 +31,11 @@ kb_med_umi_count = c()
 
 for (i in 1:length(samples)) {
 
-  
+  # Read in seurat objects
   seurat_obj_cr = readRDS(paste0("cr_rds/sample_",samples[i],"_cr.rds"))
   seurat_obj_kb = readRDS(paste0("kb_rds/sample_",samples[i],"_kb.rds"))
-  #seurat_obj_kb = readRDS(paste0())
   
+  # Pull total cell counts, total genes per cell, median genes and umis per cell
   cr_total_cells[i] = ncol(seurat_obj_cr@assays[["RNA"]]@counts)
   cr_total_genes [i] = nrow(seurat_obj_cr@assays[["RNA"]]@counts)
 
@@ -56,6 +59,7 @@ for (i in 1:length(samples)) {
 
 ```{r}
 
+# Read in timepoints from data provided by the Yu lab
 timepoints = readxl::read_xlsx("Olfactory_Bulb_Summary.xlsx",sheet = 4) %>%
   rename_all(list(~make.names(.))) %>%
   separate(Sample.Name, sep = "-",into = c("Tissue","Timepoint")) %>%
@@ -63,7 +67,7 @@ timepoints = readxl::read_xlsx("Olfactory_Bulb_Summary.xlsx",sheet = 4) %>%
   rename(Sample = Library.ID)
 
 
-#strrep
+# Create tibbles from the ouputs of the loop
 cr_df = tibble(Sample = samples,
                Pipeline = "CellRanger",
                Total_Cells = cr_total_cells,
@@ -78,6 +82,7 @@ kb_df = tibble(Sample = samples,
                Median_Gene_Count = kb_med_gene_count,
                Median_UMI_Count = kb_med_umi_count)
 
+# Create a final results table for both pipelines and write the output
 pipeline_comparison = cr_df %>%
   full_join(kb_df) %>%
   full_join(timepoints) %>%
@@ -86,32 +91,47 @@ pipeline_comparison = cr_df %>%
                             levels = c("E14","E18","P0","P3","P5","P7","P10","P14","P21","Adult"))) %>%
   arrange(Timepoint)
 
+
 write_csv(pipeline_comparison,"pipeline_comparison.csv")
 
 ```
 
 ```{r}
-pipeline_comparison %>%
+total_cells = pipeline_comparison %>%
   ggplot(aes(x=Timepoint,y=Total_Cells,fill=Pipeline))+
-  geom_bar(stat = "identity",position = "dodge")
-```
-```{r}
-pipeline_comparison %>%
+  geom_bar(stat = "identity",position = "dodge")+
+  ggtitle("Total Cells")+
+  theme(plot.title = element_text(hjust = 0.5))
+
+total_genes = pipeline_comparison %>%
   ggplot(aes(x=Timepoint,y=Total_Genes,fill=Pipeline))+
-  geom_bar(stat = "identity",position = "dodge")
-```
+  geom_bar(stat = "identity",position = "dodge")+
+  ggtitle("Total Genes")+
+  theme(plot.title = element_text(hjust = 0.5))
 
-
-```{r}
-pipeline_comparison %>%
+med_gene_count = pipeline_comparison %>%
   ggplot(aes(x=Timepoint,y=Median_Gene_Count,fill=Pipeline))+
-  geom_bar(stat = "identity",position = "dodge")
+  geom_bar(stat = "identity",position = "dodge")+
+  ggtitle("Median Gene Count")+
+  theme(plot.title = element_text(hjust = 0.5))
+
+med_umi_count = pipeline_comparison %>%
+  ggplot(aes(x=Timepoint,y=Median_UMI_Count,fill=Pipeline))+
+  geom_bar(stat = "identity",position = "dodge")+
+  ggtitle("Median UMI Count")+
+  theme(plot.title = element_text(hjust = 0.5))
+```
+```{r, fig.dim=c(10,8)}
+ggarrange(total_cells,total_genes,med_gene_count,med_umi_count,common.legend = TRUE)
+```
+
+
+```{r}
+
 ```
 
 ```{r}
-pipeline_comparison %>%
-  ggplot(aes(x=Timepoint,y=Median_UMI_Count,fill=Pipeline))+
-  geom_bar(stat = "identity",position = "dodge")
+
 ```
 
 

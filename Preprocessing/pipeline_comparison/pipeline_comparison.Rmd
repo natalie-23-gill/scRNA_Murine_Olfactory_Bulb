@@ -156,23 +156,6 @@ genes_across_samples_kb_only = Reduce(intersect, genes_kb_only)
 genes_across_samples_both = Reduce(intersect, genes_both)
 ```
 
-```{r}
-
-
-# Loop through the samples, getting the counts for the genes that are in genes_across_samples_both and storing each in a matrix
-
-rowSums(seurat_obj_cr[[1]]@assays[["RNA"]]@counts)->m 
-
-as.matrix(rowSums(seurat_obj_cr[[1]]))->m
-
-as.matrix(m[rownames(m) %in% genes_across_samples_both,])->x
-
-
-
-
-```
-
-
 ```{r biomart}
 # Select Ensembl BioMart database and dataset
 ensembl <- useEnsembl(biomart = "genes", dataset = "mmusculus_gene_ensembl")
@@ -183,6 +166,51 @@ bm_query = getBM(attributes = c('ensembl_gene_id', 'external_gene_name', 'gene_b
 # Create a tibble from the biomart query 
 bm_tib = tibble(Gene_Name = bm_query$external_gene_name, Gene_ID = bm_query$ensembl_gene_id, Gene_Type = bm_query$gene_biotype)
 ```
+
+```{r}
+#Collapse samples, sort by count twice, plot
+collapsed_counts_cr <- matrix(dimnames = list(genes_across_samples_both), nrow = length(genes_across_samples_both))
+
+collapsed_counts_kb <- matrix(dimnames = list(genes_across_samples_both), nrow = length(genes_across_samples_both))
+
+for (i in 1:length(samples)) {
+  m1 <- as.matrix(rowSums(seurat_obj_cr[[i]])/cr_total_cells[i])
+  m1 <- as.matrix(m1[rownames(m1) %in% genes_across_samples_both,])
+  m2 <- as.matrix(rowSums(seurat_obj_kb[[i]])/kb_total_cells[i])
+  m2 <- as.matrix(m2[rownames(m2) %in% genes_across_samples_both,])
+  
+  collapsed_counts_cr <- cbind(collapsed_counts_cr, m1)
+  collapsed_counts_kb <- cbind(collapsed_counts_kb, m2)
+}
+
+cr_sums <- as.matrix(rowSums(collapsed_counts_cr, na.rm = TRUE))
+kb_sums <- as.matrix(rowSums(collapsed_counts_kb, na.rm = TRUE))
+
+
+cr_kb_sums <- cbind(cr_sums, kb_sums) %>% as_tibble(rownames = "Gene_name") %>% rename("Cell_Ranger" = V1, "kallisto" = V2)
+
+pcoding_bm <- bm_tib %>% filter(Gene_Type == "protein_coding") 
+
+notsame <- filter(cr_kb_sums, kallisto != Cell_Ranger) %>% mutate("Difference_kb_cr" = kallisto - Cell_Ranger) %>% filter(abs(Difference_kb_cr) > 50) %>% filter(Gene_name %in% pcoding_bm$Gene_Name)
+
+
+ggplot(notsame, aes(y = Gene_name, x = Difference_kb_cr)) + geom_bar(stat = "identity") 
+
+# Loop through the samples, getting the counts for the genes that are in genes_across_samples_both and storing each in a matrix
+
+#rowSums(seurat_obj_cr[[1]]@assays[["RNA"]]@counts)->m 
+
+#as.matrix(rowSums(seurat_obj_cr[[i]]))->m
+
+#as.matrix(m[rownames(m) %in% genes_across_samples_both,])->x
+
+
+
+
+```
+
+
+
 
 ```{r}
 # Make tibbles for genes detected by cr, kb, and kb only with gene names, IDs, and types using biomart tibble

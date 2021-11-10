@@ -26,3 +26,8 @@
 5. Use trajectory analysis to determine the lineage connections of the cells.   
 
 
+
+### 1. Preprocessing  
+
+We performed cellranger and kallisto | bustools preprocessing to compare the resulting count matrices using the most recent ensembl release (104) of the mus musculus genome GRCm39. We then filtered the empty droplets from the kb count ouput and saved the outputs from both pipelines as RDS R objects for downstream comparison in Seurat. Additional documentation can be found in the cellranger and kallisto_bustools subdirectories under ./Preprocessing. 
+

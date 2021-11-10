@@ -78,13 +78,21 @@ cellranger mkref
 ```
 Full slurm script (cr_mkref.sh) with output in slurm-16423558.out can be found in repo under .../cellranger/mkref/
 
-#### Test cellranger count on one of our combined FASTQ file samples
+#### Run cellranger on the combined FASTQ files
 ```
-cellranger count --id=sample_L35463 \
---transcriptome=/projects/bgmp/shared/2021_projects/Yu/cellranger_build/Mus_musculus.GRCm39.dna.ens104 \
---fastqs=/projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output \
---sample=L35463 \
---localcores=16
+for sample in $samples
+    do
+    /usr/bin/time -v cellranger count \
+    --id=sample_$sample \
+    --transcriptome=/projects/bgmp/shared/2021_projects/Yu/cellranger_build/Mus_musculus.GRCm39.dna.ens104 \
+    --fastqs=/projects/bgmp/shared/2021_projects/Yu/BGMP_2021/combined_files_output \
+    --sample=$sample \
+    --localcores=16
+done 
 ```
 Full slurm script (cellranger_count.sh) and output files can be found in repo under .../cellranger/count/
+
+#### Save cellranger count ouptuts as RDS objects using Seurat  
+
+Script and relevant outputs can  be found under ../cellranger/seurat_obj
 

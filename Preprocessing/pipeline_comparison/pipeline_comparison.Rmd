@@ -11,9 +11,12 @@ knitr::opts_chunk$set(echo = FALSE,
                       message = FALSE)
 library(Seurat)
 library(tidyverse)
+library(ggpubr)
+library(biomaRt)
 ```
 
 ```{r}
+# Read in the samples.txt file 
 samples = read_delim("samples.txt", delim="\n",col_names=FALSE) %>% pull(X1)
 
 cr_total_cells = c()
@@ -26,27 +29,30 @@ kb_total_genes = c()
 kb_med_gene_count = c()
 kb_med_umi_count = c()
 
+seurat_obj_cr = list()
+seurat_obj_kb = list()
+
 for (i in 1:length(samples)) {
 
+  # Read in seurat objects
+  seurat_obj_cr[[i]] = readRDS(paste0("cr_rds/sample_",samples[i],"_cr.rds"))
+  seurat_obj_kb[[i]] = readRDS(paste0("kb_rds/sample_",samples[i],"_kb.rds"))
   
-  seurat_obj_cr = readRDS(paste0("cr_rds/sample_",samples[i],"_cr.rds"))
-  seurat_obj_kb = readRDS(paste0("kb_rds/sample_",samples[i],"_kb.rds"))
-  #seurat_obj_kb = readRDS(paste0())
-  
-  cr_total_cells[i] = ncol(seurat_obj_cr@assays[["RNA"]]@counts)
-  cr_total_genes [i] = nrow(seurat_obj_cr@assays[["RNA"]]@counts)
+  # Pull total cell counts, total genes per cell, median genes and umis per cell
+  cr_total_cells[i] = ncol(seurat_obj_cr[[i]]@assays[["RNA"]]@counts)
+  cr_total_genes [i] = nrow(seurat_obj_cr[[i]]@assays[["RNA"]]@counts)
 
-  cr_genes_per_cell = seurat_obj_cr@meta.data$nFeature_RNA
-  cr_umis_per_cell = seurat_obj_cr@meta.data$nCount_RNA
+  cr_genes_per_cell = seurat_obj_cr[[i]]@meta.data$nFeature_RNA
+  cr_umis_per_cell = seurat_obj_cr[[i]]@meta.data$nCount_RNA
 
   cr_med_gene_count[i] = median(cr_genes_per_cell)
   cr_med_umi_count[i] = median(cr_umis_per_cell)
 
-  kb_total_cells[i] = ncol(seurat_obj_kb@assays[["RNA"]]@counts)
-  kb_total_genes [i] = nrow(seurat_obj_kb@assays[["RNA"]]@counts)
+  kb_total_cells[i] = ncol(seurat_obj_kb[[i]]@assays[["RNA"]]@counts)
+  kb_total_genes [i] = nrow(seurat_obj_kb[[i]]@assays[["RNA"]]@counts)
 
-  kb_genes_per_cell = seurat_obj_kb@meta.data$nFeature_RNA
-  kb_umis_per_cell = seurat_obj_kb@meta.data$nCount_RNA
+  kb_genes_per_cell = seurat_obj_kb[[i]]@meta.data$nFeature_RNA
+  kb_umis_per_cell = seurat_obj_kb[[i]]@meta.data$nCount_RNA
 
   kb_med_gene_count[i] = median(kb_genes_per_cell)
   kb_med_umi_count[i] = median(kb_umis_per_cell)
@@ -56,14 +62,15 @@ for (i in 1:length(samples)) {
 
 ```{r}
 
+# Read in timepoints from data provided by the Yu lab
 timepoints = readxl::read_xlsx("Olfactory_Bulb_Summary.xlsx",sheet = 4) %>%
   rename_all(list(~make.names(.))) %>%
   separate(Sample.Name, sep = "-",into = c("Tissue","Timepoint")) %>%
-  select(Timepoint,Library.ID) %>%
+  dplyr::select(Timepoint,Library.ID) %>%
   rename(Sample = Library.ID)
 
 
-#strrep
+# Create tibbles from the ouputs of the loop
 cr_df = tibble(Sample = samples,
                Pipeline = "CellRanger",
                Total_Cells = cr_total_cells,
@@ -78,39 +85,210 @@ kb_df = tibble(Sample = samples,
                Median_Gene_Count = kb_med_gene_count,
                Median_UMI_Count = kb_med_umi_count)
 
+# Create a final results table for both pipelines and write the output
 pipeline_comparison = cr_df %>%
   full_join(kb_df) %>%
   full_join(timepoints) %>%
-  select(Timepoint,Sample,everything()) %>%
+  dplyr::select(Timepoint,Sample,everything()) %>%
   mutate(Timepoint = factor(Timepoint,
                             levels = c("E14","E18","P0","P3","P5","P7","P10","P14","P21","Adult"))) %>%
   arrange(Timepoint)
+
 
 write_csv(pipeline_comparison,"pipeline_comparison.csv")
 
 ```
 
 ```{r}
-pipeline_comparison %>%
+total_cells = pipeline_comparison %>%
   ggplot(aes(x=Timepoint,y=Total_Cells,fill=Pipeline))+
-  geom_bar(stat = "identity",position = "dodge")
-```
-```{r}
-pipeline_comparison %>%
+  geom_bar(stat = "identity",position = "dodge")+
+  ggtitle("Total Cells")+
+  theme(plot.title = element_text(hjust = 0.5))
+
+total_genes = pipeline_comparison %>%
   ggplot(aes(x=Timepoint,y=Total_Genes,fill=Pipeline))+
-  geom_bar(stat = "identity",position = "dodge")
-```
+  geom_bar(stat = "identity",position = "dodge")+
+  ggtitle("Total Genes")+
+  theme(plot.title = element_text(hjust = 0.5))
 
-
-```{r}
-pipeline_comparison %>%
+med_gene_count = pipeline_comparison %>%
   ggplot(aes(x=Timepoint,y=Median_Gene_Count,fill=Pipeline))+
-  geom_bar(stat = "identity",position = "dodge")
+  geom_bar(stat = "identity",position = "dodge")+
+  ggtitle("Median Gene Count")+
+  theme(plot.title = element_text(hjust = 0.5))
+
+med_umi_count = pipeline_comparison %>%
+  ggplot(aes(x=Timepoint,y=Median_UMI_Count,fill=Pipeline))+
+  geom_bar(stat = "identity",position = "dodge")+
+  ggtitle("Median UMI Count")+
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+```{r, fig.dim=c(10,8)}
+ggarrange(total_cells,total_genes,med_gene_count,med_umi_count,common.legend = TRUE)
+```
+
+
+
+
+```{r}
+# Extract list of genes detected by cellranger, kallisto, and those only detected by either cellranger or kallisto 
+genes_cr = list()
+genes_kb = list()
+genes_cr_only = list()
+genes_kb_only = list()
+genes_both = list()
+
+for (i in 1:length(samples)) {
+  genes_cr[[i]] = rownames(seurat_obj_cr[[i]]@assays[["RNA"]]@counts)
+  genes_kb[[i]] = rownames(seurat_obj_kb[[i]]@assays[["RNA"]]@counts)
+  genes_cr_only[[i]] = setdiff(genes_cr[[i]], genes_kb[[i]])
+  genes_kb_only[[i]] = setdiff(genes_kb[[i]], genes_cr[[i]])
+  genes_both[[i]] = intersect(genes_kb[[i]], genes_cr[[i]])
+}
+
+# Get set of genes that are present across all 10 samples for each group
+genes_across_samples_cr = Reduce(intersect, genes_cr)
+genes_across_samples_kb = Reduce(intersect, genes_kb)
+genes_across_samples_cr_only = Reduce(intersect, genes_cr_only)
+genes_across_samples_kb_only = Reduce(intersect, genes_kb_only)
+genes_across_samples_both = Reduce(intersect, genes_both)
+```
+
+```{r biomart}
+# Select Ensembl BioMart database and dataset
+ensembl <- useEnsembl(biomart = "genes", dataset = "mmusculus_gene_ensembl")
+
+# Build biomaRt query with gene ID, gene name, and gene type
+bm_query = getBM(attributes = c('ensembl_gene_id', 'external_gene_name', 'gene_biotype'), mart = ensembl)
+
+# Create a tibble from the biomart query 
+bm_tib = tibble(Gene_Name = bm_query$external_gene_name, Gene_ID = bm_query$ensembl_gene_id, Gene_Type = bm_query$gene_biotype)
+
+# filter for either protein coding or lncRNA
+pcoding_bm <- bm_tib %>% filter(Gene_Type == "protein_coding") 
+lncRNA_bm <- bm_tib %>% filter(Gene_Type == "lncRNA") 
 ```
 
 ```{r}
-pipeline_comparison %>%
-  ggplot(aes(x=Timepoint,y=Median_UMI_Count,fill=Pipeline))+
+# Loop through the samples, getting the counts for the genes that are in genes_across_samples_both and storing each in a matrix
+collapsed_counts_cr <- matrix(dimnames = list(genes_across_samples_both), nrow = length(genes_across_samples_both))
+collapsed_counts_kb <- matrix(dimnames = list(genes_across_samples_both), nrow = length(genes_across_samples_both))
+
+for (i in 1:length(samples)) {
+  m1 <- as.matrix(rowSums(seurat_obj_cr[[i]])/cr_total_cells[i])
+  m1 <- as.matrix(m1[rownames(m1) %in% genes_across_samples_both,])
+  m2 <- as.matrix(rowSums(seurat_obj_kb[[i]])/kb_total_cells[i])
+  m2 <- as.matrix(m2[rownames(m2) %in% genes_across_samples_both,])
+  
+  collapsed_counts_cr <- cbind(collapsed_counts_cr, m1)
+  collapsed_counts_kb <- cbind(collapsed_counts_kb, m2)
+}
+
+cr_sums <- as.matrix(rowSums(collapsed_counts_cr, na.rm = TRUE)/10)
+kb_sums <- as.matrix(rowSums(collapsed_counts_kb, na.rm = TRUE)/10)
+
+cr_kb_sums <- cbind(cr_sums, kb_sums) %>%
+  as_tibble(rownames = "Gene_name") %>%
+  rename("Cell_Ranger" = V1, "kallisto" = V2) %>%
+  mutate("Difference_kb_cr" = kallisto - Cell_Ranger)
+
+```
+
+```{r}
+# filter for protein coding genes and genes that have a diff greater than 50 
+pc_filt_counts <- filter(cr_kb_sums, kallisto != Cell_Ranger) %>%
+  mutate("Higher_Signal" = ifelse(Difference_kb_cr > 0, "Kallisto", "Cellranger")) %>%
+  filter(Gene_name %in% pcoding_bm$Gene_Name)
+ 
+# filter for lncRNA genes and genes that have a diff greater than 5  
+lncRNA_filt_counts <- filter(cr_kb_sums, kallisto != Cell_Ranger) %>%
+  mutate("Higher_Signal" = ifelse(Difference_kb_cr > 0, "Kallisto", "Cellranger")) %>%
+  filter(Gene_name %in% lncRNA_bm$Gene_Name)
+
+ggplot(pc_filt_counts %>% filter(abs(Difference_kb_cr) > 5), aes(y = reorder(Gene_name, Difference_kb_cr), x = Difference_kb_cr, fill=Higher_Signal)) + geom_bar(stat = "identity") + ylab("Protein Coding Genes") + xlab("Average Gene Counts Per Cell") +labs(fill="Pipeline")
+
+ggplot(lncRNA_filt_counts %>% filter(abs(Difference_kb_cr) > 1), aes(y = reorder(Gene_name, Difference_kb_cr), x = Difference_kb_cr, fill=Higher_Signal)) + geom_bar(stat = "identity") + ylab("lncRNA Genes") + xlab("Average Gene Counts Per Cell") +labs(fill="Pipeline")
+
+```
+
+```{r}
+# how many genes does Kallisto detect at higher levels? CellRanger? 
+
+# total
+kb_greater_sig = sum(cr_kb_sums$Difference_kb_cr > 0)
+cr_greater_sig = sum(cr_kb_sums$Difference_kb_cr < 0)
+# protein coding
+pc_kb_greater_sig = sum(pc_filt_counts$Difference_kb_cr > 0)
+pc_cr_greater_sig = sum(pc_filt_counts$Difference_kb_cr < 0)
+# lncRNA
+lncRNA_kb_greater_sig = sum(lncRNA_filt_counts$Difference_kb_cr > 0)
+lncRNA_cr_greater_sig = sum(lncRNA_filt_counts$Difference_kb_cr < 0)
+
+kb_greater_sig / (kb_greater_sig + cr_greater_sig) 
+pc_kb_greater_sig / (pc_kb_greater_sig + pc_cr_greater_sig)
+lncRNA_kb_greater_sig / (lncRNA_kb_greater_sig + lncRNA_cr_greater_sig)
+
+
+```
+
+
+```{r}
+# Make tibbles for genes detected by cr, kb, and kb only with gene names, IDs, and types using biomart tibble
+genes_cr_tib = inner_join(bm_tib, tibble(Gene_Name=genes_across_samples_cr)) 
+genes_kb_tib = inner_join(bm_tib, tibble(Gene_Name=genes_across_samples_kb))
+genes_cr_only_tib = inner_join(bm_tib, tibble(Gene_Name=genes_across_samples_cr_only))
+genes_kb_only_tib = inner_join(bm_tib, tibble(Gene_Name=genes_across_samples_kb_only))
+
+
+# Genes with no gene names kb (only 52, mostly miRNAs)
+#inner_join(bm_tib, tibble(Gene_ID=genes_across_samples_kb)) %>%
+#  view()
+# Genes with no gene names cr (only 9)
+#inner_join(bm_tib, tibble(Gene_ID=genes_across_samples_cr)) %>%
+#  view()
+
+```
+
+```{r}
+# Get counts for gene types (protein coding, lncRNA, etc)
+gene_type_count_cr = genes_cr_tib %>%
+  group_by(Gene_Type) %>%
+  summarize("count" = n()) %>%
+  ungroup() %>%
+  mutate(Pipeline = "Cellranger")
+
+gene_type_count_kb = genes_kb_tib %>%
+  group_by(Gene_Type) %>%
+  summarize("count" = n()) %>%
+  ungroup() %>%
+  mutate(Pipeline = "Kallisto")
+
+gene_type_count_cr_only = genes_cr_only_tib %>%
+  group_by(Gene_Type) %>%
+  summarize("count" = n()) %>%
+  ungroup() %>%
+  mutate(Pipeline = "Cellranger Only")
+
+gene_type_count_kb_only = genes_kb_only_tib %>%
+  group_by(Gene_Type) %>%
+  summarize("count" = n()) %>%
+  ungroup() %>%
+  mutate(Pipeline = "Kallisto Only")
+
+gene_type_count_tib = gene_type_count_cr %>%
+  full_join(gene_type_count_kb) %>%
+  full_join(gene_type_count_cr_only) %>%
+  full_join(gene_type_count_kb_only)
+
+```
+
+```{r}
+gene_type_count_tib %>%
+  filter(Pipeline == "Cellranger Only" | Pipeline == "Kallisto Only") %>%
+  filter(Gene_Type == "protein_coding" | Gene_Type == "lncRNA" | Gene_Type == "processed_pseudogene") %>%
+  ggplot(aes(x=count,y=Gene_Type,fill=Pipeline)) +
   geom_bar(stat = "identity",position = "dodge")
 ```
 

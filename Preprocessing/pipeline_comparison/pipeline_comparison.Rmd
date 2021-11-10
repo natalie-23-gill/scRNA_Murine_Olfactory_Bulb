@@ -165,12 +165,15 @@ bm_query = getBM(attributes = c('ensembl_gene_id', 'external_gene_name', 'gene_b
 
 # Create a tibble from the biomart query 
 bm_tib = tibble(Gene_Name = bm_query$external_gene_name, Gene_ID = bm_query$ensembl_gene_id, Gene_Type = bm_query$gene_biotype)
+
+# filter for either protein coding or lncRNA
+pcoding_bm <- bm_tib %>% filter(Gene_Type == "protein_coding") 
+lncRNA_bm <- bm_tib %>% filter(Gene_Type == "lncRNA") 
 ```
 
 ```{r}
-#Collapse samples, sort by count twice, plot
+# Loop through the samples, getting the counts for the genes that are in genes_across_samples_both and storing each in a matrix
 collapsed_counts_cr <- matrix(dimnames = list(genes_across_samples_both), nrow = length(genes_across_samples_both))
-
 collapsed_counts_kb <- matrix(dimnames = list(genes_across_samples_both), nrow = length(genes_across_samples_both))
 
 for (i in 1:length(samples)) {
@@ -183,33 +186,52 @@ for (i in 1:length(samples)) {
   collapsed_counts_kb <- cbind(collapsed_counts_kb, m2)
 }
 
-cr_sums <- as.matrix(rowSums(collapsed_counts_cr, na.rm = TRUE))
-kb_sums <- as.matrix(rowSums(collapsed_counts_kb, na.rm = TRUE))
+cr_sums <- as.matrix(rowSums(collapsed_counts_cr, na.rm = TRUE)/10)
+kb_sums <- as.matrix(rowSums(collapsed_counts_kb, na.rm = TRUE)/10)
 
-
-cr_kb_sums <- cbind(cr_sums, kb_sums) %>% as_tibble(rownames = "Gene_name") %>% rename("Cell_Ranger" = V1, "kallisto" = V2)
-
-pcoding_bm <- bm_tib %>% filter(Gene_Type == "protein_coding") 
-
-notsame <- filter(cr_kb_sums, kallisto != Cell_Ranger) %>% mutate("Difference_kb_cr" = kallisto - Cell_Ranger) %>% filter(abs(Difference_kb_cr) > 50) %>% filter(Gene_name %in% pcoding_bm$Gene_Name)
-
-
-ggplot(notsame, aes(y = Gene_name, x = Difference_kb_cr)) + geom_bar(stat = "identity") 
-
-# Loop through the samples, getting the counts for the genes that are in genes_across_samples_both and storing each in a matrix
-
-#rowSums(seurat_obj_cr[[1]]@assays[["RNA"]]@counts)->m 
-
-#as.matrix(rowSums(seurat_obj_cr[[i]]))->m
-
-#as.matrix(m[rownames(m) %in% genes_across_samples_both,])->x
-
-
-
+cr_kb_sums <- cbind(cr_sums, kb_sums) %>%
+  as_tibble(rownames = "Gene_name") %>%
+  rename("Cell_Ranger" = V1, "kallisto" = V2) %>%
+  mutate("Difference_kb_cr" = kallisto - Cell_Ranger)
 
 ```
 
+```{r}
+# filter for protein coding genes and genes that have a diff greater than 50 
+pc_filt_counts <- filter(cr_kb_sums, kallisto != Cell_Ranger) %>%
+  mutate("Higher_Signal" = ifelse(Difference_kb_cr > 0, "Kallisto", "Cellranger")) %>%
+  filter(Gene_name %in% pcoding_bm$Gene_Name)
+ 
+# filter for lncRNA genes and genes that have a diff greater than 5  
+lncRNA_filt_counts <- filter(cr_kb_sums, kallisto != Cell_Ranger) %>%
+  mutate("Higher_Signal" = ifelse(Difference_kb_cr > 0, "Kallisto", "Cellranger")) %>%
+  filter(Gene_name %in% lncRNA_bm$Gene_Name)
 
+ggplot(pc_filt_counts %>% filter(abs(Difference_kb_cr) > 5), aes(y = reorder(Gene_name, Difference_kb_cr), x = Difference_kb_cr, fill=Higher_Signal)) + geom_bar(stat = "identity") + ylab("Protein Coding Genes") + xlab("Average Gene Counts Per Cell") +labs(fill="Pipeline")
+
+ggplot(lncRNA_filt_counts %>% filter(abs(Difference_kb_cr) > 1), aes(y = reorder(Gene_name, Difference_kb_cr), x = Difference_kb_cr, fill=Higher_Signal)) + geom_bar(stat = "identity") + ylab("lncRNA Genes") + xlab("Average Gene Counts Per Cell") +labs(fill="Pipeline")
+
+```
+
+```{r}
+# how many genes does Kallisto detect at higher levels? CellRanger? 
+
+# total
+kb_greater_sig = sum(cr_kb_sums$Difference_kb_cr > 0)
+cr_greater_sig = sum(cr_kb_sums$Difference_kb_cr < 0)
+# protein coding
+pc_kb_greater_sig = sum(pc_filt_counts$Difference_kb_cr > 0)
+pc_cr_greater_sig = sum(pc_filt_counts$Difference_kb_cr < 0)
+# lncRNA
+lncRNA_kb_greater_sig = sum(lncRNA_filt_counts$Difference_kb_cr > 0)
+lncRNA_cr_greater_sig = sum(lncRNA_filt_counts$Difference_kb_cr < 0)
+
+kb_greater_sig / (kb_greater_sig + cr_greater_sig) 
+pc_kb_greater_sig / (pc_kb_greater_sig + pc_cr_greater_sig)
+lncRNA_kb_greater_sig / (lncRNA_kb_greater_sig + lncRNA_cr_greater_sig)
+
+
+```
 
 
 ```{r}
@@ -249,8 +271,6 @@ gene_type_count_cr_only = genes_cr_only_tib %>%
   ungroup() %>%
   mutate(Pipeline = "Cellranger Only")
 
-
-
 gene_type_count_kb_only = genes_kb_only_tib %>%
   group_by(Gene_Type) %>%
   summarize("count" = n()) %>%
@@ -263,6 +283,7 @@ gene_type_count_tib = gene_type_count_cr %>%
   full_join(gene_type_count_kb_only)
 
 ```
+
 ```{r}
 gene_type_count_tib %>%
   filter(Pipeline == "Cellranger Only" | Pipeline == "Kallisto Only") %>%
@@ -270,8 +291,5 @@ gene_type_count_tib %>%
   ggplot(aes(x=count,y=Gene_Type,fill=Pipeline)) +
   geom_bar(stat = "identity",position = "dodge")
 ```
-```{r}
-genes_kb_only_tib %>%
-  filter(Gene_Type == "protein_coding") %>% view()
-```
+
 

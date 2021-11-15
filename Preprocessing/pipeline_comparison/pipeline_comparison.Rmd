@@ -16,6 +16,7 @@ library(biomaRt)
 library(tidyverse)
 library(ComplexHeatmap)
 library(circlize)
+library(kableExtra)
 ```
 
 ```{r Load Data}
@@ -82,7 +83,10 @@ per_aling_cr = read_csv("cr_aligned.csv",col_names = F) %>%
 
 # Combine so to insert later 
 per_aligned = full_join(per_align_kb,per_aling_cr)
-  
+
+# seurat_obj_cr[[1]][["percent.mt"]] <- PercentageFeatureSet(seurat_obj_cr[[1]], pattern = "^mt-")
+# 
+# VlnPlot(seurat_obj_cr[[1]], features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
 ```
 
 ```{r}
@@ -300,6 +304,8 @@ ggarrange(prot_genes,lncRNA,common.legend = TRUE)
 
 *Note: For protein coding genes absolute differences less than 6 were removed for visualization.*
 
+<br>
+
 
 ```{r}
 # Make tibbles for genes detected by cr, kb, and kb only with gene names, IDs, and types using biomart tibble
@@ -382,11 +388,18 @@ lncRNA_cr_greater_sig = sum(lncRNA_filt_counts$Difference_kb_cr < 0)
 #round(pc_kb_greater_sig / (pc_kb_greater_sig + pc_cr_greater_sig)*100,digits = 2)
 #round(lncRNA_kb_greater_sig / (lncRNA_kb_greater_sig + lncRNA_cr_greater_sig)*100,digits = 2)
 
+tibble(`Total Genes` = round(kb_greater_sig / (kb_greater_sig + cr_greater_sig) *100,digits = 2),
+       `Protein Coding` = round(pc_kb_greater_sig / (pc_kb_greater_sig + pc_cr_greater_sig)*100,digits = 2),
+       `lncRNA` = round(lncRNA_kb_greater_sig / (lncRNA_kb_greater_sig + lncRNA_cr_greater_sig)*100,digits = 2)) %>%
+  pivot_longer(cols = everything(),names_to = c("Gene Types")) %>%
+  rename(`% Higher in Kallisto` = value) %>%
+  kbl(caption = "Gene Types That Higher Detection in Kallisto") %>%
+  kable_minimal(full_width=FALSE)
 
 ```
 
 
-Of the genes that were detected for both pipelines `r round(kb_greater_sig / (kb_greater_sig + cr_greater_sig) *100,digits = 2)`% of them had higher counts detected in Kallisto, for protein coding genes `r round(pc_kb_greater_sig / (pc_kb_greater_sig + pc_cr_greater_sig)*100,digits = 2)`% had higher counts in Kallisto and for lncRNAs `r round(lncRNA_kb_greater_sig / (lncRNA_kb_greater_sig + lncRNA_cr_greater_sig)*100,digits = 2)`% had higher counts in Kallisto.
+
 
 <br>
 
@@ -395,35 +408,58 @@ Of the genes that were detected for both pipelines `r round(kb_greater_sig / (kb
 <br>
 
 
+```{r}
+genes_kb_only_tib %>%
+  mutate(genes = Gene_Name) %>%
+  separate(genes,into = c("Prefix","Number"),sep = "[0-9]") %>%
+  select(!Number) %>% 
+  filter(Prefix != "") %>%
+  filter(Prefix != "Gm" & Gene_Type == "protein_coding") %>%
+  filter(str_length(Prefix)>1) %>%
+  group_by(Prefix) %>%
+  summarise(Count = n()) %>% 
+  filter(Count>3) %>%
+  arrange(desc(Count)) %>%
+  kbl(caption = "Gene Families Detected at Least 4 Times", table.attr = "style='width:30%;'") %>%
+  kable_minimal()
+```
+
+
+<br>
+
 
 ```{r Heatmap}
-kb_only_mat = kb_only_olf %>%
+kb_only_log = kb_only_olf %>%
+  mutate(across(starts_with("L"),log10))
+
+
+kb_only_mat = kb_only_log %>%
   dplyr::select(!Gene_name) %>%
   dplyr::select(!Gene_family) %>%
   as.matrix()
 
-kb_annotation = kb_only_olf %>%
+kb_annotation = kb_only_log %>%
   dplyr::select(Gene_family) %>%
   as.matrix()
 
-rownames(kb_annotation) = kb_only_olf$Gene_name
+rownames(kb_annotation) = kb_only_log$Gene_name
 
-rownames(kb_only_mat) = kb_only_olf$Gene_name
+rownames(kb_only_mat) = kb_only_log$Gene_name
 
 time_points = timepoints%>%
   mutate(Timepoint = factor(Timepoint,
                             levels = c("E14","E18","P0","P3","P5","P7","P10","P14","P21","Adult"))) %>%
   arrange(Timepoint)
 
-col_fun = colorRamp2(c(0, 30,100), c("#219168", "white" ,"#b52d1b"))
+col_fun = colorRamp2(c(0, 1,3), c("#219168", "white" ,"#b52d1b"))
 
 Heatmap(kb_only_mat,
-        name="Total Counts \n Per Sample",
+        name="Log10 Counts \n Per Sample",
         col = col_fun,
         row_split = kb_annotation,
         show_row_names = FALSE,
         column_order = time_points$Sample,
-        column_title = "Total Counts Ordered By Timepoint")
+        column_title = "Log10 Counts Ordered By Timepoint")
 ```
 
 A total of `r length(kb_only_olf %>% filter(Gene_family == "Olfr") %>% pull(Gene_name))` members of the Olfr gene family were detected and a total `r length(kb_only_olf %>% filter(Gene_family == "Vmn") %>% pull(Gene_name))` members of the Vmn gene family were detected across all samples.

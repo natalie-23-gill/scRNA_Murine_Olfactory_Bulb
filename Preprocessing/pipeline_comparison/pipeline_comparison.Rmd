@@ -39,8 +39,8 @@ seurat_obj_kb = list()
 for (i in 1:length(samples)) {
 
   # Read in seurat objects
-  seurat_obj_cr[[i]] = readRDS(paste0("cr_rds/sample_",samples[i],"_cr.rds"))
-  seurat_obj_kb[[i]] = readRDS(paste0("kb_rds/sample_",samples[i],"_kb.rds"))
+  seurat_obj_cr[[i]] = readRDS(paste0("../../data/cr_rds/sample_",samples[i],"_cr.rds"))
+  seurat_obj_kb[[i]] = readRDS(paste0("../../data/kb_rds/sample_",samples[i],"_kb.rds"))
   
   # Pull total cell counts, total genes per cell, median genes and umis per cell
   cr_total_cells[i] = ncol(seurat_obj_cr[[i]]@assays[["RNA"]]@counts)

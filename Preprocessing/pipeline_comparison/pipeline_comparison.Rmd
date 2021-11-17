@@ -461,5 +461,3 @@ Heatmap(kb_only_mat,
         column_order = time_points$Sample,
         column_title = "Log10 Counts Ordered By Timepoint")
 ```
-
-A total of `r length(kb_only_olf %>% filter(Gene_family == "Olfr") %>% pull(Gene_name))` members of the Olfr gene family were detected and a total `r length(kb_only_olf %>% filter(Gene_family == "Vmn") %>% pull(Gene_name))` members of the Vmn gene family were detected across all samples.

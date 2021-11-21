@@ -1,0 +1,84 @@
+---
+title: "Doublet Removal"
+author: "Laura Paez"
+date: "November 21, 2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      warning = FALSE,
+                      message = FALSE)
+library(tidyverse)
+library(patchwork)
+library(Matrix)
+library(fields)
+library(KernSmooth)
+library(ROCR)
+library(parallel)
+library(Seurat)
+
+```
+
+```{r Read in Data}
+samples = read_delim("samples.txt", delim="\n",col_names=FALSE) %>% pull(X1)
+
+seurat_obj_kb = list()
+
+for (i in 1:length(samples)) {
+
+  # Read in seurat objects
+  seurat_obj_kb[[i]] = readRDS(paste0("../../data/kb_rds/sample_",samples[i],"_kb.rds"))
+  
+}
+
+```
+
+```{r}
+
+for (i in 1:length(samples)) {
+  seurat_obj_kb[[i]] = RunPCA(seurat_obj_kb[[i]])
+
+  #seurat_obj_kb[[i]] <- SCTransform(seurat_obj_kb[[i]])
+
+}
+
+```
+
+```{r}
+# ## Pre-process Seurat object (standard)
+# seu_kb <- CreateSeuratObject(seurat_obj_kb)
+# seu_kb <- NormalizeData(seu_kb)
+# seu_kb <- FindVariableFeatures(seu_kb, selection.method = "vst", nfeatures = 2000)
+# seu_kb <- ScaleData(seu_kb)
+# seu_kb <- RunPCA(seu_kb)
+# seu_kb <- RunUMAP(seu_kb, dims = 1:10)
+
+## Pre-process Seurat object (sctransform) -----------------------------------------------------------------------------------
+seu_kb <- CreateSeuratObject(kidney.data)
+seu_kb <- SCTransform(seu_kb)
+seu_kb <- RunPCA(seu_kb)
+seu_kb <- RunUMAP(seu_kb, dims = 1:10)
+
+## pK Identification (no ground-truth) ---------------------------------------------------------------------------------------
+sweep.res.list_kidney <- paramSweep_v3(seu_kb, PCs = 1:10, sct = FALSE)
+sweep.stats_kidney <- summarizeSweep(sweep.res.list_kidney, GT = FALSE)
+bcmvn_kidney <- find.pK(sweep.stats_kidney)
+
+## pK Identification (ground-truth) ------------------------------------------------------------------------------------------
+sweep.res.list_kidney <- paramSweep_v3(seu_kb, PCs = 1:10, sct = FALSE)
+gt.calls <- seu_kb@meta.data[rownames(sweep.res.list_kidney[[1]]), "GT"].   ## GT is a vector containing "Singlet" and "Doublet" calls recorded using sample multiplexing classification and/or in silico geneotyping results 
+sweep.stats_kidney <- summarizeSweep(sweep.res.list_kidney, GT = TRUE, GT.calls = gt.calls)
+bcmvn_kidney <- find.pK(sweep.stats_kidney)
+
+## Homotypic Doublet Proportion Estimate -------------------------------------------------------------------------------------
+homotypic.prop <- modelHomotypic(annotations)           ## ex: annotations <- seu_kb@meta.data$ClusteringResults
+nExp_poi <- round(0.075*nrow(seu_kb@meta.data))  ## Assuming 7.5% doublet formation rate - tailor for your dataset
+nExp_poi.adj <- round(nExp_poi*(1-homotypic.prop))
+
+## Run DoubletFinder with varying classification stringencies ----------------------------------------------------------------
+seu_kb <- doubletFinder_v3(seu_kb, PCs = 1:10, pN = 0.25, pK = 0.09, nExp = nExp_poi, reuse.pANN = FALSE, sct = FALSE)
+seu_kb <- doubletFinder_v3(seu_kb, PCs = 1:10, pN = 0.25, pK = 0.09, nExp = nExp_poi.adj, reuse.pANN = "pANN_0.25_0.09_913", sct = FALSE)
+
+```
+

@@ -116,8 +116,16 @@ pipeline_comparison = cr_df %>%
                             levels = c("E14","E18","P0","P3","P5","P7","P10","P14","P21","Adult"))) %>%
   arrange(Timepoint)
 
-
 write_csv(pipeline_comparison,"pipeline_comparison.csv")
+
+# Create a timepoint.csv to use to associated library IDs with samples
+
+pipeline_comparison %>%
+  dplyr::select(Timepoint,Sample) %>%
+  distinct() %>%
+  arrange(Timepoint) %>%
+  write_csv("../../data/timepoints.csv")
+
 
 ```
 

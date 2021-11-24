@@ -14,5 +14,6 @@
 conda activate scRNAseq
 
 /usr/bin/time -v Rscript SCT_integrate.R \
-/projects/bgmp/shared/2021_projects/Yu/BGMP_2021/ \
+/projects/bgmp/shared/2021_projects/Yu/BGMP_2021/seurat_pipeline/kb_rds/ \
 /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/samples.txt \
+/projects/bgmp/shared/2021_projects/Yu/BGMP_2021/seurat_pipeline/combined_kb_unfiltered.rds

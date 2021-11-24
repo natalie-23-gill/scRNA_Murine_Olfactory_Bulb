@@ -5,7 +5,7 @@ library(argparser)
 # Parse command line arguments 
 p = arg_parser("Performs integration of datasets after normalizing with SCTransform")
 p = add_argument(p, "dir", help="Directory containing RDS objects to sctranform and integrate")
-p = add_argument(p, "samples", help="Text file with sample names")
+p = add_argument(p, "samples", help="Text file with list of samples to integrate")
 p = add_argument(p, "output", help="File to output integrated object")
 args = parse_args(p)
 
@@ -18,10 +18,13 @@ setwd(args$dir)
 # Read in sample list from arguments 
 samples = read_delim(args$samples, delim="\n",col_names=FALSE) %>% pull(X1)
 
+# Get list of filenames for rds objects in directory
+file_list = list.files(path=args$dir)
+
 # Read in seurat objects
 seurat_obj_kb = list()
-for (i in 1:length(samples)) {
-  seurat_obj_kb[[i]] = readRDS(paste0("sample_", samples[i], "_kb.rds"))
+for (i in 1:length(file_list)) {
+  seurat_obj_kb[[i]] = readRDS(file_list[[i]])
 }
 
 # Use SCTransform (instead of NormalizeData) on each of the seurat objects

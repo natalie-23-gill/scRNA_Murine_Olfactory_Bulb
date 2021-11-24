@@ -1,0 +1,84 @@
+---
+title: "Seurat - Feature Plots"
+author: "Christina Zakarian"
+date: "11/24/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      warning = FALSE,
+                      message = FALSE)
+library(Seurat)
+library(tidyverse)
+library(patchwork)
+```
+
+```{r}
+#read in marker genes
+markers = read_tsv("../Clustering/ob_markergenes.tsv", col_names = FALSE)
+
+# fill in empty cells in 1st column 
+for (i in 1:nrow(markers)) {
+  if (is.na(markers[i,1])) {
+    markers[i,1] = type
+  } 
+  else {
+    type = markers[i,1]
+  }
+}
+
+# get list of genes for each cell type separately  
+marker_list = as.list(unstack(rev(markers)))
+```
+
+```{r}
+# read in the integrated object
+combined.sct = readRDS("combined_kb_unfiltered.rds")
+```
+
+```{r}
+#changing sample names in combined.sct from sample_LXXXX_kb to LXXXX // can modify to put timepoint instead
+
+combined.sct@meta.data[["orig.ident"]] = sapply(combined.sct@meta.data[["orig.ident"]], 
+                                                function(x) str_split(x, "_")[[1]][2])
+
+```
+
+
+```{r}
+DefaultAssay(combined.sct) <- "integrated"
+
+# how many PCAs ?? resolution ??
+combined.sct <- RunPCA(combined.sct, npcs = 30, verbose = FALSE)
+combined.sct <- RunUMAP(combined.sct, reduction = "pca", dims = 1:30)
+combined.sct <- FindNeighbors(combined.sct, reduction = "pca", dims = 1:30)
+combined.sct <- FindClusters(combined.sct, resolution = 0.5)
+
+
+DimPlot(combined.sct, reduction = "umap", label = TRUE, repel = TRUE)
+DimPlot(combined.sct, reduction = "umap", label = TRUE, repel = TRUE, split.by = "orig.ident")
+DimPlot(combined.sct, reduction = "umap", group.by = "orig.ident")
+
+```
+
+
+```{r}
+
+# just testing out 
+DefaultAssay(combined.sct) <- "integrated"
+FeaturePlot(combined.sct, features = marker_list[[8]])
+FeaturePlot(combined.sct, features = "Sox11", split.by = "orig.ident", combine = FALSE) %>% CombinePlots(ncol=3)
+
+```
+
+
+
+
+
+
+
+
+
+
+

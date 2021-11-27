@@ -8,8 +8,8 @@
 #SBATCH --partition=bgmp
 #SBATCH --output=seurat_pipeline_%j.out
 #SBATCH --error=seurat_pipeline_%j.err
-#SBATCH --cpus-per-task=1
-#SBATCH --mem-per-cpu=16G
+#SBATCH --cpus-per-task=2
+#SBATCH --mem-per-cpu=32G
 #SBATCH --nodes=1
 #SBATCH --time=1-00:00:00
 

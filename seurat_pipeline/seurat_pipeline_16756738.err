@@ -18,20 +18,20 @@ chr (2): Timepoint, Sample
 ℹ Use `spec()` to retrieve the full column specification for this data.
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 	Command being timed: "Rscript QC_subset.R /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/seurat_pipeline/kb_rds /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/seurat_pipeline/kb_rds_filtered /projects/bgmp/nelphick/bioinfo/Yu_project/Yu_Project_2021/data/timepoints.csv 10000 200 7"
-	User time (seconds): 68.27
-	System time (seconds): 1.55
+	User time (seconds): 68.03
+	System time (seconds): 1.66
 	Percent of CPU this job got: 99%
-	Elapsed (wall clock) time (h:mm:ss or m:ss): 1:10.19
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 1:10.05
 	Average shared text size (kbytes): 0
 	Average unshared data size (kbytes): 0
 	Average stack size (kbytes): 0
 	Average total size (kbytes): 0
-	Maximum resident set size (kbytes): 2734236
+	Maximum resident set size (kbytes): 2734252
 	Average resident set size (kbytes): 0
 	Major (requiring I/O) page faults: 0
-	Minor (reclaiming a frame) page faults: 409405
-	Voluntary context switches: 5644
-	Involuntary context switches: 248
+	Minor (reclaiming a frame) page faults: 409134
+	Voluntary context switches: 5737
+	Involuntary context switches: 86
 	Swaps: 0
 	File system inputs: 0
 	File system outputs: 0
@@ -69,7 +69,7 @@ Found 105 outliers - those will be ignored in fitting/regularization step
 Second step: Get residuals using fitted parameters for 20943 genes
 Computing corrected count matrix for 20943 genes
 Calculating gene attributes
-Wall clock passed: Time difference of 1.257272 mins
+Wall clock passed: Time difference of 1.295851 mins
 Determine variable features
 Place corrected count matrix in counts slot
 Centering data matrix
@@ -85,7 +85,7 @@ Found 137 outliers - those will be ignored in fitting/regularization step
 Second step: Get residuals using fitted parameters for 18498 genes
 Computing corrected count matrix for 18498 genes
 Calculating gene attributes
-Wall clock passed: Time difference of 55.57668 secs
+Wall clock passed: Time difference of 57.43838 secs
 Determine variable features
 Place corrected count matrix in counts slot
 Centering data matrix
@@ -101,7 +101,7 @@ Found 119 outliers - those will be ignored in fitting/regularization step
 Second step: Get residuals using fitted parameters for 19948 genes
 Computing corrected count matrix for 19948 genes
 Calculating gene attributes
-Wall clock passed: Time difference of 1.374671 mins
+Wall clock passed: Time difference of 1.460651 mins
 Determine variable features
 Place corrected count matrix in counts slot
 Centering data matrix
@@ -117,7 +117,7 @@ Found 163 outliers - those will be ignored in fitting/regularization step
 Second step: Get residuals using fitted parameters for 20181 genes
 Computing corrected count matrix for 20181 genes
 Calculating gene attributes
-Wall clock passed: Time difference of 1.293579 mins
+Wall clock passed: Time difference of 1.350664 mins
 Determine variable features
 Place corrected count matrix in counts slot
 Centering data matrix
@@ -133,7 +133,7 @@ Found 145 outliers - those will be ignored in fitting/regularization step
 Second step: Get residuals using fitted parameters for 21384 genes
 Computing corrected count matrix for 21384 genes
 Calculating gene attributes
-Wall clock passed: Time difference of 1.157221 mins
+Wall clock passed: Time difference of 1.263998 mins
 Determine variable features
 Place corrected count matrix in counts slot
 Centering data matrix
@@ -149,7 +149,7 @@ Found 121 outliers - those will be ignored in fitting/regularization step
 Second step: Get residuals using fitted parameters for 20835 genes
 Computing corrected count matrix for 20835 genes
 Calculating gene attributes
-Wall clock passed: Time difference of 1.248855 mins
+Wall clock passed: Time difference of 1.332082 mins
 Determine variable features
 Place corrected count matrix in counts slot
 Centering data matrix
@@ -165,7 +165,7 @@ Found 108 outliers - those will be ignored in fitting/regularization step
 Second step: Get residuals using fitted parameters for 20292 genes
 Computing corrected count matrix for 20292 genes
 Calculating gene attributes
-Wall clock passed: Time difference of 39.93377 secs
+Wall clock passed: Time difference of 43.27863 secs
 Determine variable features
 Place corrected count matrix in counts slot
 Centering data matrix
@@ -181,7 +181,7 @@ Found 168 outliers - those will be ignored in fitting/regularization step
 Second step: Get residuals using fitted parameters for 20390 genes
 Computing corrected count matrix for 20390 genes
 Calculating gene attributes
-Wall clock passed: Time difference of 1.209779 mins
+Wall clock passed: Time difference of 1.258165 mins
 Determine variable features
 Place corrected count matrix in counts slot
 Centering data matrix
@@ -197,7 +197,7 @@ Found 94 outliers - those will be ignored in fitting/regularization step
 Second step: Get residuals using fitted parameters for 19169 genes
 Computing corrected count matrix for 19169 genes
 Calculating gene attributes
-Wall clock passed: Time difference of 59.54205 secs
+Wall clock passed: Time difference of 1.030867 mins
 Determine variable features
 Place corrected count matrix in counts slot
 Centering data matrix
@@ -213,7 +213,7 @@ Found 169 outliers - those will be ignored in fitting/regularization step
 Second step: Get residuals using fitted parameters for 21568 genes
 Computing corrected count matrix for 21568 genes
 Calculating gene attributes
-Wall clock passed: Time difference of 1.038597 mins
+Wall clock passed: Time difference of 1.078371 mins
 Determine variable features
 Place corrected count matrix in counts slot
 Centering data matrix
@@ -555,22 +555,77 @@ Finding integration vector weights
 [----|----|----|----|----|----|----|----|----|----|
 **************************************************|
 Integrating data
-Command terminated by signal 11
+Merging dataset 2 into 3
+Extracting anchors for merged samples
+Finding integration vectors
+Finding integration vector weights
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+Integrating data
+Merging dataset 9 into 8
+Extracting anchors for merged samples
+Finding integration vectors
+Finding integration vector weights
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+Integrating data
+Merging dataset 6 7 into 5 10
+Extracting anchors for merged samples
+Finding integration vectors
+Finding integration vector weights
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+Integrating data
+Merging dataset 4 into 3 2
+Extracting anchors for merged samples
+Finding integration vectors
+Finding integration vector weights
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+Integrating data
+Merging dataset 1 into 5 10 6 7
+Extracting anchors for merged samples
+Finding integration vectors
+Finding integration vector weights
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+Integrating data
+Merging dataset 8 9 into 3 2 4
+Extracting anchors for merged samples
+Finding integration vectors
+Finding integration vector weights
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+Integrating data
+Merging dataset 5 10 6 7 1 into 3 2 4 8 9
+Extracting anchors for merged samples
+Finding integration vectors
+Finding integration vector weights
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+Integrating data
 	Command being timed: "Rscript SCT_integrate.R /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/seurat_pipeline/kb_rds_filtered /projects/bgmp/nelphick/bioinfo/Yu_project/Yu_Project_2021/data/timepoints.txt /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/seurat_pipeline/combined_kb_filtered.rds"
-	User time (seconds): 1710.63
-	System time (seconds): 226.07
-	Percent of CPU this job got: 98%
-	Elapsed (wall clock) time (h:mm:ss or m:ss): 32:39.08
+	User time (seconds): 2369.87
+	System time (seconds): 377.93
+	Percent of CPU this job got: 108%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 42:18.43
 	Average shared text size (kbytes): 0
 	Average unshared data size (kbytes): 0
 	Average stack size (kbytes): 0
 	Average total size (kbytes): 0
-	Maximum resident set size (kbytes): 16790436
+	Maximum resident set size (kbytes): 61859240
 	Average resident set size (kbytes): 0
 	Major (requiring I/O) page faults: 0
-	Minor (reclaiming a frame) page faults: 73164312
-	Voluntary context switches: 6255
-	Involuntary context switches: 6949
+	Minor (reclaiming a frame) page faults: 75774412
+	Voluntary context switches: 8367
+	Involuntary context switches: 3859
 	Swaps: 0
 	File system inputs: 0
 	File system outputs: 0

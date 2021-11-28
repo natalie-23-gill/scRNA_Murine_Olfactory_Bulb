@@ -15,6 +15,17 @@ library(patchwork)
 ```
 
 ```{r}
+# read in the integrated object
+combined.sct = readRDS("combined_kb_unfiltered.rds")
+```
+
+```{r}
+#changing sample names in combined.sct from sample_LXXXX_kb to LXXXX 
+combined.sct@meta.data[["orig.ident"]] = sapply(combined.sct@meta.data[["orig.ident"]], 
+                                                function(x) str_split(x, "_")[[1]][2])
+```
+
+```{r}
 #read in marker genes
 markers = read_tsv("../Clustering/ob_markergenes.tsv", col_names = FALSE)
 
@@ -28,33 +39,24 @@ for (i in 1:nrow(markers)) {
   }
 }
 
+# get vector with top 3000 variable features
+top_feat = combined.sct@assays[["integrated"]]@var.features
+
+# filter out marker genes not in list of features
+filt_markers = markers[markers$X2 %in% top_feat, ]
+
 # get list of genes for each cell type separately  
-marker_list = as.list(unstack(rev(markers)))
-```
-
-```{r}
-# read in the integrated object
-combined.sct = readRDS("combined_kb_unfiltered.rds")
-```
-
-```{r}
-#changing sample names in combined.sct from sample_LXXXX_kb to LXXXX // can modify to put timepoint instead
-
-combined.sct@meta.data[["orig.ident"]] = sapply(combined.sct@meta.data[["orig.ident"]], 
-                                                function(x) str_split(x, "_")[[1]][2])
-
+marker_list = as.list(unstack(rev(filt_markers)))
 ```
 
 
 ```{r}
 DefaultAssay(combined.sct) <- "integrated"
 
-# how many PCAs ?? resolution ??
 combined.sct <- RunPCA(combined.sct, npcs = 30, verbose = FALSE)
 combined.sct <- RunUMAP(combined.sct, reduction = "pca", dims = 1:30)
 combined.sct <- FindNeighbors(combined.sct, reduction = "pca", dims = 1:30)
-combined.sct <- FindClusters(combined.sct, resolution = 0.5)
-
+combined.sct <- FindClusters(combined.sct, resolution = 0.3)
 
 DimPlot(combined.sct, reduction = "umap", label = TRUE, repel = TRUE)
 DimPlot(combined.sct, reduction = "umap", label = TRUE, repel = TRUE, split.by = "orig.ident")
@@ -63,14 +65,35 @@ DimPlot(combined.sct, reduction = "umap", group.by = "orig.ident")
 ```
 
 
-```{r}
 
-# just testing out 
+```{r}
+# generate feature plots for genes in the marker list (only those that are also in top variable features)
 DefaultAssay(combined.sct) <- "integrated"
-FeaturePlot(combined.sct, features = marker_list[[8]])
-FeaturePlot(combined.sct, features = "Sox11", split.by = "orig.ident", combine = FALSE) %>% CombinePlots(ncol=3)
+featureplots = list()
+
+dir_name = "unfiltered_feature_plots"
+dir.create(dir_name)
+
+for (i in 1:length(marker_list)) {
+  # For each cell type, will store plots for each of its marker genes 
+  featureplots[[i]] = FeaturePlot(combined.sct, features = marker_list[[i]], combine = FALSE)
+  for (j in 1:length(marker_list[[i]])) {
+    # Filename will be CellType_GeneName (ex. Astrocytes_Aldoc.png)
+    filename = paste0(names(marker_list[i]), "_", marker_list[[i]][j])
+    ggsave(paste0(dir_name, "/", filename, ".png"), featureplots[[i]][[j]])
+  }
+}
 
 ```
+
+
+```{r}
+#FeaturePlot(combined.sct, features = "Aldoc", split.by = "orig.ident", combine = FALSE)[[3]] + theme_classic()
+
+#(featureplots[[2]][[2]] + featureplots[[2]][[3]]) / (featureplots[[2]][[2]] + featureplots[[2]][[3]])
+
+```
+
 
 
 

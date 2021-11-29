@@ -1,0 +1,67 @@
+---
+title: "DE"
+author: "Laura Paez"
+date: "November 27, 2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      warning = FALSE,
+                      message = FALSE)
+library(Seurat)
+library(tidyverse)
+library(metap)
+library(dplyr)
+```
+
+```{r}
+#reading in samples txt file
+samples = read_delim("samples.txt", delim="\n",col_names=FALSE) %>% pull(X1)
+
+#reading in data, combined filtered seurat obj
+seurat_obj = readRDS("/Users/laurapaez/Downloads/combined_kb_filtered.rds")
+
+#assays on seurat obj
+seurat_obj = RunPCA(seurat_obj, features = VariableFeatures(object = seurat_obj))
+
+seurat_obj = FindNeighbors(seurat_obj, dims = 1:10)
+seurat_obj = FindClusters(seurat_obj, resolution = 0.11)
+
+
+
+```
+
+```{r}
+#running UMAP and plotting
+seurat_obj= RunUMAP(seurat_obj, dims = 1:10)
+
+DimPlot(object = seurat_obj, reduction = "umap")
+```
+
+```{r}
+
+#FindAllMarkers for each cluster in seurat_obj
+seu.markers <- FindAllMarkers(seurat_obj, only.pos = TRUE, min.pct = 0.25, logfc.threshold = 0.25)
+seu.markers %>%
+    group_by(cluster) %>%
+    slice_max(n = 2, order_by = avg_log2FC)
+
+# Create function to get conserved markers for any given cluster
+# get_conserved <- function(cluster){
+#         FindConservedMarkers(seurat_obj,
+#                              ident.1 = cluster,
+#                              grouping.var ="timepoint",
+#                              only.pos = TRUE) %>%
+#                 rownames_to_column(var = paste0("gene", seurat_obj$timepoint)) %>%
+#                 cbind(cluster_id = cluster, .)
+# }
+
+# markers = list()
+# # markers = c(markers, map_dfr(c(0:18), get_conserved))
+# 
+# for (i in 0:18){
+#   markers = c(markers, map_dfr(c(i), get_conserved))
+# }
+```
+

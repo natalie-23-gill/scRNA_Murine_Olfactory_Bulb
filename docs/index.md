@@ -2,7 +2,7 @@
 
 You can use the [editor on GitHub](https://github.com/natalie-23-gill/Yu_Project_2021/edit/main/docs/index.md) to maintain and preview the content for your website in Markdown files.
 
-Test [link](../main/Preprocessing/violin_plots/violin_plots.html)
+Test [link](../Preprocessing/violin_plots/violin_plots.html)
 
 Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 

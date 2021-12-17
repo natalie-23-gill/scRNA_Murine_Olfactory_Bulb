@@ -1,0 +1,150 @@
+---
+title: "Clustree"
+author: "Natalie Elphick"
+date: "12/2/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      warning = FALSE,
+                      message = FALSE,
+                      fig.width = 16,
+                      fig.height = 10)
+library(tidyverse)
+library(Seurat)
+library(kableExtra)
+library(future)
+library(clustree)
+plan()
+plan("multicore", workers = 4,future.seed=TRUE)
+set.seed(423)
+
+```
+```{r}
+combined.sct = readRDS("combined_kb_filtered_3000nfeatures.rds")
+DefaultAssay(combined.sct) = "integrated"
+
+
+# Set timepoint metadata to right order
+combined.sct$timepoint = factor(combined.sct$timepoint,levels = c("E14","E18","P0","P3","P5","P7","P10","P14","P21","Adult"))
+
+
+markergenes =read_tsv("ob_markergenes.tsv",col_names = F) %>%
+  rename(Cell_type = X1, gene = X2)
+
+
+
+
+```
+
+
+```{r}
+# Standard workflow for visualization and clustering
+
+
+combined.sct = RunPCA(combined.sct, npcs = 30, verbose = FALSE)
+combined.sct = RunUMAP(combined.sct, reduction = "pca", dims = 1:30)
+combined.sct= FindNeighbors(combined.sct, reduction = "pca", dims = 1:30)
+#ElbowPlot(combined.sct)
+```
+
+```{r}
+# Clustree 
+resolution.range = seq(from = 0, to = 1.2, by = .2)
+
+combined.sct = FindClusters(combined.sct, resolution = resolution.range)
+
+inter_genes = markergenes %>%
+  filter(gene %in% combined.sct@assays[["integrated"]]@var.features) %>%
+  filter(Cell_type == "Interneurons") %>%
+  pull(gene)
+
+prog_genes = markergenes %>%
+  filter(gene %in% combined.sct@assays[["integrated"]]@var.features) %>%
+  filter(Cell_type == "Progenitor") %>%
+  pull(gene)
+
+mitral_genes = markergenes %>%
+  filter(gene %in% combined.sct@assays[["integrated"]]@var.features) %>%
+  filter(Cell_type == "Mitral") %>%
+  pull(gene)
+
+astro_genes = markergenes %>%
+  filter(gene %in% combined.sct@assays[["integrated"]]@var.features) %>%
+  filter(Cell_type == "Astrocytes") %>%
+  pull(gene)
+  
+oligo_genes = markergenes %>%
+  filter(gene %in% combined.sct@assays[["integrated"]]@var.features) %>%
+  filter(Cell_type == "Oligodendrocyte") %>%
+  pull(gene)
+  
+lp_genes = markergenes %>%
+  filter(gene %in% combined.sct@assays[["integrated"]]@var.features) %>%
+  filter(Cell_type == "LP") %>%
+  pull(gene)
+  
+
+
+
+
+```
+
+# Interneurons
+
+```{r}
+for (i in inter_genes){
+print(clustree(combined.sct, prefix = "integrated_snn_res.",show_axis = TRUE,
+         node_colour = i, node_colour_aggr = "mean")+scale_color_gradient(low = "white", high = "#f02929"))
+}
+
+
+
+```
+
+# Progenitor  
+
+```{r}
+for (i in prog_genes){
+print(clustree(combined.sct, prefix = "integrated_snn_res.",show_axis = TRUE,
+         node_colour = i, node_colour_aggr = "mean")+scale_color_gradient(low = "white", high = "#f02929"))
+}
+```
+
+# Mitral  
+
+```{r}
+for (i in mitral_genes){
+print(clustree(combined.sct, prefix = "integrated_snn_res.",show_axis = TRUE,
+         node_colour = i, node_colour_aggr = "mean")+scale_color_gradient(low = "white", high = "#f02929"))
+}
+```
+
+# Astrocytes
+
+```{r}
+for (i in astro_genes){
+print(clustree(combined.sct, prefix = "integrated_snn_res.",show_axis = TRUE,
+         node_colour = i, node_colour_aggr = "mean")+scale_color_gradient(low = "white", high = "#f02929"))
+}
+```
+
+# Oligodendrocytes
+
+```{r}
+for (i in oligo_genes){
+print(clustree(combined.sct, prefix = "integrated_snn_res.",show_axis = TRUE,
+         node_colour = i, node_colour_aggr = "mean")+scale_color_gradient(low = "white", high = "#f02929"))
+}
+
+```
+
+# LP  
+
+```{r}
+for (i in lp_genes){
+print(clustree(combined.sct, prefix = "integrated_snn_res.",show_axis = TRUE,
+         node_colour = i, node_colour_aggr = "mean")+scale_color_gradient(low = "white", high = "#f02929"))
+}
+```

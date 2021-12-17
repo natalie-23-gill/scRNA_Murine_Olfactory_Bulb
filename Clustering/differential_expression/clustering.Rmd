@@ -1,0 +1,158 @@
+---
+title: "Differential Expression"
+author: "Natalie Elphick"
+date: "11/27/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      warning = FALSE,
+                      message = FALSE,
+                      fig.width = 10,
+                      fig.height = 8)
+library(tidyverse)
+library(Seurat)
+library(kableExtra)
+library(future)
+library(clustree)
+plan()
+plan("multicore", workers = 4,future.seed=TRUE)
+set.seed(423)
+```
+
+```{r}
+markergenes =read_tsv("ob_markergenes.tsv",col_names = F) %>%
+  rename(Cell_type = X1, gene = X2)
+
+
+```
+
+
+```{r}
+combined.sct = readRDS("combined_kb_filtered_3000nfeatures.rds")
+DefaultAssay(combined.sct) = "integrated"
+
+
+# Set timepoint metadata to right order
+combined.sct$timepoint = factor(combined.sct$timepoint,levels = c("E14","E18","P0","P3","P5","P7","P10","P14","P21","Adult"))
+
+
+
+```
+
+
+```{r}
+# Standard workflow for visualization and clustering
+
+
+combined.sct = RunPCA(combined.sct, npcs = 30, verbose = FALSE)
+combined.sct = RunUMAP(combined.sct, reduction = "pca", dims = 1:30)
+combined.sct= FindNeighbors(combined.sct, reduction = "pca", dims = 1:30)
+#ElbowPlot(combined.sct)
+```
+
+
+
+
+
+```{r UMAP}
+
+
+combined.sct = FindClusters(combined.sct, resolution = 1)
+
+#saveRDS(combined.sct,"clustered_kb_res1_30PC.rds")
+
+DimPlot(combined.sct, reduction = "umap", label = TRUE, repel = TRUE,pt.size = 1)
+
+
+
+#DimPlot(combined.sct, reduction = "umap", group.by = "timepoint")
+```
+
+```{r}
+
+DefaultAssay(combined.sct) <- "RNA"
+
+all.markers <- FindAllMarkers(combined.sct,only.pos = TRUE,logfc.threshold = 0.25)
+
+mgene_res <- all.markers %>%
+  filter(p_val_adj < 0.05) %>%
+  mutate(identity_score = (pct.1/pct.2)*avg_log2FC) %>%
+  inner_join(markergenes) %>%
+  group_by(cluster) %>%
+  top_n(n = 1,wt = identity_score)
+
+mgene_res_all <- all.markers %>%
+  filter(p_val_adj < 0.05) %>%
+  mutate(identity_score = (pct.1/pct.2)*avg_log2FC) %>%
+  inner_join(markergenes) %>%
+  group_by(cluster)
+
+
+mgene_res %>% kbl() %>% kable_minimal()
+
+
+
+```
+
+```{r}
+found_celltypes <- mgene_res %>%
+  select(Cell_type,cluster) %>% distinct()
+
+found_celltypes %>% kbl() %>% kable_minimal()
+```
+
+
+```{r}
+max_c <- levels(unique(combined.sct@meta.data$seurat_clusters)) %>% as.vector() %>% as.numeric() %>% max()
+min_c <- levels(unique(combined.sct@meta.data$seurat_clusters)) %>% as.vector() %>% as.numeric() %>% min()
+
+
+
+cells_f <- found_celltypes$cluster %>% as.character() %>% as.numeric()
+
+clusters <- seq(min_c,max_c)
+
+unknown_clusters <- union(setdiff(cells_f,clusters),setdiff(clusters,cells_f))
+```
+
+```{r}
+
+
+assign_cells <-found_celltypes %>%
+  rbind(tibble(Cell_type = as.character(factor(unknown_clusters)), cluster = factor(unknown_clusters)))
+
+
+name_list <- set_names(assign_cells$Cell_type,assign_cells$cluster)
+
+combined.sct <- RenameIdents(combined.sct,name_list)
+
+
+colors<- RColorBrewer::brewer.pal(n=12,name="Set3")
+
+
+col_n <-set_names(colors,unique(assign_cells$Cell_type))
+
+DimPlot(combined.sct, reduction = "umap", label = TRUE, repel = TRUE,cols = col_n,pt.size = 1,label.size = 7)
+
+```
+
+```{r}
+all.markers %>%
+  filter(cluster == 10 | cluster == 13 | cluster == 22 | cluster == 24 |cluster ==30) %>%
+  filter(p_val_adj < 0.05) %>%
+  filter(pct.1>.25 & pct.2>0) %>%
+  mutate(identity_score = (pct.1/pct.2)*avg_log2FC) %>%
+  group_by(cluster) %>%
+  top_n(n = 10,wt = identity_score)  %>% view()
+```
+
+```{r}
+VlnPlot(combined.sct,features="percent.mt")
+```
+
+```{r}
+
+```
+

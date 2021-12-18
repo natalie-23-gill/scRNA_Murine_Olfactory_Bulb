@@ -22,9 +22,19 @@ set.seed(423)
 ```
 
 ```{r}
-markergenes =read_tsv("ob_markergenes.tsv",col_names = F) %>%
+#read in marker genes
+markergenes = read_tsv("../../data/ob_markergenes.tsv", col_names = FALSE) %>%
   rename(Cell_type = X1, gene = X2)
 
+# fill in empty cells in 1st column 
+for (i in 1:nrow(markergenes)) {
+  if (is.na(markergenes[i,1])) {
+    markergenes[i,1] = type
+  } 
+  else {
+    type = markergenes[i,1]
+  }
+}
 
 ```
 

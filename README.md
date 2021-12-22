@@ -1,12 +1,3 @@
-<header class="page-header" role="banner">
-  <h1 class="project-name">Single cell atlas of neural development in the murine olfactory system</h1>
-  <h2 class="project-tagline"></h2>
-
-    <a href="https://github.com/natalie-23-gill/Yu_Project_2021" class="btn">Test Button</a>
-
-
-</header>
-
 ## Single cell atlas of neural development in the murine olfactory system  
 
 #### Created: 10/07/2021

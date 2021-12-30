@@ -1,4 +1,16 @@
-## Single cell atlas of neural development in the murine olfactory system  
+## Single cell atlas of neural development in the murine olfactory bulb  
+
+
+
+## Introduction   
+
+In order to investigate the development of the olfactory bulb during the critical period, here we perform an analysis of scRNA-seq data from 10 mouse olfactory bulbs each at different developmental time points (E14, E18, P0, P3, P5, P7, P10, P14, P21, and Adult). These tissue samples were dissociated and sequenced on the 10x Genomics' single-cell RNA-seq platform. Our analysis focuses on the cells identified as interneurons through differential expression analysis.
+
+## Methods   
+
+### Preprocessing  
+
+We performed 10x Genomics Cell Ranger 6.1.1 and kallisto \| bustools preprocessing to compare the resulting count matrices using the most recent ensembl release (104) of the mus musculus genome GRCm39. We then filtered the empty droplets from the kb count ouput and saved the outputs from both pipelines as RDS R objects for downstream comparison in Seurat. Additional documentation can be found in the cellranger and kallisto_bustools subdirectories under ./Preprocessing. 
 
 #### Created: 10/07/2021
 
@@ -8,15 +20,10 @@
 
 #### Contributors: Laura Paez, Natalie Elphick and Christina Zakarian   
 
-## Project goals   
+## References   
 
-1. Learn how to map reads and extract expression data for individual cells.
-2. Cluster cells according to their gene expression patterns.
-3. Use marker genes to identify cell types and clusters.
-4. Use statistical analyses to identify cells that are enriched in specific cell types.
-5. Use trajectory analysis to determine the lineage connections of the cells.   
+1.Zheng, G. X. Y. et al. Massively parallel digital transcriptional profiling of single cells. Nat Commun 8, 14049 (2017).   
+2.Bray, N. L., Pimentel, H., Melsted, P. & Pachter, L. Near-optimal probabilistic RNA-seq quantification. Nat Biotechnol 34, 525–527 (2016).   
+3.Melsted, P. et al. Modular, efficient and constant-memory single-cell RNA-seq preprocessing. Nat Biotechnol 39, 813–818 (2021).   
 
-### 1. Preprocessing  
-
-We performed cellranger and kallisto \| bustools preprocessing to compare the resulting count matrices using the most recent ensembl release (104) of the mus musculus genome GRCm39. We then filtered the empty droplets from the kb count ouput and saved the outputs from both pipelines as RDS R objects for downstream comparison in Seurat. Additional documentation can be found in the cellranger and kallisto_bustools subdirectories under ./Preprocessing. 
 

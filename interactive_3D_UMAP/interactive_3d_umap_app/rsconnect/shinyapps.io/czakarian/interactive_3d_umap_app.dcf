@@ -1,0 +1,13 @@
+name: interactive_3d_umap_app
+title: interactive_3d_umap_app
+username:
+account: czakarian
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 5382720
+bundleId: 5427814
+url: https://czakarian.shinyapps.io/interactive_3d_umap_app/
+when: 1641172207.43105
+lastSyncTime: 1641172207.43108
+asMultiple: FALSE
+asStatic: FALSE

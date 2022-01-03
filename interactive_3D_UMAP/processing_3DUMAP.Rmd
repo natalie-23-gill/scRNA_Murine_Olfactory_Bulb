@@ -1,0 +1,43 @@
+---
+title: "Processing for 3D UMAP"
+author: "Christina Zakarian"
+output: html_document
+---
+
+```{r}
+library(Seurat)
+library(tidyverse)
+```
+
+```{r}
+combined.sct.3d = readRDS("clustered_kb_res1_30PC.rds")
+```
+
+```{r}
+# rerun UMAP with 3 dimensions
+DefaultAssay(combined.sct.3d) = "integrated"
+combined.sct.3d <- RunUMAP(combined.sct.3d, dims = 1:30, n.components = 3L)
+```
+
+```{r}
+#read in marker genes
+markers = read_tsv("filt_ob_markergenes.tsv", col_names = FALSE) 
+marker_list = as.list(unstack(rev(filt_markers)))
+```
+
+
+```{r}
+# prepare dataframe for plotting 
+plot.data <- FetchData(object = combined.sct.3d, vars = c("UMAP_1", "UMAP_2", "UMAP_3"))
+plot.data$Identity <- Idents(combined.sct.3d)
+plot.data$label <- paste(rownames(plot.data))
+plot.data <- cbind(plot.data, FetchData(object = combined.sct.3d, vars = filt_markers$X2))
+
+# write out to csv file to upload into R shiny app
+write_csv(plot.data, "plot_data3.csv")
+
+```
+
+
+
+

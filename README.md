@@ -4,8 +4,10 @@
 
 ## Introduction   
 
-In order to investigate the development of the olfactory bulb during the critical period, here we perform an analysis of scRNA-seq data from 10 mouse olfactory bulbs each at different developmental time points (E14, E18, P0, P3, P5, P7, P10, P14, P21, and Adult). These tissue samples were dissociated and sequenced on the 10x Genomics' single-cell RNA-seq platform. Our analysis focuses on the cells identified as interneurons through differential expression analysis.
+In order to investigate the development of the olfactory bulb during the critical period of olfactory map formation, here we perform an analysis of scRNA-seq data from 10 mouse olfactory bulbs each at different developmental time points (E14, E18, P0, P3, P5, P7, P10, P14, P21, and Adult). These tissue samples were dissociated and sequenced on the 10x Genomics' single-cell RNA-seq platform. Our analysis focuses on the cells identified as interneurons through differential expression analysis.   
 
+![Workflow Diagram](./assets/images/workflow.png)
+   
 ## Methods   
 
 ### Preprocessing  

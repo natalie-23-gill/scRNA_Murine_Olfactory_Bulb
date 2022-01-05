@@ -1,4 +1,4 @@
-## Single cell atlas of neural development in the murine olfactory bulb  
+# Single cell atlas of neural development in the murine olfactory bulb  
 
 
 

@@ -16,11 +16,13 @@ We performed 10x Genomics Cell Ranger 6.1.1 and kallisto \| bustools preprocessi
 <a href="https://natalie-23-gill.github.io/scRNA_Murine_Olfactory_Bulb/Preprocessing/cellranger/cellranger.html">CellRanger</a>   
 <a href="https://natalie-23-gill.github.io/scRNA_Murine_Olfactory_Bulb/Preprocessing/kallisto_bustools/kallisto_bustools.html">kallisto \| bustools</a>   
 The results of comparing the preprocessing pipelines show kallisto \| bustools detects more genes across the time points and higher percent alignment to the transcriptome than CellRanger, to view the results of the pipeline comparison click <a href="https://natalie-23-gill.github.io/scRNA_Murine_Olfactory_Bulb/Preprocessing/pipeline_comparison/pipeline_comparison.html">here</a>.
-
   
- 
+### Clustering and Cell Type Identification   
 
-#### Created: 10/07/2021
+After running the kallisto \| bustools preprocessing pipeline, we filtered each time point count matrix and kept the cells that met the following criteria (nFeature_RNA > 200, nCount_RNA < 10, percent.mt < 7%). We then ran the standard Seurat v4 SCTintegration workflow, UMAP dimensionality reduction, kNN clustering and wilcoxon rank sum test differential expression on those clusters in order to identify specific cell types across the time points using known marker genes.    
+
+
+## Created: 10/07/2021
 
 #### PI: Dr. Ron Yu CRY@stowers.org    
 

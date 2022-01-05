@@ -1,0 +1,81 @@
+---
+title: "Interneuron Analysis"
+author: "Natalie Elphick"
+date: "12/30/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      warning = FALSE,
+                      message = FALSE,
+                      fig.width = 10,
+                      fig.height = 8)
+library(tidyverse)
+library(Seurat)
+library(kableExtra)
+library(future)
+library(clustree)
+plan()
+plan("multicore", workers = 4,future.seed=TRUE)
+set.seed(423)
+```
+
+```{r load}
+
+interneurons <- readRDS("../../data/interneurons_kb.rds")
+
+```
+
+
+```{r}
+DefaultAssay(interneurons) <- "integrated"
+
+# interneurons = FindVariableFeatures(interneurons, selection.method = "vst", nfeatures = 3000)
+# all.genes = rownames(interneurons)
+# interneurons = ScaleData(interneurons, features = all.genes)
+
+#interneurons = RunPCA(interneurons, features = VariableFeatures(object = interneurons))
+
+#interneurons = RunPCA(interneurons,npcs = 30)
+interneurons = RunUMAP(interneurons, reduction = "pca", dims = 1:30)
+interneurons= FindNeighbors(interneurons, reduction = "pca", dims = 1:30)
+
+
+interneurons = FindClusters(interneurons, resolution = .7)
+
+DimPlot(interneurons, reduction = "umap", label = TRUE, repel = TRUE,pt.size = 1)
+DimPlot(interneurons, reduction = "umap", label = TRUE, repel = TRUE, group.by = "timepoint",pt.size = 1)
+
+pre.critical <- unique(interneurons@meta.data["timepoint"]) %>% pull(timepoint) 
+
+pre.critical <- pre.critical[0:5]
+
+interneurons@meta.data <- interneurons@meta.data %>%
+  mutate(timepoint2 = ifelse(timepoint %in% pre.critical,
+                             "E14-P5",
+                             "P7-Adult"))
+
+DimPlot(interneurons, reduction = "umap", label = TRUE, repel = TRUE, split.by =  "timepoint2",pt.size = 1)
+
+DimPlot(interneurons, reduction = "umap", label = TRUE, repel = TRUE,pt.size = 1, group.by =  "timepoint2")
+```
+```{r}
+DefaultAssay(interneurons) <- "RNA"
+
+all.markers <- FindAllMarkers(interneurons,only.pos = TRUE,logfc.threshold = 0.25)
+
+sig.markers <- all.markers %>%
+  filter(p_val_adj < 0.05) 
+
+
+sig.markers %>% 
+  group_by(cluster) %>%
+  top_n(n = 5,wt = avg_log2FC) %>% 
+  kbl() %>%
+  kable_minimal()
+
+```
+
+```{r}
+

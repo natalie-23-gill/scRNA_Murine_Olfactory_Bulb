@@ -15,7 +15,7 @@ library(tidyverse)
 library(Seurat)
 library(kableExtra)
 library(future)
-library(clustree)
+
 plan()
 plan("multicore", workers = 4,future.seed=TRUE)
 set.seed(423)
@@ -71,11 +71,9 @@ combined.sct= FindNeighbors(combined.sct, reduction = "pca", dims = 1:30)
 
 combined.sct = FindClusters(combined.sct, resolution = 1)
 
-#saveRDS(combined.sct,"clustered_kb_res1_30PC.rds")
+
 
 DimPlot(combined.sct, reduction = "umap", label = TRUE, repel = TRUE,pt.size = 1)
-
-
 
 #DimPlot(combined.sct, reduction = "umap", group.by = "timepoint")
 ```
@@ -84,7 +82,8 @@ DimPlot(combined.sct, reduction = "umap", label = TRUE, repel = TRUE,pt.size = 1
 
 DefaultAssay(combined.sct) <- "RNA"
 
-all.markers <- FindAllMarkers(combined.sct,only.pos = TRUE,logfc.threshold = 0.25)
+all.markers <- FindAllMarkers(combined.sct,only.pos = TRUE,logfc.threshold = 0.25)%>%
+  filter(p_val_adj < 0.05)
 
 mgene_res <- all.markers %>%
   filter(p_val_adj < 0.05) %>%
@@ -99,18 +98,13 @@ mgene_res_all <- all.markers %>%
   inner_join(markergenes) %>%
   group_by(cluster)
 
-
-mgene_res %>% kbl() %>% kable_minimal()
-
-
-
+write_csv(all.markers, file = "diff_exp_results_all_cells.csv")
 ```
 
 ```{r}
 found_celltypes <- mgene_res %>%
   select(Cell_type,cluster) %>% distinct()
 
-found_celltypes %>% kbl() %>% kable_minimal()
 ```
 
 
@@ -139,30 +133,64 @@ name_list <- set_names(assign_cells$Cell_type,assign_cells$cluster)
 combined.sct <- RenameIdents(combined.sct,name_list)
 
 
-colors<- RColorBrewer::brewer.pal(n=12,name="Set3")
+colors<- RColorBrewer::brewer.pal(n=length(unique(assign_cells$Cell_type)),name="Set3")
 
+#colors[13]<-"#eb4034"
 
 col_n <-set_names(colors,unique(assign_cells$Cell_type))
 
 DimPlot(combined.sct, reduction = "umap", label = TRUE, repel = TRUE,cols = col_n,pt.size = 1,label.size = 7)
 
+
+table(Idents(combined.sct)) %>% kbl(col.names = c("Cluster","Cell Count")) %>% kable_minimal()
+
+```
+
+
+```{r}
+#saveRDS(combined.sct,"clustered_kb_res1_30PC.rds")
+
+
+pre.critical <- unique(combined.sct@meta.data["timepoint"]) %>% pull(timepoint) 
+
+pre.critical <- pre.critical[0:5]
+
+combined.sct@meta.data <- combined.sct@meta.data %>%
+  mutate(timepoint2 = ifelse(timepoint %in% pre.critical,
+                             "E14-P5",
+                             "P7-Adult"))
+
+
+DimPlot(combined.sct, reduction = "umap", label = TRUE, repel = TRUE,pt.size = 1, group.by =  "timepoint")
+
+combined.sct[["percent.olf"]] <- PercentageFeatureSet(combined.sct, pattern = "^Olfr")
+combined.sct[["percent.vmn"]] <- PercentageFeatureSet(combined.sct, pattern = "^Vmn")
+
+
+
 ```
 
 ```{r}
-all.markers %>%
-  filter(cluster == 10 | cluster == 13 | cluster == 22 | cluster == 24 |cluster ==30) %>%
-  filter(p_val_adj < 0.05) %>%
-  filter(pct.1>.25 & pct.2>0) %>%
-  mutate(identity_score = (pct.1/pct.2)*avg_log2FC) %>%
-  group_by(cluster) %>%
-  top_n(n = 10,wt = identity_score)  %>% view()
+
+FeaturePlot(combined.sct,features = "percent.olf",label = TRUE, repel = TRUE, min.cutoff = "q10", max.cutoff = "q90")
+FeaturePlot(combined.sct,features = "percent.vmn",label = TRUE, repel = TRUE, min.cutoff = "q10", max.cutoff = "q90")
+
+FeaturePlot(combined.sct,features = "percent.mt",label = TRUE, repel = TRUE, min.cutoff = "q10", max.cutoff = "q90")
+```
+
+
+```{r}
+VlnPlot(combined.sct,features = "percent.olf")
+VlnPlot(combined.sct,features = "percent.vmn")
+VlnPlot(combined.sct,features = "percent.mt")
 ```
 
 ```{r}
-VlnPlot(combined.sct,features="percent.mt")
-```
+combined.sct <- subset(x = combined.sct,idents = "Interneurons")
 
-```{r}
+
+#saveRDS(combined.sct,file = "interneurons_kb.rds")
+
 
 ```
 

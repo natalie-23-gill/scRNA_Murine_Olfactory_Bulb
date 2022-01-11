@@ -29,15 +29,18 @@ interneurons <- readRDS("../../data/interneurons_kb.rds")
 
 
 ```{r}
-DefaultAssay(interneurons) <- "integrated"
+DefaultAssay(interneurons) = "integrated"
 
-# interneurons = FindVariableFeatures(interneurons, selection.method = "vst", nfeatures = 3000)
+Idents(interneurons) = "integrated_snn_res.1"
+
+interneurons = FindVariableFeatures(interneurons, selection.method = "vst", nfeatures = 3000)
 # all.genes = rownames(interneurons)
 # interneurons = ScaleData(interneurons, features = all.genes)
 
 #interneurons = RunPCA(interneurons, features = VariableFeatures(object = interneurons))
 
 #interneurons = RunPCA(interneurons,npcs = 30)
+
 interneurons = RunUMAP(interneurons, reduction = "pca", dims = 1:30)
 interneurons= FindNeighbors(interneurons, reduction = "pca", dims = 1:30)
 
@@ -47,9 +50,9 @@ interneurons = FindClusters(interneurons, resolution = .7)
 DimPlot(interneurons, reduction = "umap", label = TRUE, repel = TRUE,pt.size = 1)
 DimPlot(interneurons, reduction = "umap", label = TRUE, repel = TRUE, group.by = "timepoint",pt.size = 1)
 
-pre.critical <- unique(interneurons@meta.data["timepoint"]) %>% pull(timepoint) 
+time_points <- unique(interneurons@meta.data["timepoint"]) %>% pull(timepoint) 
 
-pre.critical <- pre.critical[0:5]
+pre.critical <- levels(time_points)[1:5]
 
 interneurons@meta.data <- interneurons@meta.data %>%
   mutate(timepoint2 = ifelse(timepoint %in% pre.critical,
@@ -60,6 +63,7 @@ DimPlot(interneurons, reduction = "umap", label = TRUE, repel = TRUE, split.by =
 
 DimPlot(interneurons, reduction = "umap", label = TRUE, repel = TRUE,pt.size = 1, group.by =  "timepoint2")
 ```
+
 ```{r}
 DefaultAssay(interneurons) <- "RNA"
 
@@ -78,4 +82,24 @@ sig.markers %>%
 ```
 
 ```{r}
+# Subset by pre and post critical 
+
+Idents(interneurons) <- "timepoint2"
+
+
+
+pre_crit_ob <- subset(x = interneurons,idents = "E14-P5")
+
+saveRDS(pre_crit_ob,file = "../../data/pre_critical_interneurons.RDS")
+
+# remove saved object for memory
+rm(pre_crit_ob)
+
+post_crit_ob <- subset(x = interneurons,idents = "P7-Adult")
+
+
+saveRDS(post_crit_ob,file = "../../data/post_critical_interneurons.RDS")
+rm(post_crit_ob)
+```
+
 

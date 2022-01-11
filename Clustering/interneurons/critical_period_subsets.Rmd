@@ -1,0 +1,69 @@
+---
+title: "interneuron_critical period"
+author: "Natalie Elphick"
+date: "1/7/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      warning = FALSE,
+                      message = FALSE,
+                      fig.width = 10,
+                      fig.height = 8)
+library(tidyverse)
+library(Seurat)
+library(kableExtra)
+library(future)
+library(clustree)
+plan()
+plan("multicore", workers = 4,future.seed=TRUE)
+set.seed(423)
+```
+
+```{r}
+pre_crit <- readRDS("../../data/pre_critical_interneurons.RDS")
+post_crit <- readRDS("../../data/post_critical_interneurons.RDS")
+
+```
+
+```{r}
+DefaultAssay(pre_crit) <- "integrated"
+DefaultAssay(post_crit) <- "integrated"
+
+Idents(pre_crit) <- "integrated_snn_res.0.7"
+Idents(post_crit) <- "integrated_snn_res.0.7"
+
+DimPlot(pre_crit, reduction = "umap", label = TRUE, repel = TRUE,pt.size = 1)
+DimPlot(post_crit, reduction = "umap", label = TRUE, repel = TRUE,pt.size = 1)
+
+
+```
+
+
+```{r}
+pre_crit = RunUMAP(pre_crit, reduction = "pca", dims = 1:30)
+pre_crit= FindNeighbors(pre_crit, reduction = "pca", dims = 1:30)
+
+
+pre_crit = FindClusters(pre_crit, resolution = .7)
+
+post_crit = RunUMAP(post_crit, reduction = "pca", dims = 1:30)
+post_crit= FindNeighbors(post_crit, reduction = "pca", dims = 1:30)
+
+
+post_crit = FindClusters(post_crit, resolution = .7)
+```
+
+```{r}
+DimPlot(pre_crit, reduction = "umap", label = TRUE, repel = TRUE,pt.size = 1, group.by = "timepoint")
+```
+
+```{r}
+DimPlot(post_crit, reduction = "umap", label = TRUE, repel = TRUE,pt.size = 1, group.by = "timepoint")
+```
+```{r}
+DimPlot(post_crit, reduction = "umap", label = TRUE, repel = TRUE,pt.size = 1, split.by = "timepoint",ncol = 2)
+```
+
+

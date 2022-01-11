@@ -15,7 +15,9 @@ library(tidyverse)
 library(Seurat)
 library(kableExtra)
 library(future)
-library(clustree)
+library(clusterProfiler)
+library(org.Mm.eg.db)
+library(AnnotationHub)
 plan()
 plan("multicore", workers = 4,future.seed=TRUE)
 set.seed(423)
@@ -33,7 +35,7 @@ DefaultAssay(interneurons) <- "RNA"
 
 interneurons = FindVariableFeatures(interneurons, selection.method = "vst", nfeatures = 10000)
 all.genes = rownames(interneurons)
-interneurons = ScaleData(interneurons, features = all.genes)
+interneurons = ScaleData(interneurons)
 
 interneurons = RunPCA(interneurons, features = VariableFeatures(object = interneurons))
 
@@ -47,10 +49,11 @@ interneurons = FindClusters(interneurons, resolution = .7)
 DimPlot(interneurons, reduction = "umap", label = TRUE, repel = TRUE,pt.size = 1)
 DimPlot(interneurons, reduction = "umap", label = TRUE, repel = TRUE, group.by = "timepoint",pt.size = 1)
 
-pre.critical <- unique(interneurons@meta.data["timepoint"]) %>% pull(timepoint) 
+time_points <- unique(interneurons@meta.data["timepoint"]) %>% pull(timepoint) 
 
-pre.critical <- pre.critical[0:5]
+pre.critical <- levels(time_points)[1:5]
 
+# Add new timepoint column for pre and post critical period
 interneurons@meta.data <- interneurons@meta.data %>%
   mutate(timepoint2 = ifelse(timepoint %in% pre.critical,
                              "E14-P5",
@@ -74,18 +77,71 @@ sig.markers <- all.markers %>%
 
 
 sig.markers %>% 
-  group_by(cluster) %>%
-  top_n(n = 5,wt = avg_log2FC) %>% 
+  filter(cluster == 5) %>%
+  arrange(desc(avg_log2FC)) %>%
+  head(20) %>%
   kbl() %>%
   kable_minimal()
+
 write_csv(sig.markers, file = "sig_markers_1.csv")
 ```
 
+```{r,fig.dim=c(11,11)}
+
+# genes in cluster 5 that have a log2 fold change > 1
+cluster5_genes  = sig.markers %>%
+  filter(cluster == 5 & avg_log2FC>1) 
+
+# Concert gene symbols to ENSEMBL
+geneconvert = bitr(rownames(cluster5_genes), fromType="SYMBOL", toType="ENSEMBL", OrgDb="org.Mm.eg.db")
+
+go_enrich <- enrichGO(gene = geneconvert$ENSEMBL,
+                      OrgDb = org.Mm.eg.db,
+                      keyType = "ENSEMBL",
+                      pvalueCutoff = 0.05,
+                      ont = "ALL",
+                      pAdjustMethod ="BH")
+
+
+
+dotplot(go_enrich,
+        split="ONTOLOGY",showCategory=15)+
+  facet_grid(ONTOLOGY ~ .,scales = "free")+
+scale_y_discrete(expand=c(0.1, 0))
+```
+
 ```{r}
+
+```
+
+
+
+
+```{r}
+
 table(Idents(interneurons)) %>% kbl(col.names = c("Cluster","Cell Count")) %>% kable_minimal()
 
-interneurons[["percent.olf"]] <- PercentageFeatureSet(interneurons, pattern = "^Olfr")
-interneurons[["percent.vmn"]] <- PercentageFeatureSet(interneurons, pattern = "^Vmn")
 
-FeaturePlot(interneurons,features = "percent.olf",label = TRUE, repel = TRUE, min.cutoff = "q10", max.cutoff = "q90",pt.size = 1,split.by="timepoint2")
-FeaturePlot(interneurons,features = "percent.vmn",label = TRUE, repel = TRUE, min.cutoff = "q10", max.cutoff = "q90",pt.size = 1,split.by="timepoint2")
+
+# interneurons[["percent.olf"]] <- PercentageFeatureSet(interneurons, pattern = "^Olfr")
+# interneurons[["percent.vmn"]] <- PercentageFeatureSet(interneurons, pattern = "^Vmn")
+# 
+# FeaturePlot(interneurons,features = "percent.olf",label = TRUE, repel = TRUE, min.cutoff = "q10", max.cutoff = "q90",pt.size = 1)
+# FeaturePlot(interneurons,features = "percent.vmn",label = TRUE, repel = TRUE, min.cutoff = "q10", max.cutoff = "q90",pt.size = 1)
+
+DimHeatmap(interneurons, dims = 1:15, cells = 500, balanced = TRUE)
+
+```
+
+
+```{r}
+DimPlot(interneurons, reduction = "pca", group.by = "timepoint",pt.size = 1)
+DimPlot(interneurons, reduction = "pca", group.by = "timepoint",pt.size = 1,dims=c(2,3))
+DimPlot(interneurons, reduction = "pca", group.by = "timepoint",pt.size = 1,dims=c(3,4))
+DimPlot(interneurons, reduction = "pca", group.by = "timepoint",pt.size = 1,dims=c(4,5))
+DimPlot(interneurons, reduction = "pca", group.by = "timepoint",pt.size = 1,dims=c(5,6))
+DimPlot(interneurons, reduction = "pca", group.by = "timepoint",pt.size = 1,dims=c(5,7))
+DimPlot(interneurons, reduction = "pca", group.by = "timepoint",pt.size = 1,dims=c(7,8))
+```
+
+

@@ -5,3 +5,6 @@ Clustering/differential_expression/clustered_kb_res1_30PC.rds
 data/interneurons_kb.rds
 data/post_critical_interneurons.RDS
 data/pre_critical_interneurons.RDS
+data/interneurons_labeled.RDS
+Clustering/interneurons/interneuron_analysis_1_cache/
+Clustering/interneurons/interneuron_analysis_1_files/

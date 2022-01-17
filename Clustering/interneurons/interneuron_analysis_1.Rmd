@@ -10,7 +10,8 @@ knitr::opts_chunk$set(echo = TRUE,
                       warning = FALSE,
                       message = FALSE,
                       fig.width = 10,
-                      fig.height = 8)
+                      fig.height = 8,
+                      dev = "png")
 library(tidyverse)
 library(Seurat)
 library(kableExtra)
@@ -26,6 +27,7 @@ set.seed(423)
 ```{r load}
 
 interneurons <- readRDS("../../data/interneurons_kb.rds")
+
 
 ```
 
@@ -45,11 +47,35 @@ interneurons= FindNeighbors(interneurons, reduction = "pca", dims = 1:30)
 
 
 interneurons = FindClusters(interneurons, resolution = .7)
+```
 
+
+```{r interneuron_seurat_clusters,cache=TRUE}
 DimPlot(interneurons, reduction = "umap", label = TRUE, repel = TRUE,pt.size = 1)
-DimPlot(interneurons, reduction = "umap", label = TRUE, repel = TRUE, group.by = "timepoint",pt.size = 1)
+```
+
+```{r interneuron_timepoints}
+plot_colors = read_delim("../../data/palettes/interneuron_timepoint_pal.txt",
+                         delim = "/n",col_names = F) %>% pull(X1)
 
 time_points <- unique(interneurons@meta.data["timepoint"]) %>% pull(timepoint) 
+
+col_n <-set_names(plot_colors,levels(time_points))
+
+
+DimPlot(interneurons,
+        reduction = "umap",
+        repel = TRUE,
+        group.by = "timepoint",
+        pt.size = 2,
+        cols = col_n,
+        label.size = 10,order = rev(levels(time_points)))+
+  ggtitle(label = "")+ theme(legend.position = "none")
+```
+
+
+
+```{r}
 
 pre.critical <- levels(time_points)[1:5]
 
@@ -66,6 +92,12 @@ DimPlot(interneurons, reduction = "umap", label = TRUE, repel = TRUE,pt.size = 1
 DimPlot(interneurons, reduction = "umap", label = TRUE, repel = TRUE, split.by =  "timepoint2",pt.size = 1)
 
 ```
+
+```{r}
+
+saveRDS(interneurons,"../../data/interneurons_labeled.RDS")
+```
+
 
 ```{r}
 DefaultAssay(interneurons) <- "RNA"
@@ -88,46 +120,46 @@ write_csv(sig.markers, file = "sig_markers_1.csv")
 
 ```{r,fig.dim=c(11,11)}
 
-# genes in cluster 5 that have a log2 fold change > 1
+# genes in cluster 5 that have a log2 fold change >= 1
 cluster5_genes  = sig.markers %>%
-  filter(cluster == 5 & avg_log2FC>1) 
+  filter(cluster == 5 & avg_log2FC>=1) 
 
-# Concert gene symbols to ENSEMBL
+
+
+# Convert gene symbols to ENSEMBL
 geneconvert = bitr(rownames(cluster5_genes), fromType="SYMBOL", toType="ENSEMBL", OrgDb="org.Mm.eg.db")
+
+# Convert to MGI IDs
+mgi_ids <- select(org.Mm.eg.db, geneconvert$ENSEMBL, "MGI","ENSEMBL") %>% pull(MGI)
+
+# Write MGI IDs for genewalk analysis
+mgi_ids %>% as_tibble() %>% write_delim(file = "cluster5_genes.txt",col_names = FALSE)
 
 go_enrich <- enrichGO(gene = geneconvert$ENSEMBL,
                       OrgDb = org.Mm.eg.db,
                       keyType = "ENSEMBL",
                       pvalueCutoff = 0.05,
-                      ont = "ALL",
-                      pAdjustMethod ="BH")
+                      ont = "BP",
+                      pAdjustMethod ="BH",readable = T)
 
+dotplot(go_enrich,showCategory=15)
 
+clusterProfiler::cnetplot(go_enrich,
+                          showCategory = 15,
+                          layout = "gem",
+                          cex_gene=2,
+                          cex_category=2)
 
-dotplot(go_enrich,
-        split="ONTOLOGY",showCategory=15)+
-  facet_grid(ONTOLOGY ~ .,scales = "free")+
-scale_y_discrete(expand=c(0.1, 0))
+# dotplot(go_enrich,
+#         split="ONTOLOGY",showCategory=15)+
+#   facet_grid(ONTOLOGY ~ .,scales = "free")+
+# scale_y_discrete(expand=c(0.1, 0))
 ```
-
-```{r}
-
-```
-
-
 
 
 ```{r}
 
 table(Idents(interneurons)) %>% kbl(col.names = c("Cluster","Cell Count")) %>% kable_minimal()
-
-
-
-# interneurons[["percent.olf"]] <- PercentageFeatureSet(interneurons, pattern = "^Olfr")
-# interneurons[["percent.vmn"]] <- PercentageFeatureSet(interneurons, pattern = "^Vmn")
-# 
-# FeaturePlot(interneurons,features = "percent.olf",label = TRUE, repel = TRUE, min.cutoff = "q10", max.cutoff = "q90",pt.size = 1)
-# FeaturePlot(interneurons,features = "percent.vmn",label = TRUE, repel = TRUE, min.cutoff = "q10", max.cutoff = "q90",pt.size = 1)
 
 DimHeatmap(interneurons, dims = 1:15, cells = 500, balanced = TRUE)
 
@@ -135,13 +167,21 @@ DimHeatmap(interneurons, dims = 1:15, cells = 500, balanced = TRUE)
 
 
 ```{r}
-DimPlot(interneurons, reduction = "pca", group.by = "timepoint",pt.size = 1)
-DimPlot(interneurons, reduction = "pca", group.by = "timepoint",pt.size = 1,dims=c(2,3))
-DimPlot(interneurons, reduction = "pca", group.by = "timepoint",pt.size = 1,dims=c(3,4))
-DimPlot(interneurons, reduction = "pca", group.by = "timepoint",pt.size = 1,dims=c(4,5))
-DimPlot(interneurons, reduction = "pca", group.by = "timepoint",pt.size = 1,dims=c(5,6))
-DimPlot(interneurons, reduction = "pca", group.by = "timepoint",pt.size = 1,dims=c(5,7))
+DimPlot(interneurons, reduction = "pca", group.by = "timepoint2",pt.size = 1)
+DimPlot(interneurons, reduction = "pca", group.by = "timepoint2",pt.size = 1,dims=c(2,3))
+DimPlot(interneurons, reduction = "pca", group.by = "timepoint2",pt.size = 1,dims=c(3,4))
+DimPlot(interneurons, reduction = "pca", group.by = "timepoint2",pt.size = 1,dims=c(4,5))
+DimPlot(interneurons, reduction = "pca", group.by = "timepoint2",pt.size = 1,dims=c(5,6))
+DimPlot(interneurons, reduction = "pca", group.by = "timepoint2",pt.size = 1,dims=c(5,7))
 DimPlot(interneurons, reduction = "pca", group.by = "timepoint",pt.size = 1,dims=c(7,8))
 ```
 
+
+```{r}
+interneurons[["percent.olf"]] <- PercentageFeatureSet(interneurons, pattern = "^Olfr")
+interneurons[["percent.vmn"]] <- PercentageFeatureSet(interneurons, pattern = "^Vmn")
+
+FeaturePlot(interneurons,features = "percent.olf",label = TRUE, repel = TRUE, min.cutoff = "q10", max.cutoff = "q90",pt.size = 1)
+FeaturePlot(interneurons,features = "percent.vmn",label = TRUE, repel = TRUE, min.cutoff = "q10", max.cutoff = "q90",pt.size = 1)
+```
 

@@ -19,7 +19,7 @@ conda activate scRNA_R
 /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/seurat_pipeline/kb_rds \
 /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/seurat_pipeline/kb_rds_filtered \
 /projects/bgmp/nelphick/bioinfo/Yu_project/Yu_Project_2021/data/timepoints.csv \
-10000 200 7
+10000 200
 
 /usr/bin/time -v Rscript SCT_integrate.R \
 /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/seurat_pipeline/kb_rds_filtered \

@@ -54,12 +54,10 @@ combined.sct$timepoint = factor(combined.sct$timepoint,levels = c("E14","E18","P
 
 ```{r}
 # Standard workflow for visualization and clustering
-
-
 combined.sct = RunPCA(combined.sct, npcs = 30, verbose = FALSE)
 combined.sct = RunUMAP(combined.sct, reduction = "pca", dims = 1:30)
 combined.sct= FindNeighbors(combined.sct, reduction = "pca", dims = 1:30)
-#ElbowPlot(combined.sct)
+
 ```
 
 
@@ -70,8 +68,6 @@ combined.sct= FindNeighbors(combined.sct, reduction = "pca", dims = 1:30)
 
 
 combined.sct = FindClusters(combined.sct, resolution = 1)
-
-
 
 DimPlot(combined.sct, reduction = "umap", label = TRUE, repel = TRUE,pt.size = 1)
 
@@ -135,7 +131,7 @@ combined.sct <- RenameIdents(combined.sct,name_list)
 
 colors<- RColorBrewer::brewer.pal(n=length(unique(assign_cells$Cell_type)),name="Set3")
 
-#colors[13]<-"#eb4034"
+
 
 col_n <-set_names(colors,unique(assign_cells$Cell_type))
 

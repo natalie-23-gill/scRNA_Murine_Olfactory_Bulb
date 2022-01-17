@@ -12,7 +12,7 @@ p = add_argument(p, "max_count", help="Maximum cutoff for nCount_RNA")
 #p = add_argument(p, "min_count", help="Minimum cutoff for nCount_RNA")
 p = add_argument(p, "min_features", help="Minimum cutoff for nFeature_RNA")
 #p = add_argument(p, "max_features", help="Maximum cutoff for nFeature_RNA")
-p = add_argument(p, "max_mito", help="Maximum cutoff for percent mitochondrial genes")
+#p = add_argument(p, "max_mito", help="Maximum cutoff for percent mitochondrial genes")
 args = parse_args(p)
 
 
@@ -46,7 +46,7 @@ print("Post filtering Cell Counts:")
 for (i in 1:length(seurat_obj_kb)){
     # Subset using arguments for cutoffs
     seurat_obj_kb[[i]] <- subset(seurat_obj_kb[[i]],
-    subset = nFeature_RNA > as.numeric(args$min_features) & nCount_RNA < as.numeric(args$max_count) & percent.mt < as.numeric(args$max_mito))
+    subset = nFeature_RNA > as.numeric(args$min_features) & nCount_RNA < as.numeric(args$max_count) & percent.mt < mad(seurat_obj_kb[[i]]@meta.data$percent.mt)*3)
     print(paste(timepoints[i],dim(seurat_obj_kb[[i]])[2]))
  
 }

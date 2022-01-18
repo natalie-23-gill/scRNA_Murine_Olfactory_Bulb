@@ -45,13 +45,29 @@ for (i in 1:length(seurat_obj_kb)){
 print("Post filtering Cell Counts:")
 for (i in 1:length(seurat_obj_kb)){
     # Subset using arguments for cutoffs
-    # percent.mt cutoff is anything more than 5 standard deviations from the mean
-    stdev<- sd(seurat_obj_kb[[i]]@meta.data[["percent.mt"]])
-    cut_off <- mean(seurat_obj_kb[[i]]@meta.data[["percent.mt"]])+5*stdev
+    ## Get filtering parameters
+    count.max <- round(mean(seurat_obj_kb[[i]]$nCount_RNA) + 3 * sd(seurat_obj_kb[[i]]$nCount_RNA), digits = -2)
+    count.min <- round(mean(seurat_obj_kb[[i]]$nCount_RNA) - 3 * sd(seurat_obj_kb[[i]]$nCount_RNA), digits = -2)
+    feat.max <- round(mean(seurat_obj_kb[[i]]$nFeature_RNA) + 3 * sd(seurat_obj_kb[[i]]$nFeature_RNA), digits = -2)
+    feat.min <- round(mean(seurat_obj_kb[[i]]$nFeature_RNA) - 3 * sd(seurat_obj_kb[[i]]$nFeature_RNA), digits = -2)
   
+    # Filter out percent mitochondrial genes above the 99.9th percentile
+    max.mito <- quantile(seurat_obj_kb[[i]]@meta.data[["percent.mt"]],probs = .999)
+
+    ## Set minimum parameters to 0 if negative value
+    if (count.min < 0){
+      count.min <- 0
+      } else {
+        count.min <- count.min}
     
+    if (feat.min < 0){
+      feat.min <- 0
+      } else {
+        feat.min <- feat.min}
+  
+    ## Filter cells
     seurat_obj_kb[[i]] <- subset(seurat_obj_kb[[i]],
-    subset = nFeature_RNA > as.numeric(args$min_features) & nCount_RNA < as.numeric(args$max_count) & percent.mt < cut_off)
+                              subset = nFeature_RNA > feat.min & nFeature_RNA < feat.max & nCount_RNA < count.max & nCount_RNA > count.min & percent.mt < max.mito)
     print(paste(timepoints[i],dim(seurat_obj_kb[[i]])[2]))
  
 }

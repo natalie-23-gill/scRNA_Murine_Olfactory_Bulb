@@ -36,24 +36,13 @@ for (i in 1:length(samples)) {
   
 }
 
-# test <- readRDS("../../data/kb_rds/sample_L35472_kb.rds")
-
-# test[["percent.mt"]] <- PercentageFeatureSet(test, pattern = "^mt-")
-# test[["log2_percent.mt"]]<- log2(test[["percent.mt"]])
-# 
-# hist(test@meta.data[["log2_percent.mt"]])
-# 
-# mad(test@meta.data[["log2_percent.mt"]],constant = 1)*5+median(test@meta.data[["log2_percent.mt"]])
-
 ```
 
-```{r,echo=TRUE}
+```{r}
 
 for (i in 1:length(seurat_obj_kb)){
   # Add percentage mitochondrial genes
   seurat_obj_kb[[i]][["percent.mt"]] <- PercentageFeatureSet(seurat_obj_kb[[i]], pattern = "^mt-")
-  seurat_obj_kb[[i]][["log2_percent.mt"]] <- log2(seurat_obj_kb[[i]][["percent.mt"]])
-  
   
   seurat_obj_kb[[i]]$timepoint <- timepoints[i]
   Idents(seurat_obj_kb[[i]]) <- "timepoint"
@@ -62,7 +51,6 @@ for (i in 1:length(seurat_obj_kb)){
   print(paste(timepoints[i],dim(seurat_obj_kb[[i]])[2]))
 
 }
-
 
 ```
 
@@ -91,14 +79,30 @@ ggarrange(VlnPlot(seurat_obj_kb[[9]], features = c("nFeature_RNA", "nCount_RNA",
 ```{r, echo=TRUE}
 # Subset data
 for (i in 1:length(seurat_obj_kb)){
-
-  #iqr_log <- IQR(seurat_obj_kb[[i]]@meta.data[["log2_percent.mt"]])*2.5
-  # cut_off <- iqr_log+quantile(x = seurat_obj_kb[[i]]@meta.data[["log2_percent.mt"]],probs=c(.75))
-  stdev<- sd(seurat_obj_kb[[i]]@meta.data[["percent.mt"]])
-  cut_off <- mean(seurat_obj_kb[[i]]@meta.data[["percent.mt"]])+5*stdev
   
+  ## Get filtering parameters
+  count.max <- round(mean(seurat_obj_kb[[i]]$nCount_RNA) + 3 * sd(seurat_obj_kb[[i]]$nCount_RNA), digits = -2)
+  count.min <- round(mean(seurat_obj_kb[[i]]$nCount_RNA) - 3 * sd(seurat_obj_kb[[i]]$nCount_RNA), digits = -2)
+  feat.max <- round(mean(seurat_obj_kb[[i]]$nFeature_RNA) + 3 * sd(seurat_obj_kb[[i]]$nFeature_RNA), digits = -2)
+  feat.min <- round(mean(seurat_obj_kb[[i]]$nFeature_RNA) - 3 * sd(seurat_obj_kb[[i]]$nFeature_RNA), digits = -2)
+  
+  # Filter out percent mitochondrial genes above the 99.9th percentile
+  max.mito <- quantile(seurat_obj_kb[[i]]@meta.data[["percent.mt"]],probs = .999)
+
+  ## Set minimum parameters to 0 if negative value
+  if (count.min < 0){
+    count.min <- 0
+    } else {
+      count.min <- count.min}
+    
+  if (feat.min < 0){
+    feat.min <- 0
+    } else {
+      feat.min <- feat.min}
+  
+  ## Filter cells
   seurat_obj_kb[[i]] <- subset(seurat_obj_kb[[i]],
-                              subset = nFeature_RNA > 200 & nCount_RNA< 10000 & percent.mt < cut_off)
+                              subset = nFeature_RNA > feat.min & nFeature_RNA < feat.max & nCount_RNA < count.max & nCount_RNA > count.min & percent.mt < max.mito)
   # Print cell counts
   print(paste(timepoints[i],dim(seurat_obj_kb[[i]])[2]))
 
@@ -110,8 +114,6 @@ for (i in 1:length(seurat_obj_kb)){
 
 ```{r,fig.width=11}
 # Visualize QC metrics as a violin plots
-
-
 ggarrange(VlnPlot(seurat_obj_kb[[1]],
                   features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3),
           VlnPlot(seurat_obj_kb[[2]],

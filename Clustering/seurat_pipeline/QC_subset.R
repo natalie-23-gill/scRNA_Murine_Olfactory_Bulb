@@ -45,8 +45,13 @@ for (i in 1:length(seurat_obj_kb)){
 print("Post filtering Cell Counts:")
 for (i in 1:length(seurat_obj_kb)){
     # Subset using arguments for cutoffs
+    # percent.mt cutoff is anything more than 5 standard deviations from the mean
+    stdev<- sd(seurat_obj_kb[[i]]@meta.data[["percent.mt"]])
+    cut_off <- mean(seurat_obj_kb[[i]]@meta.data[["percent.mt"]])+5*stdev
+  
+    
     seurat_obj_kb[[i]] <- subset(seurat_obj_kb[[i]],
-    subset = nFeature_RNA > as.numeric(args$min_features) & nCount_RNA < as.numeric(args$max_count) & percent.mt < mad(seurat_obj_kb[[i]]@meta.data$percent.mt)*3)
+    subset = nFeature_RNA > as.numeric(args$min_features) & nCount_RNA < as.numeric(args$max_count) & percent.mt < cut_off)
     print(paste(timepoints[i],dim(seurat_obj_kb[[i]])[2]))
  
 }

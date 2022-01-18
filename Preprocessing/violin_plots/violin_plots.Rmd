@@ -1,8 +1,10 @@
 ---
-title: "Seurat Clustering"
+title: "Violin Plots for Pre and Post Filtered Count Matrices"
 author: "Natalie Elphick, Laura Paez, Christina Zakarian"
 date: "11/17/2021"
-output: html_document
+output:  
+  prettydoc::html_pretty:
+    theme: cayman
 ---
 
 ```{r setup, include=FALSE}
@@ -16,25 +18,48 @@ library(ggpubr)
 ```
 
 ```{r Read in Data}
-samples = read_delim("../data/samples.txt", delim="\n",col_names=FALSE) %>% pull(X1)
 
+
+labels = read_csv("../../data/timepoints.csv")
+#samples = read_delim("../../data/samples.txt", delim="\n",col_names=FALSE) %>% pull(X1)
+
+timepoints = labels$Timepoint
+samples = labels$Sample
 seurat_obj_kb = list()
 
 for (i in 1:length(samples)) {
 
   # Read in seurat objects
-  seurat_obj_kb[[i]] = readRDS(paste0("../data/kb_rds/sample_",samples[i],"_kb.rds"))
+  seurat_obj_kb[[i]] = readRDS(paste0("../../data/kb_rds/sample_",samples[i],"_kb.rds"))
   seurat_obj_kb[[i]]$sample <- samples[i]
+  seurat_obj_kb[[i]]$timepoint <- timepoints[i]
   
 }
+
+# test <- readRDS("../../data/kb_rds/sample_L35472_kb.rds")
+
+# test[["percent.mt"]] <- PercentageFeatureSet(test, pattern = "^mt-")
+# test[["log2_percent.mt"]]<- log2(test[["percent.mt"]])
+# 
+# hist(test@meta.data[["log2_percent.mt"]])
+# 
+# mad(test@meta.data[["log2_percent.mt"]],constant = 1)*5+median(test@meta.data[["log2_percent.mt"]])
+
 ```
 
-```{r}
+```{r,echo=TRUE}
 
 for (i in 1:length(seurat_obj_kb)){
   # Add percentage mitochondrial genes
   seurat_obj_kb[[i]][["percent.mt"]] <- PercentageFeatureSet(seurat_obj_kb[[i]], pattern = "^mt-")
-
+  seurat_obj_kb[[i]][["log2_percent.mt"]] <- log2(seurat_obj_kb[[i]][["percent.mt"]])
+  
+  
+  seurat_obj_kb[[i]]$timepoint <- timepoints[i]
+  Idents(seurat_obj_kb[[i]]) <- "timepoint"
+  
+  # Print cell counts
+  print(paste(timepoints[i],dim(seurat_obj_kb[[i]])[2]))
 
 }
 
@@ -63,11 +88,19 @@ ggarrange(VlnPlot(seurat_obj_kb[[9]], features = c("nFeature_RNA", "nCount_RNA",
                   ncol = 3),VlnPlot(seurat_obj_kb[[10]], features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3))
 ```
 
-```{r}
+```{r, echo=TRUE}
 # Subset data
 for (i in 1:length(seurat_obj_kb)){
 
- seurat_obj_kb[[i]] <- subset(seurat_obj_kb[[i]], subset = nFeature_RNA > 200 & nCount_RNA< 10000 & percent.mt < 7)
+  #iqr_log <- IQR(seurat_obj_kb[[i]]@meta.data[["log2_percent.mt"]])*2.5
+  # cut_off <- iqr_log+quantile(x = seurat_obj_kb[[i]]@meta.data[["log2_percent.mt"]],probs=c(.75))
+  stdev<- sd(seurat_obj_kb[[i]]@meta.data[["percent.mt"]])
+  cut_off <- mean(seurat_obj_kb[[i]]@meta.data[["percent.mt"]])+5*stdev
+  
+  seurat_obj_kb[[i]] <- subset(seurat_obj_kb[[i]],
+                              subset = nFeature_RNA > 200 & nCount_RNA< 10000 & percent.mt < cut_off)
+  # Print cell counts
+  print(paste(timepoints[i],dim(seurat_obj_kb[[i]])[2]))
 
 }
 
@@ -79,20 +112,30 @@ for (i in 1:length(seurat_obj_kb)){
 # Visualize QC metrics as a violin plots
 
 
-ggarrange(VlnPlot(seurat_obj_kb[[1]], features = c("nFeature_RNA", "nCount_RNA", "percent.mt"),
-                  ncol = 3),VlnPlot(seurat_obj_kb[[2]], features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3))
+ggarrange(VlnPlot(seurat_obj_kb[[1]],
+                  features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3),
+          VlnPlot(seurat_obj_kb[[2]],
+                  features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3))
 
-ggarrange(VlnPlot(seurat_obj_kb[[3]], features = c("nFeature_RNA", "nCount_RNA", "percent.mt"),
-                  ncol = 3),VlnPlot(seurat_obj_kb[[4]], features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3))
+ggarrange(VlnPlot(seurat_obj_kb[[3]],
+                  features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3),
+          VlnPlot(seurat_obj_kb[[4]],
+                  features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3))
 
-ggarrange(VlnPlot(seurat_obj_kb[[5]], features = c("nFeature_RNA", "nCount_RNA", "percent.mt"),
-                  ncol = 3),VlnPlot(seurat_obj_kb[[6]], features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3))
+ggarrange(VlnPlot(seurat_obj_kb[[5]],
+                  features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3),
+          VlnPlot(seurat_obj_kb[[6]],
+                  features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3))
 
-ggarrange(VlnPlot(seurat_obj_kb[[7]], features = c("nFeature_RNA", "nCount_RNA", "percent.mt"),
-                  ncol = 3),VlnPlot(seurat_obj_kb[[8]], features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3))
+ggarrange(VlnPlot(seurat_obj_kb[[7]],
+                  features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3),
+          VlnPlot(seurat_obj_kb[[8]],
+                  features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3))
 
-ggarrange(VlnPlot(seurat_obj_kb[[9]], features = c("nFeature_RNA", "nCount_RNA", "percent.mt"),
-                  ncol = 3),VlnPlot(seurat_obj_kb[[10]], features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3))
+ggarrange(VlnPlot(seurat_obj_kb[[9]],
+                  features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3),
+          VlnPlot(seurat_obj_kb[[10]],
+                  features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3,))
 ```
 
 

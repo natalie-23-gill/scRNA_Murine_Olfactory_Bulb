@@ -40,7 +40,7 @@ for (i in 1:nrow(markergenes)) {
 
 
 ```{r}
-combined.sct = readRDS("combined_kb_filtered_3000nfeatures.rds")
+combined.sct = readRDS("../../data/combined_kb_filtered.rds")
 DefaultAssay(combined.sct) = "integrated"
 
 
@@ -54,9 +54,9 @@ combined.sct$timepoint = factor(combined.sct$timepoint,levels = c("E14","E18","P
 
 ```{r}
 # Standard workflow for visualization and clustering
-combined.sct = RunPCA(combined.sct, npcs = 30, verbose = FALSE)
-combined.sct = RunUMAP(combined.sct, reduction = "pca", dims = 1:30)
-combined.sct= FindNeighbors(combined.sct, reduction = "pca", dims = 1:30)
+combined.sct = RunPCA(combined.sct, npcs = 25, verbose = FALSE)
+combined.sct = RunUMAP(combined.sct, reduction = "pca", dims = 1:25)
+combined.sct= FindNeighbors(combined.sct, reduction = "pca", dims = 1:25)
 
 ```
 
@@ -67,7 +67,7 @@ combined.sct= FindNeighbors(combined.sct, reduction = "pca", dims = 1:30)
 ```{r UMAP}
 
 
-combined.sct = FindClusters(combined.sct, resolution = 1)
+combined.sct = FindClusters(combined.sct, resolution = .9)
 
 DimPlot(combined.sct, reduction = "umap", label = TRUE, repel = TRUE,pt.size = 1)
 
@@ -108,11 +108,9 @@ found_celltypes <- mgene_res %>%
 max_c <- levels(unique(combined.sct@meta.data$seurat_clusters)) %>% as.vector() %>% as.numeric() %>% max()
 min_c <- levels(unique(combined.sct@meta.data$seurat_clusters)) %>% as.vector() %>% as.numeric() %>% min()
 
-
+clusters <- seq(min_c,max_c)
 
 cells_f <- found_celltypes$cluster %>% as.character() %>% as.numeric()
-
-clusters <- seq(min_c,max_c)
 
 unknown_clusters <- union(setdiff(cells_f,clusters),setdiff(clusters,cells_f))
 ```
@@ -121,7 +119,7 @@ unknown_clusters <- union(setdiff(cells_f,clusters),setdiff(clusters,cells_f))
 
 
 assign_cells <-found_celltypes %>%
-  rbind(tibble(Cell_type = as.character(factor(unknown_clusters)), cluster = factor(unknown_clusters)))
+  rbind(tibble(Cell_type = "Unknown", cluster = factor(unknown_clusters)))
 
 
 name_list <- set_names(assign_cells$Cell_type,assign_cells$cluster)
@@ -129,13 +127,13 @@ name_list <- set_names(assign_cells$Cell_type,assign_cells$cluster)
 combined.sct <- RenameIdents(combined.sct,name_list)
 
 
-colors<- RColorBrewer::brewer.pal(n=length(unique(assign_cells$Cell_type)),name="Set3")
+colors <- read_delim("../../data/palettes/all_cells_umap_pal.txt",delim = "/n",col_names = F) %>% pull(X1)
 
 
 
 col_n <-set_names(colors,unique(assign_cells$Cell_type))
 
-DimPlot(combined.sct, reduction = "umap", label = TRUE, repel = TRUE,cols = col_n,pt.size = 1,label.size = 7)
+DimPlot(combined.sct, reduction = "umap", label = F, repel = TRUE,cols = col_n,pt.size = 1,label.size = 7)
 
 
 table(Idents(combined.sct)) %>% kbl(col.names = c("Cluster","Cell Count")) %>% kable_minimal()
@@ -144,7 +142,7 @@ table(Idents(combined.sct)) %>% kbl(col.names = c("Cluster","Cell Count")) %>% k
 
 
 ```{r}
-#saveRDS(combined.sct,"clustered_kb_res1_30PC.rds")
+saveRDS(combined.sct,"clustered_kb_res.9_25PC.rds")
 
 
 pre.critical <- unique(combined.sct@meta.data["timepoint"]) %>% pull(timepoint) 
@@ -185,7 +183,7 @@ VlnPlot(combined.sct,features = "percent.mt")
 combined.sct <- subset(x = combined.sct,idents = "Interneurons")
 
 
-#saveRDS(combined.sct,file = "interneurons_kb.rds")
+saveRDS(combined.sct,file = "interneurons_kb.rds")
 
 
 ```

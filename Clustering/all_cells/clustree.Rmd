@@ -22,7 +22,7 @@ set.seed(423)
 
 ```
 ```{r}
-combined.sct = readRDS("combined_kb_filtered_3000nfeatures.rds")
+combined.sct = readRDS("../../data/combined_kb_filtered.rds")
 DefaultAssay(combined.sct) = "integrated"
 
 
@@ -30,10 +30,18 @@ DefaultAssay(combined.sct) = "integrated"
 combined.sct$timepoint = factor(combined.sct$timepoint,levels = c("E14","E18","P0","P3","P5","P7","P10","P14","P21","Adult"))
 
 
-markergenes =read_tsv("ob_markergenes.tsv",col_names = F) %>%
+markers = read_tsv("../../data/ob_markergenes.tsv", col_names = FALSE)%>%
   rename(Cell_type = X1, gene = X2)
 
-
+# fill in empty cells in 1st column 
+for (i in 1:nrow(markers)) {
+  if (is.na(markers[i,1])) {
+    markers[i,1] = type
+  } 
+  else {
+    type = markers[i,1]
+  }
+}
 
 
 ```
@@ -43,44 +51,44 @@ markergenes =read_tsv("ob_markergenes.tsv",col_names = F) %>%
 # Standard workflow for visualization and clustering
 
 
-combined.sct = RunPCA(combined.sct, npcs = 30, verbose = FALSE)
-combined.sct = RunUMAP(combined.sct, reduction = "pca", dims = 1:30)
-combined.sct= FindNeighbors(combined.sct, reduction = "pca", dims = 1:30)
-#ElbowPlot(combined.sct)
+combined.sct = RunPCA(combined.sct, npcs = 25, verbose = FALSE)
+combined.sct = RunUMAP(combined.sct, reduction = "pca", dims = 1:25)
+combined.sct= FindNeighbors(combined.sct, reduction = "pca", dims = 1:25)
+DimPlot(combined.sct, reduction = "umap", label = TRUE, repel = TRUE,pt.size = 1)
 ```
 
 ```{r}
 # Clustree 
-resolution.range = seq(from = 0, to = 1.2, by = .2)
+resolution.range = seq(from = 0, to = 1.5, by = .1)
 
 combined.sct = FindClusters(combined.sct, resolution = resolution.range)
 
-inter_genes = markergenes %>%
+inter_genes = markers %>%
   filter(gene %in% combined.sct@assays[["integrated"]]@var.features) %>%
   filter(Cell_type == "Interneurons") %>%
   pull(gene)
 
-prog_genes = markergenes %>%
+prog_genes = markers %>%
   filter(gene %in% combined.sct@assays[["integrated"]]@var.features) %>%
   filter(Cell_type == "Progenitor") %>%
   pull(gene)
 
-mitral_genes = markergenes %>%
+mitral_genes = markers %>%
   filter(gene %in% combined.sct@assays[["integrated"]]@var.features) %>%
   filter(Cell_type == "Mitral") %>%
   pull(gene)
 
-astro_genes = markergenes %>%
+astro_genes = markers %>%
   filter(gene %in% combined.sct@assays[["integrated"]]@var.features) %>%
   filter(Cell_type == "Astrocytes") %>%
   pull(gene)
   
-oligo_genes = markergenes %>%
+oligo_genes = markers %>%
   filter(gene %in% combined.sct@assays[["integrated"]]@var.features) %>%
   filter(Cell_type == "Oligodendrocyte") %>%
   pull(gene)
   
-lp_genes = markergenes %>%
+lp_genes = markers %>%
   filter(gene %in% combined.sct@assays[["integrated"]]@var.features) %>%
   filter(Cell_type == "LP") %>%
   pull(gene)

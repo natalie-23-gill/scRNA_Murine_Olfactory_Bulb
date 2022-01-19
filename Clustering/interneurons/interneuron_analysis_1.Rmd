@@ -42,16 +42,17 @@ interneurons = ScaleData(interneurons)
 interneurons = RunPCA(interneurons, features = VariableFeatures(object = interneurons))
 
 
-interneurons = RunUMAP(interneurons, reduction = "pca", dims = 1:30)
-interneurons= FindNeighbors(interneurons, reduction = "pca", dims = 1:30)
+interneurons = RunUMAP(interneurons, reduction = "pca", dims = 1:25)
+interneurons= FindNeighbors(interneurons, reduction = "pca", dims = 1:25)
 
 
-interneurons = FindClusters(interneurons, resolution = .7)
+interneurons = FindClusters(interneurons, resolution = .9)
 ```
 
 
 ```{r interneuron_seurat_clusters,cache=TRUE}
 DimPlot(interneurons, reduction = "umap", label = TRUE, repel = TRUE,pt.size = 1)
+
 ```
 
 ```{r interneuron_timepoints}
@@ -62,14 +63,13 @@ time_points <- unique(interneurons@meta.data["timepoint"]) %>% pull(timepoint)
 
 col_n <-set_names(plot_colors,levels(time_points))
 
-
+#,order = rev(levels(time_points))
 DimPlot(interneurons,
         reduction = "umap",
         repel = TRUE,
         group.by = "timepoint",
-        pt.size = 2,
-        cols = col_n,
-        label.size = 10,order = rev(levels(time_points)))+
+        pt.size = 1,
+        cols = col_n,order = rev(levels(time_points)))+
   ggtitle(label = "")+ theme(legend.position = "none")
 ```
 
@@ -108,8 +108,8 @@ sig.markers <- all.markers %>%
   filter(p_val_adj < 0.05) 
 
 
-sig.markers %>% 
-  filter(cluster == 5) %>%
+sig.markers %>%
+  filter(cluster == 6) %>%
   arrange(desc(avg_log2FC)) %>%
   head(20) %>%
   kbl() %>%
@@ -118,37 +118,43 @@ sig.markers %>%
 write_csv(sig.markers, file = "sig_markers_1.csv")
 ```
 
-```{r,fig.dim=c(11,11)}
+```{r,fig.dim=c(11,11),dpi = 400}
 
-# genes in cluster 5 that have a log2 fold change >= 1
-cluster5_genes  = sig.markers %>%
-  filter(cluster == 5 & avg_log2FC>=1) 
-
-
+# genes in the P7 clusters that have a log2 fold change >= 1
+P7_genes  = sig.markers %>%
+  filter(cluster ==6 & avg_log2FC>=1) 
 
 # Convert gene symbols to ENSEMBL
-geneconvert = bitr(rownames(cluster5_genes), fromType="SYMBOL", toType="ENSEMBL", OrgDb="org.Mm.eg.db")
+geneconvert = bitr(rownames(P7_genes), fromType="SYMBOL", toType="ENSEMBL", OrgDb="org.Mm.eg.db")
 
 # Convert to MGI IDs
 mgi_ids <- select(org.Mm.eg.db, geneconvert$ENSEMBL, "MGI","ENSEMBL") %>% pull(MGI)
 
 # Write MGI IDs for genewalk analysis
-mgi_ids %>% as_tibble() %>% write_delim(file = "cluster5_genes.txt",col_names = FALSE)
+mgi_ids %>% as_tibble() %>% write_delim(file = "P7_genes.txt",col_names = FALSE)
 
 go_enrich <- enrichGO(gene = geneconvert$ENSEMBL,
                       OrgDb = org.Mm.eg.db,
                       keyType = "ENSEMBL",
                       pvalueCutoff = 0.05,
                       ont = "BP",
-                      pAdjustMethod ="BH",readable = T)
+                      pAdjustMethod ="BH",readable = TRUE)
 
-dotplot(go_enrich,showCategory=15)
 
-clusterProfiler::cnetplot(go_enrich,
-                          showCategory = 15,
-                          layout = "gem",
-                          cex_gene=2,
-                          cex_category=2)
+
+# clusterProfiler::cnetplot(go_enrich,
+#                           showCategory = 15,
+#                           layout = "gem",
+#                           cex_gene=2,
+#                           cex_category=2)
+
+go_plot <- barplot(go_enrich,showCategory = 15,font.size = 24)
+  #scale_y_discrete(expand=c(0.2, 1))
+go_plot$data <- go_plot$data %>% tail(-2)
+
+go_plot
+
+
 
 # dotplot(go_enrich,
 #         split="ONTOLOGY",showCategory=15)+

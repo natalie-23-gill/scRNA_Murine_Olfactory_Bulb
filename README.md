@@ -1,6 +1,4 @@
-# Single cell atlas of neural development in the murine olfactory bulb  
-
-
+# Characterizing Interneuron Expression in the Developing Olfactory Bulb
 
 ## Introduction   
 

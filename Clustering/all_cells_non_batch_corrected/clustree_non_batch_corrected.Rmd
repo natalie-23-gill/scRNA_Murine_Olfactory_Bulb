@@ -1,0 +1,165 @@
+---
+title: "Clustree"
+author: "Natalie Elphick"
+date: "12/2/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      warning = FALSE,
+                      message = FALSE,
+                      fig.width = 16,
+                      fig.height = 10)
+library(tidyverse)
+library(Seurat)
+library(kableExtra)
+library(future)
+library(clustree)
+plan()
+plan("multicore", workers = 4,future.seed=TRUE)
+set.seed(423)
+
+```
+```{r}
+combined.sct = readRDS("../../data/combined_kb_filtered.rds")
+DefaultAssay(combined.sct) = "integrated"
+
+
+# Set timepoint metadata to right order
+combined.sct$timepoint = factor(combined.sct$timepoint,levels = c("E14","E18","P0","P3","P5","P7","P10","P14","P21","Adult"))
+
+
+markers = read_tsv("../../data/ob_markergenes.tsv", col_names = FALSE)%>%
+  rename(Cell_type = X1, gene = X2)
+
+# fill in empty cells in 1st column 
+for (i in 1:nrow(markers)) {
+  if (is.na(markers[i,1])) {
+    markers[i,1] = type
+  } 
+  else {
+    type = markers[i,1]
+  }
+}
+
+
+```
+
+
+```{r}
+# Standard workflow for visualization and clustering
+
+
+DefaultAssay(combined.sct) <- "RNA"
+
+combined.sct = FindVariableFeatures(combined.sct, selection.method = "vst", nfeatures = 5000)
+all.genes = rownames(combined.sct)
+combined.sct = ScaleData(combined.sct)
+
+combined.sct = RunPCA(combined.sct, features = VariableFeatures(object = combined.sct))
+#combined.sct = RunPCA(combined.sct, npcs = 25, verbose = FALSE)
+combined.sct = RunUMAP(combined.sct, reduction = "pca", dims = 1:25)
+combined.sct= FindNeighbors(combined.sct, reduction = "pca", dims = 1:25)
+DimPlot(combined.sct, reduction = "umap", label = TRUE, repel = TRUE,pt.size = 1)
+```
+
+```{r}
+# Clustree 
+resolution.range = seq(from = 0, to = 1.5, by = .1)
+
+combined.sct = FindClusters(combined.sct, resolution = resolution.range)
+
+inter_genes = markers %>%
+  filter(gene %in% combined.sct@assays[["integrated"]]@var.features) %>%
+  filter(Cell_type == "Interneurons") %>%
+  pull(gene)
+
+prog_genes = markers %>%
+  filter(gene %in% combined.sct@assays[["integrated"]]@var.features) %>%
+  filter(Cell_type == "Progenitor") %>%
+  pull(gene)
+
+mitral_genes = markers %>%
+  filter(gene %in% combined.sct@assays[["integrated"]]@var.features) %>%
+  filter(Cell_type == "Mitral") %>%
+  pull(gene)
+
+astro_genes = markers %>%
+  filter(gene %in% combined.sct@assays[["integrated"]]@var.features) %>%
+  filter(Cell_type == "Astrocytes") %>%
+  pull(gene)
+  
+oligo_genes = markers %>%
+  filter(gene %in% combined.sct@assays[["integrated"]]@var.features) %>%
+  filter(Cell_type == "Oligodendrocyte") %>%
+  pull(gene)
+  
+lp_genes = markers %>%
+  filter(gene %in% combined.sct@assays[["integrated"]]@var.features) %>%
+  filter(Cell_type == "LP") %>%
+  pull(gene)
+  
+
+
+
+
+```
+
+# Interneurons
+
+```{r}
+for (i in inter_genes){
+print(clustree(combined.sct, prefix = "RNA_snn_res.",show_axis = TRUE,
+         node_colour = i, node_colour_aggr = "mean")+scale_color_gradient(low = "white", high = "#f02929"))
+}
+
+
+
+```
+
+# Progenitor  
+
+```{r}
+for (i in prog_genes){
+print(clustree(combined.sct, prefix = "RNA_snn_res.",show_axis = TRUE,
+         node_colour = i, node_colour_aggr = "mean")+scale_color_gradient(low = "white", high = "#f02929"))
+}
+```
+
+# Mitral  
+
+```{r}
+for (i in mitral_genes){
+print(clustree(combined.sct, prefix = "RNA_snn_res.",show_axis = TRUE,
+         node_colour = i, node_colour_aggr = "mean")+scale_color_gradient(low = "white", high = "#f02929"))
+}
+```
+
+# Astrocytes
+
+```{r}
+for (i in astro_genes){
+print(clustree(combined.sct, prefix = "RNA_snn_res.",show_axis = TRUE,
+         node_colour = i, node_colour_aggr = "mean")+scale_color_gradient(low = "white", high = "#f02929"))
+}
+```
+
+# Oligodendrocytes
+
+```{r}
+for (i in oligo_genes){
+print(clustree(combined.sct, prefix = "RNA_snn_res.",show_axis = TRUE,
+         node_colour = i, node_colour_aggr = "mean")+scale_color_gradient(low = "white", high = "#f02929"))
+}
+
+```
+
+# LP  
+
+```{r}
+for (i in lp_genes){
+print(clustree(combined.sct, prefix = "RNA_snn_res.",show_axis = TRUE,
+         node_colour = i, node_colour_aggr = "mean")+scale_color_gradient(low = "white", high = "#f02929"))
+}
+```

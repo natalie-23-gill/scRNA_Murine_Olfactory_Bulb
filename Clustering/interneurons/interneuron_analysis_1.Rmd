@@ -173,12 +173,12 @@ DimHeatmap(interneurons, dims = 1:15, cells = 500, balanced = TRUE)
 
 
 ```{r}
-DimPlot(interneurons, reduction = "pca", group.by = "timepoint2",pt.size = 1)
-DimPlot(interneurons, reduction = "pca", group.by = "timepoint2",pt.size = 1,dims=c(2,3))
-DimPlot(interneurons, reduction = "pca", group.by = "timepoint2",pt.size = 1,dims=c(3,4))
-DimPlot(interneurons, reduction = "pca", group.by = "timepoint2",pt.size = 1,dims=c(4,5))
-DimPlot(interneurons, reduction = "pca", group.by = "timepoint2",pt.size = 1,dims=c(5,6))
-DimPlot(interneurons, reduction = "pca", group.by = "timepoint2",pt.size = 1,dims=c(5,7))
+DimPlot(interneurons, reduction = "pca", group.by = "timepoint",pt.size = 1)
+DimPlot(interneurons, reduction = "pca", group.by = "timepoint",pt.size = 1,dims=c(2,3))
+DimPlot(interneurons, reduction = "pca", group.by = "timepoint",pt.size = 1,dims=c(3,4))
+DimPlot(interneurons, reduction = "pca", group.by = "timepoint",pt.size = 1,dims=c(4,5))
+DimPlot(interneurons, reduction = "pca", group.by = "timepoint",pt.size = 1,dims=c(5,6))
+DimPlot(interneurons, reduction = "pca", group.by = "timepoint",pt.size = 1,dims=c(5,7))
 DimPlot(interneurons, reduction = "pca", group.by = "timepoint",pt.size = 1,dims=c(7,8))
 ```
 

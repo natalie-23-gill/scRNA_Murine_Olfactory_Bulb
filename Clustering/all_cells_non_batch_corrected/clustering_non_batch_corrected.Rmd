@@ -1,0 +1,207 @@
+---
+title: "Visualizing All Cells Using Uncorr"
+author: "Natalie Elphick"
+date: "11/27/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      warning = FALSE,
+                      message = FALSE,
+                      fig.width = 10,
+                      fig.height = 8)
+library(tidyverse)
+library(Seurat)
+library(kableExtra)
+library(future)
+
+plan()
+plan("multicore", workers = 4,future.seed=TRUE)
+set.seed(423)
+```
+
+```{r}
+#read in marker genes
+markergenes = read_tsv("../../data/ob_markergenes.tsv", col_names = FALSE) %>%
+  rename(Cell_type = X1, gene = X2)
+
+# fill in empty cells in 1st column 
+for (i in 1:nrow(markergenes)) {
+  if (is.na(markergenes[i,1])) {
+    markergenes[i,1] = type
+  } 
+  else {
+    type = markergenes[i,1]
+  }
+}
+
+```
+
+
+```{r}
+# Read in file from seurat_pipeline
+combined.sct = readRDS("../../data/combined_kb_filtered.rds")
+DefaultAssay(combined.sct) = "integrated"
+
+
+# Set timepoint metadata to right order
+combined.sct$timepoint = factor(combined.sct$timepoint,levels = c("E14","E18","P0","P3","P5","P7","P10","P14","P21","Adult"))
+```
+
+
+```{r}
+# Standard workflow for visualization and clustering
+DefaultAssay(combined.sct) <- "RNA"
+
+combined.sct = FindVariableFeatures(combined.sct, selection.method = "vst", nfeatures = 3000)
+all.genes = rownames(combined.sct)
+combined.sct = ScaleData(combined.sct)
+
+combined.sct = RunPCA(combined.sct, features = VariableFeatures(object = combined.sct))
+#combined.sct = RunPCA(combined.sct, npcs = 25, verbose = FALSE)
+combined.sct = RunUMAP(combined.sct, reduction = "pca", dims = 1:30)
+combined.sct= FindNeighbors(combined.sct, reduction = "pca", dims = 1:30)
+
+```
+
+
+
+
+
+```{r UMAP}
+
+
+combined.sct = FindClusters(combined.sct, resolution = 1.5)
+
+DimPlot(combined.sct, reduction = "umap", label = TRUE, repel = TRUE,pt.size = 1)
+
+#DimPlot(combined.sct, reduction = "umap", group.by = "timepoint")
+```
+
+```{r}
+
+DefaultAssay(combined.sct) <- "RNA"
+
+all.markers <- FindAllMarkers(combined.sct,only.pos = TRUE,logfc.threshold = 0.25)%>%
+  filter(p_val_adj < 0.05)
+
+mgene_res <- all.markers %>%
+  filter(p_val_adj < 0.05) %>%
+  mutate(identity_score = (pct.1/pct.2)*avg_log2FC) %>%
+  inner_join(markergenes) %>%
+  group_by(cluster) %>%
+  top_n(n = 1,wt = identity_score)
+
+mgene_res_all <- all.markers %>%
+  filter(p_val_adj < 0.05) %>%
+  mutate(identity_score = (pct.1/pct.2)*avg_log2FC) %>%
+  inner_join(markergenes) %>%
+  group_by(cluster)
+
+write_csv(all.markers, file = "diff_exp_results_all_cells.csv")
+```
+
+```{r}
+found_celltypes <- mgene_res %>%
+  select(Cell_type,cluster) %>% distinct()
+
+```
+
+
+```{r}
+max_c <- levels(unique(combined.sct@meta.data$seurat_clusters)) %>% as.vector() %>% as.numeric() %>% max()
+min_c <- levels(unique(combined.sct@meta.data$seurat_clusters)) %>% as.vector() %>% as.numeric() %>% min()
+
+clusters <- seq(min_c,max_c)
+
+cells_f <- found_celltypes$cluster %>% as.character() %>% as.numeric()
+
+unknown_clusters <- union(setdiff(cells_f,clusters),setdiff(clusters,cells_f))
+```
+
+```{r}
+
+
+assign_cells <-found_celltypes %>%
+  rbind(tibble(Cell_type = "Unknown", cluster = factor(unknown_clusters)))
+
+
+name_list <- set_names(assign_cells$Cell_type,assign_cells$cluster)
+
+combined.sct <- RenameIdents(combined.sct,name_list)
+
+
+colors <- read_delim("../../data/palettes/all_cells_umap_pal.txt",delim = "/n",col_names = F) %>% pull(X1)
+
+colors <- RColorBrewer::brewer.pal(length(unique(assign_cells$Cell_type)),"Set3")
+
+col_n <-set_names(colors,unique(assign_cells$Cell_type))
+
+DimPlot(combined.sct, reduction = "umap", label = F, repel = TRUE,cols = col_n,pt.size = 1,label.size = 7)
+
+
+table(Idents(combined.sct)) %>% kbl(col.names = c("Cluster","Cell Count")) %>% kable_minimal()
+
+```
+
+
+```{r}
+pre.critical <- unique(combined.sct@meta.data["timepoint"]) %>% pull(timepoint) 
+
+pre.critical <- pre.critical[0:5]
+
+combined.sct@meta.data <- combined.sct@meta.data %>%
+  mutate(timepoint2 = ifelse(timepoint %in% pre.critical,
+                             "E14-P5",
+                             "P7-Adult"))
+
+plot_colors = read_delim("../../data/palettes/interneuron_timepoint_pal.txt",
+                         delim = "/n",col_names = F) %>% pull(X1)
+
+time_points <- unique(combined.sct@meta.data["timepoint"]) %>% pull(timepoint) 
+
+col_n <-set_names(plot_colors,levels(time_points))
+
+
+DimPlot(combined.sct,
+        reduction = "umap",
+        repel = TRUE,pt.size = 1, group.by =  "timepoint",cols=col_n,order = rev(levels(time_points)))
+
+combined.sct[["percent.olf"]] <- PercentageFeatureSet(combined.sct, pattern = "^Olfr")
+combined.sct[["percent.vmn"]] <- PercentageFeatureSet(combined.sct, pattern = "^Vmn")
+
+```
+
+```{r}
+DimPlot(combined.sct,
+        reduction = "umap",
+        repel = TRUE,pt.size = 1, split.by =  "timepoint2")
+```
+
+
+```{r}
+FeaturePlot(combined.sct,features = "percent.olf",label = TRUE, repel = TRUE, min.cutoff = "q10", max.cutoff = "q90")
+FeaturePlot(combined.sct,features = "percent.vmn",label = TRUE, repel = TRUE, min.cutoff = "q10", max.cutoff = "q90")
+
+FeaturePlot(combined.sct,features = "percent.mt",label = TRUE, repel = TRUE, min.cutoff = "q10", max.cutoff = "q90")
+```
+
+
+```{r}
+VlnPlot(combined.sct,features = "percent.olf")
+VlnPlot(combined.sct,features = "percent.vmn")
+VlnPlot(combined.sct,features = "percent.mt")
+```
+
+```{r}
+DimPlot(combined.sct, reduction = "pca", group.by = "timepoint",pt.size = 1)
+DimPlot(combined.sct, reduction = "pca", group.by = "timepoint",pt.size = 1,dims=c(2,3))
+DimPlot(combined.sct, reduction = "pca", group.by = "timepoint",pt.size = 1,dims=c(3,4))
+DimPlot(combined.sct, reduction = "pca", group.by = "timepoint",pt.size = 1,dims=c(4,5))
+DimPlot(combined.sct, reduction = "pca", group.by = "timepoint",pt.size = 1,dims=c(5,6))
+DimPlot(combined.sct, reduction = "pca", group.by = "timepoint",pt.size = 1,dims=c(5,7))
+DimPlot(combined.sct, reduction = "pca", group.by = "timepoint",pt.size = 1,dims=c(7,8))
+
+```
+

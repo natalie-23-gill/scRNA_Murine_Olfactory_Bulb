@@ -41,7 +41,7 @@ for (i in 1:nrow(markergenes)) {
 
 ```{r}
 combined.sct = readRDS("../../data/combined_kb_filtered.rds")
-DefaultAssay(combined.sct) = "integrated"
+
 
 
 # Set timepoint metadata to right order
@@ -53,7 +53,8 @@ combined.sct$timepoint = factor(combined.sct$timepoint,levels = c("E14","E18","P
 
 
 ```{r}
-# Standard workflow for visualization and clustering
+# Batch Corrected workflow for visualization and clustering
+DefaultAssay(combined.sct) = "integrated"
 combined.sct = RunPCA(combined.sct, npcs = 25, verbose = FALSE)
 combined.sct = RunUMAP(combined.sct, reduction = "pca", dims = 1:25)
 combined.sct= FindNeighbors(combined.sct, reduction = "pca", dims = 1:25)

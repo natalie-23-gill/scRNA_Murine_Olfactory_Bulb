@@ -1,8 +1,8 @@
 # Characterizing Interneuron Expression in the Developing Olfactory Bulb
 
-## Introduction   
+## Background  
 
-In order to investigate the development of the olfactory bulb during the critical period of olfactory map formation, here we perform an analysis of scRNA-seq data from 10 mouse olfactory bulbs each at different developmental time points (E14, E18, P0, P3, P5, P7, P10, P14, P21, and Adult). These tissue samples were dissociated and sequenced on the 10x Genomics' single-cell RNA-seq platform. Our analysis focuses on the cells identified as interneurons through differential expression analysis.   
+Interneurons are a diverse cell population and make up the majority of neurons in the body. They relay information between sensory and motor neurons, making them necessary for complex processing and response. Interneurons are indispensable for learning, memory, and cognition. Here we used single-cell RNA-sequencing data from the mouse olfactory bulb (OB) to identify cell types and investigated the  differences in gene expression  within the subpopulation  of interneurons across 10 developmental timepoints (E14, E18, P0, P3, P5, P7, P10, P14, P21, and Adult).
 
 ![Workflow Diagram](./assets/images/workflow.png)
    
@@ -30,8 +30,11 @@ After running the kallisto \| bustools preprocessing pipeline, we filtered each 
 
 ## References   
 
-1.Zheng, G. X. Y. et al. Massively parallel digital transcriptional profiling of single cells. Nat Commun 8, 14049 (2017).   
-2.Bray, N. L., Pimentel, H., Melsted, P. & Pachter, L. Near-optimal probabilistic RNA-seq quantification. Nat Biotechnol 34, 525–527 (2016).   
-3.Melsted, P. et al. Modular, efficient and constant-memory single-cell RNA-seq preprocessing. Nat Biotechnol 39, 813–818 (2021).   
+1.Zheng, G. X. Y. et al. Massively parallel digital transcriptional profiling of single cells. Nat Commun 8, 14049 (2017).
+2.Wu, Y. et al. A Population of Navigator Neurons Is Essential for Olfactory Map Formation during the Critical Period. Neuron 100, 1066-1082.e6 (2018).
+3.Tepe, B. et al. Single-Cell RNA-Seq of Mouse Olfactory Bulb Reveals Cellular Heterogeneity and Activity-Dependent Molecular Census of Adult-Born Neurons. Cell Rep 25, 2689-2703.e3 (2018).
+4.Melsted, P. et al. Modular, efficient and constant-memory single-cell RNA-seq preprocessing. Nat Biotechnol 39, 813–818 (2021).
+5.Bray, N. L., Pimentel, H., Melsted, P. & Pachter, L. Near-optimal probabilistic RNA-seq quantification. Nat Biotechnol 34, 525–527 (2016).
+
 
 

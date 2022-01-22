@@ -10,7 +10,40 @@ library(tidyverse)
 ```
 
 ```{r}
-combined.sct.3d = readRDS("clustered_kb_res1_30PC.rds")
+#read in marker genes
+filt_markers = read_tsv("filt_ob_markergenes.tsv", col_names = FALSE) 
+```
+
+```{r}
+interneurons = readRDS("interneurons_labeled.RDS")
+```
+
+
+```{r}
+DefaultAssay(combined.sct.3d) = "RNA"
+interneurons <- RunUMAP(interneurons, dims = 1:30, n.components = 3L)
+
+#DimPlot(interneurons, reduction = "umap", label = TRUE, repel = TRUE,pt.size = 1)
+#DimPlot(interneurons, reduction = "umap", label = TRUE, repel = TRUE, group.by = "timepoint",pt.size = 1)
+```
+
+```{r}
+plot.data <- FetchData(object = interneurons, vars = c("UMAP_1", "UMAP_2", "UMAP_3"))
+plot.data$Identity <- as.vector(interneurons$timepoint)
+#plot.data$label <- paste(rownames(plot.data))
+plot.data <- cbind(plot.data, FetchData(object = interneurons, vars = filt_markers$X2))
+```
+
+```{r}
+# write out to csv file to upload into R shiny app
+write_csv(plot.data, "plot_data_int.csv")
+```
+
+
+
+
+```{r}
+combined.sct.3d = readRDS("clustered_kb_res1_30PC.RDS")
 ```
 
 ```{r}
@@ -20,22 +53,18 @@ combined.sct.3d <- RunUMAP(combined.sct.3d, dims = 1:30, n.components = 3L)
 ```
 
 ```{r}
-#read in marker genes
-filt_markers = read_tsv("filt_ob_markergenes.tsv", col_names = FALSE) 
-```
-
-```{r}
 # prepare dataframe for plotting 
 plot.data <- FetchData(object = combined.sct.3d, vars = c("UMAP_1", "UMAP_2", "UMAP_3"))
-plot.data$Identity <- Idents(combined.sct.3d)
-plot.data$label <- paste(rownames(plot.data))
+plot.data$Identity <- as.vector(combined.sct.3d$timepoint)
+#plot.data$label <- paste(rownames(plot.data))
 plot.data <- cbind(plot.data, FetchData(object = combined.sct.3d, vars = filt_markers$X2))
 ```
 
 ```{r}
 # write out to csv file to upload into R shiny app
-write_csv(plot.data, "plot_data.csv")
+write_csv(plot.data, "plot_data_all.csv")
 ```
+
 
 
 

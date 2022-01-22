@@ -51,9 +51,9 @@ for (i in 1:nrow(markers)) {
 # Standard workflow for visualization and clustering
 
 
-combined.sct = RunPCA(combined.sct, npcs = 25, verbose = FALSE)
-combined.sct = RunUMAP(combined.sct, reduction = "pca", dims = 1:25)
-combined.sct= FindNeighbors(combined.sct, reduction = "pca", dims = 1:25)
+combined.sct = RunPCA(combined.sct, npcs = 20, verbose = FALSE)
+combined.sct = RunUMAP(combined.sct, reduction = "pca", dims = 1:20)
+combined.sct= FindNeighbors(combined.sct, reduction = "pca", dims = 1:20)
 DimPlot(combined.sct, reduction = "umap", label = TRUE, repel = TRUE,pt.size = 1)
 ```
 

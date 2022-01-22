@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = FALSE,
                       warning = FALSE,
                       message = FALSE,
                       fig.width = 10,
-                      fig.height = 8)
+                      fig.height = 10)
 library(tidyverse)
 library(Seurat)
 library(kableExtra)
@@ -55,9 +55,9 @@ combined.sct$timepoint = factor(combined.sct$timepoint,levels = c("E14","E18","P
 ```{r}
 # Batch Corrected workflow for visualization and clustering
 DefaultAssay(combined.sct) = "integrated"
-combined.sct = RunPCA(combined.sct, npcs = 25, verbose = FALSE)
-combined.sct = RunUMAP(combined.sct, reduction = "pca", dims = 1:25)
-combined.sct= FindNeighbors(combined.sct, reduction = "pca", dims = 1:25)
+combined.sct = RunPCA(combined.sct, npcs = 20, verbose = FALSE)
+combined.sct = RunUMAP(combined.sct, reduction = "pca", dims = 1:20)
+combined.sct= FindNeighbors(combined.sct, reduction = "pca", dims = 1:20)
 
 ```
 
@@ -68,7 +68,7 @@ combined.sct= FindNeighbors(combined.sct, reduction = "pca", dims = 1:25)
 ```{r UMAP}
 
 
-combined.sct = FindClusters(combined.sct, resolution = .9)
+combined.sct = FindClusters(combined.sct, resolution = 1.4)
 
 DimPlot(combined.sct, reduction = "umap", label = TRUE, repel = TRUE,pt.size = 1)
 
@@ -130,7 +130,7 @@ combined.sct <- RenameIdents(combined.sct,name_list)
 
 colors <- read_delim("../../data/palettes/all_cells_umap_pal.txt",delim = "/n",col_names = F) %>% pull(X1)
 
-
+colors <- sample(colors,size = length(unique(assign_cells$Cell_type)))
 
 col_n <-set_names(colors,unique(assign_cells$Cell_type))
 
@@ -143,7 +143,7 @@ table(Idents(combined.sct)) %>% kbl(col.names = c("Cluster","Cell Count")) %>% k
 
 
 ```{r}
-saveRDS(combined.sct,"clustered_kb_res.9_25PC.rds")
+saveRDS(combined.sct,"labeled_all_cells.rds")
 
 
 pre.critical <- unique(combined.sct@meta.data["timepoint"]) %>% pull(timepoint) 
@@ -184,7 +184,7 @@ VlnPlot(combined.sct,features = "percent.mt")
 combined.sct <- subset(x = combined.sct,idents = "Interneurons")
 
 
-saveRDS(combined.sct,file = "interneurons_kb.rds")
+saveRDS(combined.sct,file = "../../data/interneurons_kb.rds")
 
 
 ```

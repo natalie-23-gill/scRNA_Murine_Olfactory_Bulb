@@ -34,7 +34,9 @@ After running the kallisto \| bustools preprocessing pipeline, we filtered each 
 2.Wu, Y. et al. A Population of Navigator Neurons Is Essential for Olfactory Map Formation during the Critical Period. Neuron 100, 1066-1082.e6 (2018).
 3.Tepe, B. et al. Single-Cell RNA-Seq of Mouse Olfactory Bulb Reveals Cellular Heterogeneity and Activity-Dependent Molecular Census of Adult-Born Neurons. Cell Rep 25, 2689-2703.e3 (2018).
 4.Melsted, P. et al. Modular, efficient and constant-memory single-cell RNA-seq preprocessing. Nat Biotechnol 39, 813–818 (2021).
-5.Bray, N. L., Pimentel, H., Melsted, P. & Pachter, L. Near-optimal probabilistic RNA-seq quantification. Nat Biotechnol 34, 525–527 (2016).
+5.Ma, L. et al. A developmental switch of axon targeting in the continuously regenerating mouse olfactory system. Science 344, 194–197 (2014).
+6.Bray, N. L., Pimentel, H., Melsted, P. & Pachter, L. Near-optimal probabilistic RNA-seq quantification. Nat Biotechnol 34, 525–527 (2016).
+
 
 
 

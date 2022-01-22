@@ -5,13 +5,13 @@ date: "12/30/2021"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE,cache=TRUE}
 knitr::opts_chunk$set(echo = TRUE,
                       warning = FALSE,
                       message = FALSE,
+                      dev = "png",
                       fig.width = 10,
-                      fig.height = 8,
-                      dev = "png")
+                      fig.height = 8)
 library(tidyverse)
 library(Seurat)
 library(kableExtra)
@@ -42,20 +42,20 @@ interneurons = ScaleData(interneurons)
 interneurons = RunPCA(interneurons, features = VariableFeatures(object = interneurons))
 
 
-interneurons = RunUMAP(interneurons, reduction = "pca", dims = 1:25)
-interneurons= FindNeighbors(interneurons, reduction = "pca", dims = 1:25)
+interneurons = RunUMAP(interneurons, reduction = "pca", dims = 1:30)
+interneurons= FindNeighbors(interneurons, reduction = "pca", dims = 1:30)
 
 
 interneurons = FindClusters(interneurons, resolution = .9)
 ```
 
 
-```{r interneuron_seurat_clusters,cache=TRUE}
+```{r interneuron_seurat_clusters}
 DimPlot(interneurons, reduction = "umap", label = TRUE, repel = TRUE,pt.size = 1)
 
 ```
 
-```{r interneuron_timepoints}
+```{r interneuron_timepoints,dpi=400}
 plot_colors = read_delim("../../data/palettes/interneuron_timepoint_pal.txt",
                          delim = "/n",col_names = F) %>% pull(X1)
 
@@ -68,7 +68,7 @@ DimPlot(interneurons,
         reduction = "umap",
         repel = TRUE,
         group.by = "timepoint",
-        pt.size = 1,
+        pt.size = 2,
         cols = col_n,order = rev(levels(time_points)))+
   ggtitle(label = "")+ theme(legend.position = "none")
 ```
@@ -102,65 +102,17 @@ saveRDS(interneurons,"../../data/interneurons_labeled.RDS")
 ```{r}
 DefaultAssay(interneurons) <- "RNA"
 
-all.markers <- FindAllMarkers(interneurons,only.pos = TRUE,logfc.threshold = 0.25)
+all.markers <- FindAllMarkers(interneurons,logfc.threshold = 0.25)
 
 sig.markers <- all.markers %>%
   filter(p_val_adj < 0.05) 
 
 
-sig.markers %>%
-  filter(cluster == 6) %>%
-  arrange(desc(avg_log2FC)) %>%
-  head(20) %>%
-  kbl() %>%
-  kable_minimal()
 
 write_csv(sig.markers, file = "sig_markers_1.csv")
 ```
 
-```{r,fig.dim=c(11,11),dpi = 400}
 
-# genes in the P7 clusters that have a log2 fold change >= 1
-P7_genes  = sig.markers %>%
-  filter(cluster ==6 & avg_log2FC>=1) 
-
-# Convert gene symbols to ENSEMBL
-geneconvert = bitr(rownames(P7_genes), fromType="SYMBOL", toType="ENSEMBL", OrgDb="org.Mm.eg.db")
-
-# Convert to MGI IDs
-mgi_ids <- select(org.Mm.eg.db, geneconvert$ENSEMBL, "MGI","ENSEMBL") %>% pull(MGI)
-
-# Write MGI IDs for genewalk analysis
-mgi_ids %>% as_tibble() %>% write_delim(file = "P7_genes.txt",col_names = FALSE)
-
-go_enrich <- enrichGO(gene = geneconvert$ENSEMBL,
-                      OrgDb = org.Mm.eg.db,
-                      keyType = "ENSEMBL",
-                      pvalueCutoff = 0.05,
-                      ont = "BP",
-                      pAdjustMethod ="BH",readable = TRUE)
-
-
-
-# clusterProfiler::cnetplot(go_enrich,
-#                           showCategory = 15,
-#                           layout = "gem",
-#                           cex_gene=2,
-#                           cex_category=2)
-
-go_plot <- barplot(go_enrich,showCategory = 15,font.size = 24)
-  #scale_y_discrete(expand=c(0.2, 1))
-go_plot$data <- go_plot$data %>% tail(-2)
-
-go_plot
-
-
-
-# dotplot(go_enrich,
-#         split="ONTOLOGY",showCategory=15)+
-#   facet_grid(ONTOLOGY ~ .,scales = "free")+
-# scale_y_discrete(expand=c(0.1, 0))
-```
 
 
 ```{r}
@@ -190,4 +142,6 @@ interneurons[["percent.vmn"]] <- PercentageFeatureSet(interneurons, pattern = "^
 FeaturePlot(interneurons,features = "percent.olf",label = TRUE, repel = TRUE, min.cutoff = "q10", max.cutoff = "q90",pt.size = 1)
 FeaturePlot(interneurons,features = "percent.vmn",label = TRUE, repel = TRUE, min.cutoff = "q10", max.cutoff = "q90",pt.size = 1)
 ```
+
+
 

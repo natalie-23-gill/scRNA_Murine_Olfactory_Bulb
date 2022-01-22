@@ -18,9 +18,9 @@ conda activate scRNA_R
 /usr/bin/time -v Rscript QC_subset.R \
 /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/seurat_pipeline/kb_rds \
 /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/seurat_pipeline/kb_rds_filtered \
-/projects/bgmp/nelphick/bioinfo/Yu_project/Yu_Project_2021/data/timepoints.csv
+/projects/bgmp/nelphick/bioinfo/Yu_project/scRNA_Murine_Olfactory_Bulb/data/timepoints.csv
 
 /usr/bin/time -v Rscript SCT_integrate.R \
 /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/seurat_pipeline/kb_rds_filtered \
-/projects/bgmp/nelphick/bioinfo/Yu_project/Yu_Project_2021/data/timepoints.txt \
+/projects/bgmp/nelphick/bioinfo/Yu_project/scRNA_Murine_Olfactory_Bulb/data/timepoints.txt \
 /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/seurat_pipeline/combined_kb_filtered.rds

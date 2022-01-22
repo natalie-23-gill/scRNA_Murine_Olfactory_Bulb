@@ -40,6 +40,9 @@ for (i in 1:length(samples)) {
 
 ```{r}
 
+time_list <- list()
+pre_count <- list()
+
 for (i in 1:length(seurat_obj_kb)){
   # Add percentage mitochondrial genes
   seurat_obj_kb[[i]][["percent.mt"]] <- PercentageFeatureSet(seurat_obj_kb[[i]], pattern = "^mt-")
@@ -47,11 +50,12 @@ for (i in 1:length(seurat_obj_kb)){
   seurat_obj_kb[[i]]$timepoint <- timepoints[i]
   Idents(seurat_obj_kb[[i]]) <- "timepoint"
   
-  # Print cell counts
-  print(paste(timepoints[i],dim(seurat_obj_kb[[i]])[2]))
+  time_list <- append(time_list,timepoints[i])
+  pre_count <- append(pre_count,dim(seurat_obj_kb[[i]])[2])
+
 
 }
-
+tibble(Timepoint = time_list,`Cell Count` =pre_count) %>% unnest() %>% kableExtra::kable(caption = "Pre-filtering Cell Counts")
 ```
 
 # Prefiltered
@@ -77,64 +81,18 @@ ggarrange(VlnPlot(seurat_obj_kb[[9]], features = c("nFeature_RNA", "nCount_RNA",
 ```
 
 ```{r}
-
-# E14
-seurat_obj_kb[[1]]<- subset(seurat_obj_kb[[1]],
-                             subset = nFeature_RNA > 200 & nCount_RNA < 12000 & percent.mt < 6)
-
-# E18
-seurat_obj_kb[[2]] <- subset(seurat_obj_kb[[2]],
-                             subset = nFeature_RNA > 200 & nCount_RNA < 10000 & percent.mt < 6)
-
-# P0
-seurat_obj_kb[[3]] <- subset(seurat_obj_kb[[3]],
-                             subset = nFeature_RNA > 200 & nCount_RNA < 15000 & percent.mt < 9)
-
-# P3
-seurat_obj_kb[[4]] <- subset(seurat_obj_kb[[4]],
-                             subset = nFeature_RNA > 200 & nCount_RNA < 12000 & percent.mt < 7.5)
-
-# P5
-seurat_obj_kb[[5]] <- subset(seurat_obj_kb[[5]],
-                             subset = nFeature_RNA > 200 & nCount_RNA < 8000 & percent.mt < 7)
-
-# P7
-seurat_obj_kb[[6]] <- subset(seurat_obj_kb[[6]],
-                             subset = nFeature_RNA > 200 & nCount_RNA < 10000 & percent.mt < 8)
-
-
-# P10
-seurat_obj_kb[[7]] <- subset(seurat_obj_kb[[7]],
-                             subset = nFeature_RNA > 200 & nCount_RNA < 10000 & percent.mt < 9)
-
-# P14
-seurat_obj_kb[[8]] <- subset(seurat_obj_kb[[8]],
-                             subset = nFeature_RNA > 200 & nCount_RNA < 10000 & percent.mt < 13)
-
-# P21
-seurat_obj_kb[[9]] <- subset(seurat_obj_kb[[9]],
-                             subset = nFeature_RNA > 200 & nCount_RNA < 10000 & percent.mt < 10)
-
-# Adult
-seurat_obj_kb[[10]] <- subset(seurat_obj_kb[[10]],
-                             subset = nFeature_RNA > 200 & nCount_RNA < 10000 & percent.mt < 12)
-
-
+post_count <-list()
 # Subset data
 for (i in 1:length(seurat_obj_kb)){
+  ## Filter cells
+  seurat_obj_kb[[i]] <- subset(seurat_obj_kb[[i]],
+                              subset = nFeature_RNA > 200 & nCount_RNA < 10000 & percent.mt < 7)
+    
+    post_count <- append(post_count,dim(seurat_obj_kb[[i]])[2])
 
-  # # Filter out percent mitochondrial genes above the 99.9th percentile
-  # max.mito <- quantile(seurat_obj_kb[[i]]@meta.data[["percent.mt"]],probs = .995)
-  # 
-  # 
-  # ## Filter cells
-  # seurat_obj_kb[[i]] <- subset(seurat_obj_kb[[i]],
-  #                             subset = nFeature_RNA > 200 & nCount_RNA < 10000 & percent.mt < max.mito)
-  # Print cell counts
-  print(paste(timepoints[i],dim(seurat_obj_kb[[i]])[2]))
 
 }
-
+tibble(Timepoint = time_list,`Cell Count` =post_count) %>% unnest() %>% kableExtra::kable(caption = "Post-filtering Cell Counts")
 ```
 
 # Postfiltering

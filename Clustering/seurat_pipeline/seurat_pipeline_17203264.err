@@ -18,20 +18,20 @@ chr (2): Timepoint, Sample
 ℹ Use `spec()` to retrieve the full column specification for this data.
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 	Command being timed: "Rscript QC_subset.R /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/seurat_pipeline/kb_rds /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/seurat_pipeline/kb_rds_filtered /projects/bgmp/nelphick/bioinfo/Yu_project/scRNA_Murine_Olfactory_Bulb/data/timepoints.csv"
-	User time (seconds): 70.16
-	System time (seconds): 1.63
-	Percent of CPU this job got: 98%
-	Elapsed (wall clock) time (h:mm:ss or m:ss): 1:13.16
+	User time (seconds): 70.34
+	System time (seconds): 1.65
+	Percent of CPU this job got: 91%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 1:18.60
 	Average shared text size (kbytes): 0
 	Average unshared data size (kbytes): 0
 	Average stack size (kbytes): 0
 	Average total size (kbytes): 0
-	Maximum resident set size (kbytes): 2739612
+	Maximum resident set size (kbytes): 2742404
 	Average resident set size (kbytes): 0
 	Major (requiring I/O) page faults: 0
-	Minor (reclaiming a frame) page faults: 407831
-	Voluntary context switches: 3125
-	Involuntary context switches: 328
+	Minor (reclaiming a frame) page faults: 463454
+	Voluntary context switches: 6902
+	Involuntary context switches: 186
 	Swaps: 0
 	File system inputs: 0
 	File system outputs: 0
@@ -60,65 +60,65 @@ chr (1): X1
 ℹ Use `spec()` to retrieve the full column specification for this data.
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 Calculating cell attributes from input UMI matrix: log_umi
-Variance stabilizing transformation of count matrix of size 20988 by 4177
+Variance stabilizing transformation of count matrix of size 21000 by 4192
 Model formula is y ~ log_umi
 Get Negative Binomial regression parameters per gene
-Using 2000 genes, 4177 cells
-Found 112 outliers - those will be ignored in fitting/regularization step
+Using 2000 genes, 4192 cells
+Found 107 outliers - those will be ignored in fitting/regularization step
 
-Second step: Get residuals using fitted parameters for 20988 genes
-Computing corrected count matrix for 20988 genes
+Second step: Get residuals using fitted parameters for 21000 genes
+Computing corrected count matrix for 21000 genes
 Calculating gene attributes
-Wall clock passed: Time difference of 1.274681 mins
+Wall clock passed: Time difference of 1.277868 mins
 Determine variable features
 Place corrected count matrix in counts slot
 Centering data matrix
   |                                                                              |                                                                      |   0%  |                                                                              |==================                                                    |  25%  |                                                                              |===================================                                   |  50%  |                                                                              |====================================================                  |  75%  |                                                                              |======================================================================| 100%
 Set default assay to SCT
 Calculating cell attributes from input UMI matrix: log_umi
-Variance stabilizing transformation of count matrix of size 18525 by 3220
+Variance stabilizing transformation of count matrix of size 18589 by 3244
 Model formula is y ~ log_umi
 Get Negative Binomial regression parameters per gene
-Using 2000 genes, 3220 cells
-Found 146 outliers - those will be ignored in fitting/regularization step
-
-Second step: Get residuals using fitted parameters for 18525 genes
-Computing corrected count matrix for 18525 genes
-Calculating gene attributes
-Wall clock passed: Time difference of 56.02396 secs
-Determine variable features
-Place corrected count matrix in counts slot
-Centering data matrix
-  |                                                                              |                                                                      |   0%  |                                                                              |==================                                                    |  25%  |                                                                              |===================================                                   |  50%  |                                                                              |====================================================                  |  75%  |                                                                              |======================================================================| 100%
-Set default assay to SCT
-Calculating cell attributes from input UMI matrix: log_umi
-Variance stabilizing transformation of count matrix of size 19934 by 4647
-Model formula is y ~ log_umi
-Get Negative Binomial regression parameters per gene
-Using 2000 genes, 4647 cells
-There are 1 estimated thetas smaller than 1e-07 - will be set to 1e-07
+Using 2000 genes, 3244 cells
 Found 137 outliers - those will be ignored in fitting/regularization step
 
-Second step: Get residuals using fitted parameters for 19934 genes
-Computing corrected count matrix for 19934 genes
+Second step: Get residuals using fitted parameters for 18589 genes
+Computing corrected count matrix for 18589 genes
 Calculating gene attributes
-Wall clock passed: Time difference of 1.372181 mins
+Wall clock passed: Time difference of 57.01293 secs
 Determine variable features
 Place corrected count matrix in counts slot
 Centering data matrix
   |                                                                              |                                                                      |   0%  |                                                                              |==================                                                    |  25%  |                                                                              |===================================                                   |  50%  |                                                                              |====================================================                  |  75%  |                                                                              |======================================================================| 100%
 Set default assay to SCT
 Calculating cell attributes from input UMI matrix: log_umi
-Variance stabilizing transformation of count matrix of size 20269 by 4448
+Variance stabilizing transformation of count matrix of size 19944 by 4658
 Model formula is y ~ log_umi
 Get Negative Binomial regression parameters per gene
-Using 2000 genes, 4448 cells
-Found 123 outliers - those will be ignored in fitting/regularization step
+Using 2000 genes, 4658 cells
+There are 1 estimated thetas smaller than 1e-07 - will be set to 1e-07
+Found 117 outliers - those will be ignored in fitting/regularization step
 
-Second step: Get residuals using fitted parameters for 20269 genes
-Computing corrected count matrix for 20269 genes
+Second step: Get residuals using fitted parameters for 19944 genes
+Computing corrected count matrix for 19944 genes
 Calculating gene attributes
-Wall clock passed: Time difference of 1.312558 mins
+Wall clock passed: Time difference of 1.367751 mins
+Determine variable features
+Place corrected count matrix in counts slot
+Centering data matrix
+  |                                                                              |                                                                      |   0%  |                                                                              |==================                                                    |  25%  |                                                                              |===================================                                   |  50%  |                                                                              |====================================================                  |  75%  |                                                                              |======================================================================| 100%
+Set default assay to SCT
+Calculating cell attributes from input UMI matrix: log_umi
+Variance stabilizing transformation of count matrix of size 20276 by 4461
+Model formula is y ~ log_umi
+Get Negative Binomial regression parameters per gene
+Using 2000 genes, 4461 cells
+Found 152 outliers - those will be ignored in fitting/regularization step
+
+Second step: Get residuals using fitted parameters for 20276 genes
+Computing corrected count matrix for 20276 genes
+Calculating gene attributes
+Wall clock passed: Time difference of 1.306011 mins
 Determine variable features
 Place corrected count matrix in counts slot
 Centering data matrix
@@ -134,87 +134,87 @@ Found 116 outliers - those will be ignored in fitting/regularization step
 Second step: Get residuals using fitted parameters for 21401 genes
 Computing corrected count matrix for 21401 genes
 Calculating gene attributes
-Wall clock passed: Time difference of 1.17578 mins
+Wall clock passed: Time difference of 1.17791 mins
 Determine variable features
 Place corrected count matrix in counts slot
 Centering data matrix
   |                                                                              |                                                                      |   0%  |                                                                              |==================                                                    |  25%  |                                                                              |===================================                                   |  50%  |                                                                              |====================================================                  |  75%  |                                                                              |======================================================================| 100%
 Set default assay to SCT
 Calculating cell attributes from input UMI matrix: log_umi
-Variance stabilizing transformation of count matrix of size 20891 by 4249
+Variance stabilizing transformation of count matrix of size 20909 by 4267
 Model formula is y ~ log_umi
 Get Negative Binomial regression parameters per gene
-Using 2000 genes, 4249 cells
-Found 123 outliers - those will be ignored in fitting/regularization step
+Using 2000 genes, 4267 cells
+Found 138 outliers - those will be ignored in fitting/regularization step
 
-Second step: Get residuals using fitted parameters for 20891 genes
-Computing corrected count matrix for 20891 genes
+Second step: Get residuals using fitted parameters for 20909 genes
+Computing corrected count matrix for 20909 genes
 Calculating gene attributes
-Wall clock passed: Time difference of 1.268349 mins
+Wall clock passed: Time difference of 1.282101 mins
 Determine variable features
 Place corrected count matrix in counts slot
 Centering data matrix
   |                                                                              |                                                                      |   0%  |                                                                              |==================                                                    |  25%  |                                                                              |===================================                                   |  50%  |                                                                              |====================================================                  |  75%  |                                                                              |======================================================================| 100%
 Set default assay to SCT
 Calculating cell attributes from input UMI matrix: log_umi
-Variance stabilizing transformation of count matrix of size 20309 by 2248
+Variance stabilizing transformation of count matrix of size 20359 by 2267
 Model formula is y ~ log_umi
 Get Negative Binomial regression parameters per gene
-Using 2000 genes, 2248 cells
-Found 94 outliers - those will be ignored in fitting/regularization step
+Using 2000 genes, 2267 cells
+Found 103 outliers - those will be ignored in fitting/regularization step
 
-Second step: Get residuals using fitted parameters for 20309 genes
-Computing corrected count matrix for 20309 genes
+Second step: Get residuals using fitted parameters for 20359 genes
+Computing corrected count matrix for 20359 genes
 Calculating gene attributes
-Wall clock passed: Time difference of 40.76231 secs
+Wall clock passed: Time difference of 41.04005 secs
 Determine variable features
 Place corrected count matrix in counts slot
 Centering data matrix
   |                                                                              |                                                                      |   0%  |                                                                              |==================                                                    |  25%  |                                                                              |===================================                                   |  50%  |                                                                              |====================================================                  |  75%  |                                                                              |======================================================================| 100%
 Set default assay to SCT
 Calculating cell attributes from input UMI matrix: log_umi
-Variance stabilizing transformation of count matrix of size 20419 by 4132
+Variance stabilizing transformation of count matrix of size 20421 by 4138
 Model formula is y ~ log_umi
 Get Negative Binomial regression parameters per gene
-Using 2000 genes, 4132 cells
-Found 131 outliers - those will be ignored in fitting/regularization step
+Using 2000 genes, 4138 cells
+Found 149 outliers - those will be ignored in fitting/regularization step
 
-Second step: Get residuals using fitted parameters for 20419 genes
-Computing corrected count matrix for 20419 genes
+Second step: Get residuals using fitted parameters for 20421 genes
+Computing corrected count matrix for 20421 genes
 Calculating gene attributes
-Wall clock passed: Time difference of 1.209384 mins
+Wall clock passed: Time difference of 1.209063 mins
 Determine variable features
 Place corrected count matrix in counts slot
 Centering data matrix
   |                                                                              |                                                                      |   0%  |                                                                              |==================                                                    |  25%  |                                                                              |===================================                                   |  50%  |                                                                              |====================================================                  |  75%  |                                                                              |======================================================================| 100%
 Set default assay to SCT
 Calculating cell attributes from input UMI matrix: log_umi
-Variance stabilizing transformation of count matrix of size 19132 by 3343
+Variance stabilizing transformation of count matrix of size 19143 by 3349
 Model formula is y ~ log_umi
 Get Negative Binomial regression parameters per gene
-Using 2000 genes, 3343 cells
-Found 118 outliers - those will be ignored in fitting/regularization step
+Using 2000 genes, 3349 cells
+Found 104 outliers - those will be ignored in fitting/regularization step
 
-Second step: Get residuals using fitted parameters for 19132 genes
-Computing corrected count matrix for 19132 genes
+Second step: Get residuals using fitted parameters for 19143 genes
+Computing corrected count matrix for 19143 genes
 Calculating gene attributes
-Wall clock passed: Time difference of 58.45011 secs
+Wall clock passed: Time difference of 58.87605 secs
 Determine variable features
 Place corrected count matrix in counts slot
 Centering data matrix
   |                                                                              |                                                                      |   0%  |                                                                              |==================                                                    |  25%  |                                                                              |===================================                                   |  50%  |                                                                              |====================================================                  |  75%  |                                                                              |======================================================================| 100%
 Set default assay to SCT
 Calculating cell attributes from input UMI matrix: log_umi
-Variance stabilizing transformation of count matrix of size 21577 by 3507
+Variance stabilizing transformation of count matrix of size 21581 by 3510
 Model formula is y ~ log_umi
 Get Negative Binomial regression parameters per gene
-Using 2000 genes, 3507 cells
-Found 151 outliers - those will be ignored in fitting/regularization step
+Using 2000 genes, 3510 cells
+Found 156 outliers - those will be ignored in fitting/regularization step
 
-Second step: Get residuals using fitted parameters for 21577 genes
-Computing corrected count matrix for 21577 genes
+Second step: Get residuals using fitted parameters for 21581 genes
+Computing corrected count matrix for 21581 genes
 Calculating gene attributes
-Wall clock passed: Time difference of 1.048817 mins
+Wall clock passed: Time difference of 1.046559 mins
 Determine variable features
 Place corrected count matrix in counts slot
 Centering data matrix
@@ -226,317 +226,317 @@ Running CCA
 Merging objects
 Finding neighborhoods
 Finding anchors
-	Found 6475 anchors
+	Found 6534 anchors
 Filtering anchors
-	Retained 4422 anchors
+	Retained 4453 anchors
 Running CCA
 Merging objects
 Finding neighborhoods
 Finding anchors
-	Found 6064 anchors
+	Found 6087 anchors
 Filtering anchors
-	Retained 4176 anchors
+	Retained 4242 anchors
 Running CCA
 Merging objects
 Finding neighborhoods
 Finding anchors
-	Found 7826 anchors
+	Found 7892 anchors
 Filtering anchors
-	Retained 6850 anchors
+	Retained 6910 anchors
 Running CCA
 Merging objects
 Finding neighborhoods
 Finding anchors
-	Found 6061 anchors
+	Found 6068 anchors
 Filtering anchors
-	Retained 4037 anchors
+	Retained 4087 anchors
 Running CCA
 Merging objects
 Finding neighborhoods
 Finding anchors
-	Found 7060 anchors
+	Found 7082 anchors
 Filtering anchors
-	Retained 6089 anchors
+	Retained 6117 anchors
 Running CCA
 Merging objects
 Finding neighborhoods
 Finding anchors
 	Found 10445 anchors
 Filtering anchors
-	Retained 9097 anchors
+	Retained 9072 anchors
 Running CCA
 Merging objects
 Finding neighborhoods
 Finding anchors
-	Found 7951 anchors
+	Found 7932 anchors
 Filtering anchors
-	Retained 6616 anchors
+	Retained 6554 anchors
 Running CCA
 Merging objects
 Finding neighborhoods
 Finding anchors
-	Found 6768 anchors
+	Found 6748 anchors
 Filtering anchors
-	Retained 4623 anchors
+	Retained 4521 anchors
 Running CCA
 Merging objects
 Finding neighborhoods
 Finding anchors
-	Found 7181 anchors
+	Found 7220 anchors
 Filtering anchors
-	Retained 5619 anchors
+	Retained 5596 anchors
 Running CCA
 Merging objects
 Finding neighborhoods
 Finding anchors
-	Found 6991 anchors
+	Found 6978 anchors
 Filtering anchors
-	Retained 5496 anchors
+	Retained 5366 anchors
 Running CCA
 Merging objects
 Finding neighborhoods
 Finding anchors
-	Found 8953 anchors
+	Found 8981 anchors
 Filtering anchors
-	Retained 7161 anchors
+	Retained 7213 anchors
 Running CCA
 Merging objects
 Finding neighborhoods
 Finding anchors
-	Found 6734 anchors
+	Found 6830 anchors
 Filtering anchors
-	Retained 4227 anchors
+	Retained 4354 anchors
 Running CCA
 Merging objects
 Finding neighborhoods
 Finding anchors
-	Found 7197 anchors
+	Found 7269 anchors
 Filtering anchors
-	Retained 4978 anchors
+	Retained 5154 anchors
 Running CCA
 Merging objects
 Finding neighborhoods
 Finding anchors
-	Found 7253 anchors
+	Found 7179 anchors
 Filtering anchors
-	Retained 4837 anchors
+	Retained 4703 anchors
 Running CCA
 Merging objects
 Finding neighborhoods
 Finding anchors
-	Found 9788 anchors
+	Found 9772 anchors
 Filtering anchors
-	Retained 7660 anchors
+	Retained 7713 anchors
 Running CCA
 Merging objects
 Finding neighborhoods
 Finding anchors
-	Found 7051 anchors
+	Found 7092 anchors
 Filtering anchors
-	Retained 6566 anchors
+	Retained 6530 anchors
 Running CCA
 Merging objects
 Finding neighborhoods
 Finding anchors
-	Found 5228 anchors
+	Found 5248 anchors
 Filtering anchors
-	Retained 3907 anchors
+	Retained 4019 anchors
 Running CCA
 Merging objects
 Finding neighborhoods
 Finding anchors
-	Found 4919 anchors
+	Found 4869 anchors
 Filtering anchors
-	Retained 4057 anchors
+	Retained 4008 anchors
 Running CCA
 Merging objects
 Finding neighborhoods
 Finding anchors
-	Found 4644 anchors
+	Found 4613 anchors
 Filtering anchors
-	Retained 3878 anchors
+	Retained 3858 anchors
 Running CCA
 Merging objects
 Finding neighborhoods
 Finding anchors
-	Found 6720 anchors
+	Found 6663 anchors
 Filtering anchors
-	Retained 6251 anchors
+	Retained 6164 anchors
 Running CCA
 Merging objects
 Finding neighborhoods
 Finding anchors
-	Found 7337 anchors
+	Found 7313 anchors
 Filtering anchors
-	Retained 6770 anchors
+	Retained 6788 anchors
 Running CCA
 Merging objects
 Finding neighborhoods
 Finding anchors
-	Found 5540 anchors
+	Found 5575 anchors
 Filtering anchors
-	Retained 3737 anchors
+	Retained 3756 anchors
 Running CCA
 Merging objects
 Finding neighborhoods
 Finding anchors
-	Found 6796 anchors
+	Found 6785 anchors
 Filtering anchors
-	Retained 5291 anchors
+	Retained 5298 anchors
 Running CCA
 Merging objects
 Finding neighborhoods
 Finding anchors
-	Found 8984 anchors
+	Found 8931 anchors
 Filtering anchors
-	Retained 7424 anchors
+	Retained 7351 anchors
 Running CCA
 Merging objects
 Finding neighborhoods
 Finding anchors
-	Found 9695 anchors
+	Found 9672 anchors
 Filtering anchors
-	Retained 8168 anchors
+	Retained 8172 anchors
+Running CCA
+Merging objects
+Finding neighborhoods
+Finding anchors
+	Found 7102 anchors
+Filtering anchors
+	Retained 5410 anchors
+Running CCA
+Merging objects
+Finding neighborhoods
+Finding anchors
+	Found 6873 anchors
+Filtering anchors
+	Retained 4636 anchors
+Running CCA
+Merging objects
+Finding neighborhoods
+Finding anchors
+	Found 4520 anchors
+Filtering anchors
+	Retained 3107 anchors
+Running CCA
+Merging objects
+Finding neighborhoods
+Finding anchors
+	Found 6273 anchors
+Filtering anchors
+	Retained 4593 anchors
+Running CCA
+Merging objects
+Finding neighborhoods
+Finding anchors
+	Found 6486 anchors
+Filtering anchors
+	Retained 4663 anchors
+Running CCA
+Merging objects
+Finding neighborhoods
+Finding anchors
+	Found 7643 anchors
+Filtering anchors
+	Retained 6083 anchors
+Running CCA
+Merging objects
+Finding neighborhoods
+Finding anchors
+	Found 7643 anchors
+Filtering anchors
+	Retained 6180 anchors
+Running CCA
+Merging objects
+Finding neighborhoods
+Finding anchors
+	Found 8003 anchors
+Filtering anchors
+	Retained 6287 anchors
+Running CCA
+Merging objects
+Finding neighborhoods
+Finding anchors
+	Found 7956 anchors
+Filtering anchors
+	Retained 5988 anchors
+Running CCA
+Merging objects
+Finding neighborhoods
+Finding anchors
+	Found 5330 anchors
+Filtering anchors
+	Retained 4032 anchors
+Running CCA
+Merging objects
+Finding neighborhoods
+Finding anchors
+	Found 8225 anchors
+Filtering anchors
+	Retained 6765 anchors
+Running CCA
+Merging objects
+Finding neighborhoods
+Finding anchors
+	Found 6583 anchors
+Filtering anchors
+	Retained 5286 anchors
+Running CCA
+Merging objects
+Finding neighborhoods
+Finding anchors
+	Found 6441 anchors
+Filtering anchors
+	Retained 4543 anchors
+Running CCA
+Merging objects
+Finding neighborhoods
+Finding anchors
+	Found 7391 anchors
+Filtering anchors
+	Retained 6190 anchors
 Running CCA
 Merging objects
 Finding neighborhoods
 Finding anchors
 	Found 7143 anchors
 Filtering anchors
-	Retained 5484 anchors
+	Retained 6077 anchors
 Running CCA
 Merging objects
 Finding neighborhoods
 Finding anchors
-	Found 6955 anchors
+	Found 8699 anchors
 Filtering anchors
-	Retained 4713 anchors
+	Retained 7520 anchors
 Running CCA
 Merging objects
 Finding neighborhoods
 Finding anchors
-	Found 4503 anchors
+	Found 8243 anchors
 Filtering anchors
-	Retained 3154 anchors
-Running CCA
-Merging objects
-Finding neighborhoods
-Finding anchors
-	Found 6383 anchors
-Filtering anchors
-	Retained 4653 anchors
-Running CCA
-Merging objects
-Finding neighborhoods
-Finding anchors
-	Found 6457 anchors
-Filtering anchors
-	Retained 4630 anchors
-Running CCA
-Merging objects
-Finding neighborhoods
-Finding anchors
-	Found 7586 anchors
-Filtering anchors
-	Retained 5996 anchors
-Running CCA
-Merging objects
-Finding neighborhoods
-Finding anchors
-	Found 7574 anchors
-Filtering anchors
-	Retained 6081 anchors
-Running CCA
-Merging objects
-Finding neighborhoods
-Finding anchors
-	Found 7982 anchors
-Filtering anchors
-	Retained 6284 anchors
-Running CCA
-Merging objects
-Finding neighborhoods
-Finding anchors
-	Found 7989 anchors
-Filtering anchors
-	Retained 6030 anchors
-Running CCA
-Merging objects
-Finding neighborhoods
-Finding anchors
-	Found 5254 anchors
-Filtering anchors
-	Retained 4010 anchors
-Running CCA
-Merging objects
-Finding neighborhoods
-Finding anchors
-	Found 8171 anchors
-Filtering anchors
-	Retained 6746 anchors
-Running CCA
-Merging objects
-Finding neighborhoods
-Finding anchors
-	Found 6652 anchors
-Filtering anchors
-	Retained 5326 anchors
-Running CCA
-Merging objects
-Finding neighborhoods
-Finding anchors
-	Found 6432 anchors
-Filtering anchors
-	Retained 4499 anchors
-Running CCA
-Merging objects
-Finding neighborhoods
-Finding anchors
-	Found 7346 anchors
-Filtering anchors
-	Retained 6123 anchors
-Running CCA
-Merging objects
-Finding neighborhoods
-Finding anchors
-	Found 7148 anchors
-Filtering anchors
-	Retained 6053 anchors
-Running CCA
-Merging objects
-Finding neighborhoods
-Finding anchors
-	Found 8678 anchors
-Filtering anchors
-	Retained 7477 anchors
-Running CCA
-Merging objects
-Finding neighborhoods
-Finding anchors
-	Found 8216 anchors
-Filtering anchors
-	Retained 6775 anchors
+	Retained 6806 anchors
 Running CCA
 Merging objects
 Finding neighborhoods
 Finding anchors
 	Found 5648 anchors
 Filtering anchors
-	Retained 4715 anchors
+	Retained 4751 anchors
 Running CCA
 Merging objects
 Finding neighborhoods
 Finding anchors
-	Found 7480 anchors
+	Found 7512 anchors
 Filtering anchors
-	Retained 6395 anchors
+	Retained 6521 anchors
 Running CCA
 Merging objects
 Finding neighborhoods
 Finding anchors
-	Found 7624 anchors
+	Found 7564 anchors
 Filtering anchors
-	Retained 6512 anchors
+	Retained 6458 anchors
 Warning message:
 In CheckDuplicateCellNames(object.list = object.list) :
   Some cell names are duplicated across objects provided. Renaming to enforce unique cell names.
@@ -613,20 +613,20 @@ Finding integration vector weights
 **************************************************|
 Integrating data
 	Command being timed: "Rscript SCT_integrate.R /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/seurat_pipeline/kb_rds_filtered /projects/bgmp/nelphick/bioinfo/Yu_project/scRNA_Murine_Olfactory_Bulb/data/timepoints.txt /projects/bgmp/shared/2021_projects/Yu/BGMP_2021/seurat_pipeline/combined_kb_filtered.rds"
-	User time (seconds): 2286.63
-	System time (seconds): 265.70
+	User time (seconds): 2311.36
+	System time (seconds): 279.83
 	Percent of CPU this job got: 99%
-	Elapsed (wall clock) time (h:mm:ss or m:ss): 42:40.54
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 43:18.65
 	Average shared text size (kbytes): 0
 	Average unshared data size (kbytes): 0
 	Average stack size (kbytes): 0
 	Average total size (kbytes): 0
-	Maximum resident set size (kbytes): 64001772
+	Maximum resident set size (kbytes): 61315840
 	Average resident set size (kbytes): 0
 	Major (requiring I/O) page faults: 0
-	Minor (reclaiming a frame) page faults: 70023864
-	Voluntary context switches: 4873
-	Involuntary context switches: 9996
+	Minor (reclaiming a frame) page faults: 75866547
+	Voluntary context switches: 4862
+	Involuntary context switches: 7230
 	Swaps: 0
 	File system inputs: 0
 	File system outputs: 0

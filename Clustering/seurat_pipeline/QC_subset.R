@@ -45,27 +45,27 @@ for (i in 1:length(seurat_obj_kb)){
 # Sample Specific Filtering
 # E14
 seurat_obj_kb[[1]]<- subset(seurat_obj_kb[[1]],
-                             subset = nFeature_RNA > 200 & nCount_RNA < 11000 & percent.mt < 4)
+                             subset = nFeature_RNA > 200 & nCount_RNA < 12000 & percent.mt < 6)
 
 # E18
 seurat_obj_kb[[2]] <- subset(seurat_obj_kb[[2]],
-                             subset = nFeature_RNA > 200 & nCount_RNA < 10000 & percent.mt < 5)
+                             subset = nFeature_RNA > 200 & nCount_RNA < 10000 & percent.mt < 6)
 
 # P0
 seurat_obj_kb[[3]] <- subset(seurat_obj_kb[[3]],
-                             subset = nFeature_RNA > 200 & nCount_RNA < 15000 & percent.mt < 7)
+                             subset = nFeature_RNA > 200 & nCount_RNA < 15000 & percent.mt < 9)
 
 # P3
 seurat_obj_kb[[4]] <- subset(seurat_obj_kb[[4]],
-                             subset = nFeature_RNA > 200 & nCount_RNA < 12000 & percent.mt < 6)
+                             subset = nFeature_RNA > 200 & nCount_RNA < 12000 & percent.mt < 7.5)
 
 # P5
 seurat_obj_kb[[5]] <- subset(seurat_obj_kb[[5]],
-                             subset = nFeature_RNA > 200 & nCount_RNA < 8000 & percent.mt < 6)
+                             subset = nFeature_RNA > 200 & nCount_RNA < 8000 & percent.mt < 7)
 
 # P7
 seurat_obj_kb[[6]] <- subset(seurat_obj_kb[[6]],
-                             subset = nFeature_RNA > 200 & nCount_RNA < 10000 & percent.mt < 7.5)
+                             subset = nFeature_RNA > 200 & nCount_RNA < 10000 & percent.mt < 8)
 
 
 # P10
@@ -74,16 +74,15 @@ seurat_obj_kb[[7]] <- subset(seurat_obj_kb[[7]],
 
 # P14
 seurat_obj_kb[[8]] <- subset(seurat_obj_kb[[8]],
-                             subset = nFeature_RNA > 200 & nCount_RNA < 10000 & percent.mt < 10)
+                             subset = nFeature_RNA > 200 & nCount_RNA < 10000 & percent.mt < 13)
 
 # P21
 seurat_obj_kb[[9]] <- subset(seurat_obj_kb[[9]],
-                             subset = nFeature_RNA > 200 & nCount_RNA < 9000 & percent.mt < 9)
+                             subset = nFeature_RNA > 200 & nCount_RNA < 10000 & percent.mt < 10)
 
 # Adult
 seurat_obj_kb[[10]] <- subset(seurat_obj_kb[[10]],
-                             subset = nFeature_RNA > 200 & nCount_RNA < 9000 & percent.mt < 10)
-
+                             subset = nFeature_RNA > 200 & nCount_RNA < 10000 & percent.mt < 12)
 
 
 for (i in 1:length(seurat_obj_kb)){

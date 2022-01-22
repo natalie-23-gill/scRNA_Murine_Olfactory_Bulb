@@ -55,9 +55,9 @@ combined.sct$timepoint = factor(combined.sct$timepoint,levels = c("E14","E18","P
 ```{r}
 # Batch Corrected workflow for visualization and clustering
 DefaultAssay(combined.sct) = "integrated"
-combined.sct = RunPCA(combined.sct, npcs = 20, verbose = FALSE)
-combined.sct = RunUMAP(combined.sct, reduction = "pca", dims = 1:20)
-combined.sct= FindNeighbors(combined.sct, reduction = "pca", dims = 1:20)
+combined.sct = RunPCA(combined.sct, npcs = 35, verbose = FALSE)
+combined.sct = RunUMAP(combined.sct, reduction = "pca", dims = 1:35)
+combined.sct= FindNeighbors(combined.sct, reduction = "pca", dims = 1:35)
 
 ```
 
@@ -68,7 +68,7 @@ combined.sct= FindNeighbors(combined.sct, reduction = "pca", dims = 1:20)
 ```{r UMAP}
 
 
-combined.sct = FindClusters(combined.sct, resolution = 1.4)
+combined.sct = FindClusters(combined.sct, resolution = 1.5)
 
 DimPlot(combined.sct, reduction = "umap", label = TRUE, repel = TRUE,pt.size = 1)
 

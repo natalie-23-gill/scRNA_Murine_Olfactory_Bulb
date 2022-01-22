@@ -34,7 +34,7 @@ sig.markers<-read_csv("sig_markers_1.csv")
 
 # genes in the P7 clusters that have a log2 fold change >= 1
 P7_genes_up  = sig.markers %>%
-  filter(cluster ==7 & avg_log2FC >=1) 
+  filter(cluster ==7 & avg_log2FC >=1 & pct.1 >= .6) 
 
 
 

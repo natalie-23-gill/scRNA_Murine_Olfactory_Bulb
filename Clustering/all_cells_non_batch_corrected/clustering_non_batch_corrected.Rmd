@@ -79,28 +79,6 @@ DimPlot(combined.sct, reduction = "umap", label = TRUE, repel = TRUE,pt.size = 1
 #DimPlot(combined.sct, reduction = "umap", group.by = "timepoint")
 ```
 
-```{r}
-
-DefaultAssay(combined.sct) <- "RNA"
-
-all.markers <- FindAllMarkers(combined.sct,only.pos = TRUE,logfc.threshold = 0.25)%>%
-  filter(p_val_adj < 0.05)
-
-mgene_res <- all.markers %>%
-  filter(p_val_adj < 0.05) %>%
-  mutate(identity_score = (pct.1/pct.2)*avg_log2FC) %>%
-  inner_join(markergenes) %>%
-  group_by(cluster) %>%
-  top_n(n = 1,wt = identity_score)
-
-mgene_res_all <- all.markers %>%
-  filter(p_val_adj < 0.05) %>%
-  mutate(identity_score = (pct.1/pct.2)*avg_log2FC) %>%
-  inner_join(markergenes) %>%
-  group_by(cluster)
-
-write_csv(all.markers, file = "diff_exp_results_all_cells.csv")
-```
 
 ```{r}
 found_celltypes <- mgene_res %>%

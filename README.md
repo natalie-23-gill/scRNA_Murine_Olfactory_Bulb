@@ -17,17 +17,18 @@ The results of comparing the preprocessing pipelines show kallisto \| bustools d
   
 ### Clustering and Cell Type Identification   
 
-After running the kallisto \| bustools preprocessing pipeline, we filtered each time point count matrix and kept the cells that met the following criteria (nFeature_RNA > 200, nCount_RNA < 10, percent.mt < 7%). We then ran the standard Seurat v4 SCTintegration workflow, UMAP dimensionality reduction, kNN clustering and wilcoxon rank sum test differential expression on those clusters in order to identify specific cell types across the time points using known marker genes.    
-
-
-## Created: 10/07/2021
-
-#### PI: Dr. Ron Yu CRY@stowers.org    
-
-#### Mentors: Annie Wang AWang@stowers.org, Max Hills MHills@stowers.org    
+After running the kallisto \| bustools preprocessing pipeline, we filtered each time point count matrix and kept the cells that met the following criteria (nFeature_RNA > 200, nCount_RNA < 10000, percent.mt < 7%). We then ran the standard Seurat v4 SCTintegration workflow, UMAP dimensionality reduction, sNN clustering and wilcoxon rank sum test differential expression on those clusters in order to identify specific cell types across the time points using known marker genes.    
 
 #### Contributors: Laura Paez, Natalie Elphick and Christina Zakarian   
 
+
+
+## Acknowledgements   
+
+Thank you to Dr. Ron Yu, Max Hills, and Annie Wang of the Yu Lab at Stowers Institute for Medical Research.   
+Our BGMP instructors: Pete Batzel, Dr. Leslie Coonrod, Dr. Stacey Wagner, and Jason Sydes.   
+This work benefited from access to the University of Oregon high performance computing cluster, Talapas.   
+  
 ## References   
 
 1. Zheng, G. X. Y. et al. Massively parallel digital transcriptional profiling of single cells. Nat Commun 8, 14049 (2017).  
@@ -38,5 +39,6 @@ After running the kallisto \| bustools preprocessing pipeline, we filtered each 
 6. Bray, N. L., Pimentel, H., Melsted, P. & Pachter, L. Near-optimal probabilistic RNA-seq quantification. Nat Biotechnol 34, 525–527 (2016).  
 
 
-
+## Created: 10/07/2021
+## Updated: 01/25/2021
 

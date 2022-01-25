@@ -33,6 +33,7 @@ OBs of mice from 10 timepoints were dissected and sequenced using scRNA-Seq usin
 | ![Figure 1](Clustering/interneurons/interneuron_analysis_1_files/figure-html/interneuron_timepoints-1_arrow.png)   | 
 |  *Interneurons identified through DE analysis  were re-clustered and labeled by timepoint. Timepoints segregate between pre-critical (E14 to P5) and post-critical period (P7 to Adult). P7 has a distinct shared nearest neighbor (sNN) cluster (arrow).* |
 
+</br>
 
 | Figure 2. GO term analysis of overexpressed genes in the P7 cluster.| 
 |:--:|
@@ -91,9 +92,9 @@ This work benefited from access to the University of Oregon high-performance com
 6. Bray, N. L., Pimentel, H., Melsted, P. & Pachter, L. Near-optimal probabilistic RNA-seq quantification. Nat Biotechnol 34, 525–527 (2016).  
 
 
-## Note:  
+## Data Availability:  
 
-The data for this project is part of ongioing research that has not been published yet so it has been removed from the repository.    
+The data used for this project is part of ongioing research that has not been published yet so it has been removed from the repository.   
 
 
 ## Created: 10/07/2021

@@ -1,7 +1,7 @@
 ## Characterizing Interneuron Expression in the Developing Olfactory Bulb  
 #### Contributors: Laura Paez, Natalie Elphick and Christina Zakarian  
 
-<br></br>
+
 
 ## Background   
 
@@ -33,7 +33,6 @@ OBs of mice from 10 timepoints were dissected and sequenced using scRNA-Seq usin
 | ![Figure 1](Clustering/interneurons/interneuron_analysis_1_files/figure-html/interneuron_timepoints-1_arrow.png)   | 
 |  *Interneurons identified through DE analysis  were re-clustered and labeled by timepoint. Timepoints segregate between pre-critical (E14 to P5) and post-critical period (P7 to Adult). P7 has a distinct shared nearest neighbor (sNN) cluster (arrow).* |
 
-<br></br> 
 
 | Figure 2. GO term analysis of overexpressed genes in the P7 cluster.| 
 |:--:|

@@ -16,10 +16,10 @@ Interneurons are a diverse cell population that make up the majority of neurons 
 
 ## Results   
 
-![Figure 1](Clustering\interneurons\interneuron_analysis_1_files\figure-html\interneuron_timepoints-1.png)  
+![Figure 1](./Clustering/interneurons/interneuron_analysis_1_files/figure-html/interneuron_timepoints-1.png)  
 
 
-![Figure 2](Clustering\interneurons\P7_GO_analysis_files\figure-html\P7_GO-1.png)
+![Figure 2](Clustering/interneurons/P7_GO_analysis_files/figure-html/P7_GO-1.png)
 
 
 

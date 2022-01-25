@@ -1,7 +1,7 @@
 ---
 title: "Violin Plots for Pre and Post Filtered Count Matrices"
 author: "Natalie Elphick, Laura Paez, Christina Zakarian"
-date: "11/17/2021"
+date: "Updated: `r format(Sys.time(), '%m/%d/%y')`"
 output:  
   prettydoc::html_pretty:
     theme: cayman

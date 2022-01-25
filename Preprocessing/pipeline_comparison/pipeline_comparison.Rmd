@@ -1,14 +1,19 @@
 ---
 title: "Preprocessing Pipeline Comparison"
 author: "Natalie Elphick, Laura Paez, Christina Zakarian"
-date: "10/31/2021"
-output: html_document
+date: "Updated: `r format(Sys.time(), '%m/%d/%y')`"
+output:  
+  prettydoc::html_pretty:
+    theme: cayman
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE,
                       warning = FALSE,
-                      message = FALSE)
+                      message = FALSE,
+                      dpi = 400,
+                      fig.align = 'center',
+                      fig.topcaption = TRUE, fig.height = 4,fig.width = 7)
 library(Seurat)
 
 library(ggpubr)
@@ -84,12 +89,9 @@ per_aling_cr = read_csv("cr_aligned.csv",col_names = F) %>%
 # Combine so to insert later 
 per_aligned = full_join(per_align_kb,per_aling_cr)
 
-# seurat_obj_cr[[1]][["percent.mt"]] <- PercentageFeatureSet(seurat_obj_cr[[1]], pattern = "^mt-")
-# 
-# VlnPlot(seurat_obj_cr[[1]], features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
 ```
 
-```{r}
+```{r Data Wrangling}
 
 # Create tibbles from the ouputs of the loop
 cr_df = tibble(Sample = samples,
@@ -129,7 +131,21 @@ pipeline_comparison %>%
 
 ```
 
-### QC Metric Comparison
+In order to validate our choice of preprocessing pipeline we compared the count matrices from two commonly utilized scRNA-seq preprocessing pipelines CellRanger and kallisto | bustools. The main difference between these pipelines is while CellRanger uses the conventional splice aware aligner STAR, kallisto uses a pseudoalignment process. Pseudoalignment a rapid k-mer based algorithm that uses a de Bruijn Graph of the reference database to identify potential matches for a query sequence without actually aligning the whole query sequence and uses an expectation maximization (EM) algorithm to resolve multiply-mapped reads.
+
+   
+   
+   
+   
+
+For additional documentation of how we installed and ran these pipelines click the following links:   
+<a href="https://natalie-23-gill.github.io/scRNA_Murine_Olfactory_Bulb/Preprocessing/cellranger/cellranger.html">CellRanger</a>   
+<a href="https://natalie-23-gill.github.io/scRNA_Murine_Olfactory_Bulb/Preprocessing/kallisto_bustools/kallisto_bustools.html">kallisto | bustools</a>
+
+   
+# Results
+
+  
 
 ```{r Graph QC Metric Comparison}
 total_cells = pipeline_comparison %>%
@@ -138,7 +154,8 @@ total_cells = pipeline_comparison %>%
   ggtitle("Total Cells")+
   ylab(label = "Total Cells")+
   theme_minimal()+
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5))+
+  scale_color_brewer(type = "qual",palette = "Dark2",aesthetics = c("colour","fill"))
 
 total_genes = pipeline_comparison %>%
   ggplot(aes(x=Timepoint,y=Total_Genes,fill=Pipeline))+
@@ -146,7 +163,8 @@ total_genes = pipeline_comparison %>%
   ggtitle("Total Genes")+
   ylab(label = "Total Genes")+
   theme_minimal()+
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5))+
+  scale_color_brewer(type = "qual",palette = "Dark2",aesthetics = c("colour","fill"))
 
 med_gene_count = pipeline_comparison %>%
   ggplot(aes(x=Timepoint,y=Median_Gene_Count,fill=Pipeline))+
@@ -154,7 +172,8 @@ med_gene_count = pipeline_comparison %>%
   ggtitle("Median Gene Count")+
   ylab(label = "Median Gene Count")+
   theme_minimal()+
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5))+
+  scale_color_brewer(type = "qual",palette = "Dark2",aesthetics = c("colour","fill"))
 
 med_umi_count = pipeline_comparison %>%
   ggplot(aes(x=Timepoint,y=Median_UMI_Count,fill=Pipeline))+
@@ -162,7 +181,8 @@ med_umi_count = pipeline_comparison %>%
   ggtitle("Median UMI Count")+
   ylab(label = "Median UMI Count")+
   theme_minimal()+
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5))+
+  scale_color_brewer(type = "qual",palette = "Dark2",aesthetics = c("colour","fill"))
 
 percent_alignement = pipeline_comparison %>%
   ggplot(aes(x=Timepoint,y=Percent_Aligned,fill=Pipeline))+
@@ -170,21 +190,25 @@ percent_alignement = pipeline_comparison %>%
   ggtitle("% Alignment to Transcriptome")+
   ylab(label = "% Alignment")+
   theme_minimal()+
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5))+
+  scale_color_brewer(type = "qual",palette = "Dark2",aesthetics = c("colour","fill"))
 ```
 
-```{r Combined Plot, fig.dim=c(11,6),messages=FALSE}
+```{r Combined Plot, fig.dim=c(11,6),messages=FALSE,fig.cap="Figure 1. QC Metric Comparison"}
 ggarrange(percent_alignement,
           total_cells,
           total_genes,
           med_gene_count,
           med_umi_count,
-          common.legend = TRUE)
+          common.legend = TRUE,labels = "AUTO")
 ```
+  
+Figure 1 shows overall percent higher alignment to the transcriptome for kallisto and overall higher gene counts. Cells with higher gene counts are considered to be more informative for clustering and downstream analysis.  
 
 
-
-
+   
+   
+   
 ```{r}
 # Extract list of genes detected by cellranger, kallisto, and those only detected by either cellranger or kallisto 
 genes_cr = list()
@@ -252,16 +276,6 @@ for (i in 1:length(samples)) {
 cr_sums = as.matrix(rowSums(collapsed_counts_cr, na.rm = TRUE)/10)
 kb_sums = as.matrix(rowSums(collapsed_counts_kb, na.rm = TRUE)/10)
 
-# For heatmap
-kb_only_olf = counts_kb_only %>%
-  as_tibble(rownames = "Gene_name") %>%
-  dplyr::select(!V1) %>%
-  filter(str_detect(Gene_name, "Olf") |str_detect(Gene_name, "Vmn")) %>%
-  mutate(genes = Gene_name) %>%
-  separate(genes,into=c("Gene_family","number"),sep = "[0-9]") %>%
-  dplyr::select(!number) %>%
-  dplyr::select(Gene_family,Gene_name,everything())
-  
 
 cr_kb_sums = cbind(cr_sums, kb_sums) %>%
   as_tibble(rownames = "Gene_name") %>%
@@ -271,9 +285,9 @@ cr_kb_sums = cbind(cr_sums, kb_sums) %>%
 
 ```
 
-### Differences in Detection 
 
-```{r}
+
+```{r,fig.cap="Figure 2.Notable Differences in Detection"}
 # filter for protein coding genes and genes that have a diff greater than 50 
 pc_filt_counts = filter(cr_kb_sums, kallisto != Cell_Ranger) %>%
   mutate("Higher_Signal" = ifelse(Difference_kb_cr > 0, "Kallisto", "Cellranger")) %>%
@@ -293,7 +307,8 @@ prot_genes = ggplot(pc_filt_counts %>%
   labs(fill="Pipeline")+
   ggtitle("Protein Coding Genes")+
   theme_minimal()+
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5))+
+  scale_color_brewer(type = "qual",palette = "Dark2",aesthetics = c("colour","fill"))
 
 lncRNA = ggplot(lncRNA_filt_counts %>%
          filter(abs(Difference_kb_cr) > 1),
@@ -304,7 +319,8 @@ lncRNA = ggplot(lncRNA_filt_counts %>%
   labs(fill="Pipeline")+
   ggtitle("lncRNA")+
   theme_minimal()+
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5))+
+  scale_color_brewer(type = "qual",palette = "Dark2",aesthetics = c("colour","fill"))
 
 
 ggarrange(prot_genes,lncRNA,common.legend = TRUE)
@@ -312,7 +328,10 @@ ggarrange(prot_genes,lncRNA,common.legend = TRUE)
 
 *Note: For protein coding genes absolute differences less than 6 were removed for visualization.*
 
-<br>
+Figure 2 shows the differences in gene detection between the pipelines by subtracting the average count per cell from CellRanger from the average count per cell from kallisto. Negative values indicate higher detection for CellRanger and positive values have higher detection in kallisto.   
+   
+   
+<t> 
 
 
 ```{r}
@@ -364,7 +383,7 @@ gene_type_count_tib = gene_type_count_cr %>%
 ```
 
 
-```{r}
+```{r, fig.cap="Figure 3.Notable Differences in Gene Type Counts"}
 gene_type_count_tib %>%
   filter(Pipeline == "Cellranger Only" | Pipeline == "Kallisto Only") %>%
   filter(Gene_Type == "protein_coding" | Gene_Type == "lncRNA" | Gene_Type == "processed_pseudogene") %>%
@@ -372,13 +391,18 @@ gene_type_count_tib %>%
   geom_bar(stat = "identity",position = "dodge")+
   ylab(label = "Gene Type")+
   xlab(label = "Total Count")+
-  ggtitle(label = "Notable Differences in Gene Type Counts")+
+  ggtitle(label = "")+
   scale_y_discrete(breaks=c("protein_coding", "lncRNA", "processed_pseudogene"),
                   labels=c("Protein Coding", "lncRNA", "Processed Pseudogene"))+
   theme_classic2()+
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5))+
+  scale_color_brewer(type = "qual",palette = "Dark2",aesthetics = c("colour","fill"))
 ```
+  
+Figure 3 shows differences for the categories that had notable differences in counts for gene type categories detected for each pipeline.  
 
+
+  
 ```{r}
 # how many genes does Kallisto detect at higher levels? CellRanger? 
 
@@ -392,26 +416,19 @@ pc_cr_greater_sig = sum(pc_filt_counts$Difference_kb_cr < 0)
 lncRNA_kb_greater_sig = sum(lncRNA_filt_counts$Difference_kb_cr > 0)
 lncRNA_cr_greater_sig = sum(lncRNA_filt_counts$Difference_kb_cr < 0)
 
-#round(kb_greater_sig / (kb_greater_sig + cr_greater_sig) *100,digits = 2)
-#round(pc_kb_greater_sig / (pc_kb_greater_sig + pc_cr_greater_sig)*100,digits = 2)
-#round(lncRNA_kb_greater_sig / (lncRNA_kb_greater_sig + lncRNA_cr_greater_sig)*100,digits = 2)
 
 tibble(`Total Genes` = round(kb_greater_sig / (kb_greater_sig + cr_greater_sig) *100,digits = 2),
        `Protein Coding` = round(pc_kb_greater_sig / (pc_kb_greater_sig + pc_cr_greater_sig)*100,digits = 2),
        `lncRNA` = round(lncRNA_kb_greater_sig / (lncRNA_kb_greater_sig + lncRNA_cr_greater_sig)*100,digits = 2)) %>%
   pivot_longer(cols = everything(),names_to = c("Gene Types")) %>%
   rename(`% Higher in Kallisto` = value) %>%
-  kbl(caption = "Gene Types That Higher Detection in Kallisto") %>%
+  kbl(caption = "Table 1.Gene Types That Higher Detection in Kallisto", table.attr = "style='width:60%;'") %>%
   kable_minimal(full_width=FALSE)
 
 ```
 
 
 
-
-<br>
-
-### Genes That Were Only Detected by Kallisto Contain Members of the Olfr and Vmn Gene Families 
 
 <br>
 
@@ -425,47 +442,13 @@ genes_kb_only_tib %>%
   filter(Prefix != "Gm" & Gene_Type == "protein_coding") %>%
   filter(str_length(Prefix)>1) %>%
   group_by(Prefix) %>%
-  summarise(Count = n()) %>% 
+  summarise(Count = n()) %>%
   filter(Count>3) %>%
   arrange(desc(Count)) %>%
-  kbl(caption = "Gene Families Detected at Least 4 Times", table.attr = "style='width:30%;'") %>%
+  kbl(caption = "Table 2. Gene Families Detected by kallisto", table.attr = "style='width:50%;'") %>%
   kable_minimal()
 ```
 
 
-<br>
-
-
-```{r Heatmap}
-kb_only_log = kb_only_olf %>%
-  mutate(across(starts_with("L"),log10))
-
-
-kb_only_mat = kb_only_log %>%
-  dplyr::select(!Gene_name) %>%
-  dplyr::select(!Gene_family) %>%
-  as.matrix()
-
-kb_annotation = kb_only_log %>%
-  dplyr::select(Gene_family) %>%
-  as.matrix()
-
-rownames(kb_annotation) = kb_only_log$Gene_name
-
-rownames(kb_only_mat) = kb_only_log$Gene_name
-
-time_points = timepoints%>%
-  mutate(Timepoint = factor(Timepoint,
-                            levels = c("E14","E18","P0","P3","P5","P7","P10","P14","P21","Adult"))) %>%
-  arrange(Timepoint)
-
-col_fun = colorRamp2(c(0, 1,3), c("#219168", "white" ,"#b52d1b"))
-
-Heatmap(kb_only_mat,
-        name="Log10 Counts \n Per Sample",
-        col = col_fun,
-        row_split = kb_annotation,
-        show_row_names = FALSE,
-        column_order = time_points$Sample,
-        column_title = "Log10 Counts Ordered By Timepoint")
-```
+   
+The results of the comparison show kallisto is the better choice for our data and captures more genes in multiple gene type categories.

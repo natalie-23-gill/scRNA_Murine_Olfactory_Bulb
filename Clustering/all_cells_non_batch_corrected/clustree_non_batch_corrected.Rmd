@@ -1,8 +1,10 @@
 ---
 title: "Clustree"
-author: "Natalie Elphick"
-date: "12/2/2021"
-output: html_document
+author: "Natalie Elphick, Laura Paez, Christina Zakarian"
+date: "Updated: `r format(Sys.time(), '%d/%m/%y')`"
+output:  
+  prettydoc::html_pretty:
+    theme: cayman
 ---
 
 ```{r setup, include=FALSE}
@@ -59,8 +61,8 @@ combined.sct = ScaleData(combined.sct)
 
 combined.sct = RunPCA(combined.sct, features = VariableFeatures(object = combined.sct))
 #combined.sct = RunPCA(combined.sct, npcs = 25, verbose = FALSE)
-combined.sct = RunUMAP(combined.sct, reduction = "pca", dims = 1:25)
-combined.sct= FindNeighbors(combined.sct, reduction = "pca", dims = 1:25)
+combined.sct = RunUMAP(combined.sct, reduction = "pca", dims = 1:30)
+combined.sct= FindNeighbors(combined.sct, reduction = "pca", dims = 1:30)
 DimPlot(combined.sct, reduction = "umap", label = TRUE, repel = TRUE,pt.size = 1)
 ```
 

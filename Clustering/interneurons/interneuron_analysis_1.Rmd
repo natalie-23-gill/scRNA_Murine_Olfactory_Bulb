@@ -1,8 +1,10 @@
 ---
 title: "Interneuron Analysis"
-author: "Natalie Elphick"
-date: "12/30/2021"
-output: html_document
+author: "Natalie Elphick, Laura Paez, Christina Zakarian"
+date: "Updated: `r format(Sys.time(), '%d/%m/%y')`"
+output:  
+  prettydoc::html_pretty:
+    theme: cayman
 ---
 
 ```{r setup, include=FALSE,cache=TRUE}

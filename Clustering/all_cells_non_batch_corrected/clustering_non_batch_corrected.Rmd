@@ -1,16 +1,20 @@
 ---
-title: "Visualizing All Cells Using Uncorr"
-author: "Natalie Elphick"
-date: "11/27/2021"
-output: html_document
+title: "Visualizing All Cells Using Non Batch Corrected Workflow"
+author: "Natalie Elphick, Laura Paez, Christina Zakarian"
+date: "Updated: `r format(Sys.time(), '%m/%d/%y')`"
+output:  
+  prettydoc::html_pretty:
+    theme: cayman
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE,cache=TRUE}
 knitr::opts_chunk$set(echo = FALSE,
                       warning = FALSE,
                       message = FALSE,
-                      fig.width = 10,
-                      fig.height = 8)
+                      fig.width = 6,
+                      fig.height = 6,
+                      dpi = 375,
+                      dev = "png")
 library(tidyverse)
 library(Seurat)
 library(kableExtra)
@@ -76,8 +80,32 @@ combined.sct = FindClusters(combined.sct, resolution = 1.5)
 
 DimPlot(combined.sct, reduction = "umap", label = TRUE, repel = TRUE,pt.size = 1)
 
-#DimPlot(combined.sct, reduction = "umap", group.by = "timepoint")
 ```
+
+
+```{r}
+
+
+DefaultAssay(combined.sct) <- "RNA"
+
+all.markers <- FindAllMarkers(combined.sct,only.pos = TRUE,logfc.threshold = 0.25)%>%
+  filter(p_val_adj < 0.05)
+
+mgene_res <- all.markers %>%
+  filter(p_val_adj < 0.05) %>%
+  mutate(identity_score = (pct.1/pct.2)*avg_log2FC) %>%
+  inner_join(markergenes) %>%
+  group_by(cluster) %>%
+  top_n(n = 1,wt = identity_score)
+
+mgene_res_all <- all.markers %>%
+  filter(p_val_adj < 0.05) %>%
+  mutate(identity_score = (pct.1/pct.2)*avg_log2FC) %>%
+  inner_join(markergenes) %>%
+  group_by(cluster)
+
+```
+
 
 
 ```{r}
@@ -144,7 +172,10 @@ col_n <-set_names(plot_colors,levels(time_points))
 
 DimPlot(combined.sct,
         reduction = "umap",
-        repel = TRUE,pt.size = 1, group.by =  "timepoint",cols=col_n,order = rev(levels(time_points)))
+        repel = TRUE,pt.size = 1,
+        group.by =  "timepoint",
+        cols=col_n,
+        order = rev(levels(time_points)))
 
 combined.sct[["percent.olf"]] <- PercentageFeatureSet(combined.sct, pattern = "^Olfr")
 combined.sct[["percent.vmn"]] <- PercentageFeatureSet(combined.sct, pattern = "^Vmn")

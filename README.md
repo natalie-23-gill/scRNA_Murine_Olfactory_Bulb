@@ -1,6 +1,6 @@
 # Characterizing Interneuron Expression in the Developing Olfactory Bulb
 
-## Background  
+## Background   
 
 Interneurons are a diverse cell population and make up the majority of neurons in the body. They relay information between sensory and motor neurons, making them necessary for complex processing and response. Interneurons are indispensable for learning, memory, and cognition. Here we used single-cell RNA-sequencing data from the mouse olfactory bulb (OB) to identify cell types and investigated the  differences in gene expression  within the subpopulation  of interneurons across 10 developmental timepoints (E14, E18, P0, P3, P5, P7, P10, P14, P21, and Adult).
 
@@ -13,7 +13,7 @@ Interneurons are a diverse cell population and make up the majority of neurons i
 We performed 10x Genomics Cell Ranger 6.1.1 and kallisto \| bustools preprocessing to compare the resulting count matrices using the most recent ensembl release (104) of the mus musculus genome GRCm39. We then filtered the empty droplets from the kb count ouput and saved the outputs from both pipelines as RDS R objects for downstream comparison in Seurat. For additional documentation of the CellRanger or kallisto \| bustools preprocessing steps click the following links:   
 <a href="https://natalie-23-gill.github.io/scRNA_Murine_Olfactory_Bulb/Preprocessing/cellranger/cellranger.html">CellRanger</a>   
 <a href="https://natalie-23-gill.github.io/scRNA_Murine_Olfactory_Bulb/Preprocessing/kallisto_bustools/kallisto_bustools.html">kallisto \| bustools</a>   
-The results of comparing the preprocessing pipelines show kallisto \| bustools detects more genes across the time points and had higher percent alignment to the transcriptome than CellRanger across all of the time points, to view the results of the pipeline comparison click <a href="https://natalie-23-gill.github.io/scRNA_Murine_Olfactory_Bulb/Preprocessing/pipeline_comparison/pipeline_comparison.html">here</a>.
+The results of comparing the preprocessing pipelines show kallisto \| bustools detects more genes across the time points and had higher percent alignment to the transcriptome than CellRanger across all of the time points, to view the results of the pipeline comparison click the tab at the top of the page.   
   
 ### Clustering and Cell Type Identification   
 

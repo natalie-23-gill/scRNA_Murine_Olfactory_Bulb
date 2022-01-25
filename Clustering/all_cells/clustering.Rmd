@@ -1,8 +1,10 @@
 ---
-title: "Differential Expression"
-author: "Natalie Elphick"
-date: "11/27/2021"
-output: html_document
+title: "Clustering And Cell Type Identification"
+author: "Natalie Elphick, Laura Paez, Christina Zakarian"
+date: "Updated: `r format(Sys.time(), '%m/%d/%y')`"
+output:  
+  prettydoc::html_pretty:
+    theme: cayman
 ---
 
 ```{r setup, include=FALSE}
@@ -55,9 +57,9 @@ combined.sct$timepoint = factor(combined.sct$timepoint,levels = c("E14","E18","P
 ```{r}
 # Batch Corrected workflow for visualization and clustering
 DefaultAssay(combined.sct) = "integrated"
-combined.sct = RunPCA(combined.sct, npcs = 35, verbose = FALSE)
-combined.sct = RunUMAP(combined.sct, reduction = "pca", dims = 1:35)
-combined.sct= FindNeighbors(combined.sct, reduction = "pca", dims = 1:35)
+combined.sct = RunPCA(combined.sct, npcs = 30, verbose = FALSE)
+combined.sct = RunUMAP(combined.sct, reduction = "pca", dims = 1:30, verbose = FALSE)
+combined.sct= FindNeighbors(combined.sct, reduction = "pca", dims = 1:30, verbose = FALSE)
 
 ```
 
@@ -68,7 +70,7 @@ combined.sct= FindNeighbors(combined.sct, reduction = "pca", dims = 1:35)
 ```{r UMAP}
 
 
-combined.sct = FindClusters(combined.sct, resolution = 1.5)
+combined.sct = FindClusters(combined.sct, resolution = 1, verbose = FALSE)
 
 DimPlot(combined.sct, reduction = "umap", label = TRUE, repel = TRUE,pt.size = 1)
 

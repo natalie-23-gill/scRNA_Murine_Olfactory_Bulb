@@ -7,7 +7,6 @@ data/post_critical_interneurons.RDS
 data/pre_critical_interneurons.RDS
 data/interneurons_labeled.RDS
 Clustering/interneurons/interneuron_analysis_1_cache/
-Clustering/interneurons/interneuron_analysis_1_files/
 Clustering/all_cells/clustered_kb_res.8_25PC.rds
 Clustering/all_cells/clustered_kb_res.9_25PC.rds
 data/combined_kb_filtered.rds

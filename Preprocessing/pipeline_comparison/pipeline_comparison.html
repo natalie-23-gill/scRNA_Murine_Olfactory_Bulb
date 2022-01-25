@@ -39,13 +39,13 @@
 <section class="page-header">
 <h1 class="title toc-ignore project-name">Preprocessing Pipeline Comparison</h1>
 <h4 class="author project-author">Natalie Elphick, Laura Paez, Christina Zakarian</h4>
-<h4 class="date project-date">Updated: 01/24/22</h4>
+<h4 class="date project-date">Updated: 01/25/22</h4>
 </section>
 
 
 
 <section class="main-content">
-<p>In order to validate our choice of preprocessing pipeline we compared the count matrices from two commonly utilized scRNA-seq preprocessing pipelines CellRanger and kallisto | bustools. The main difference between these pipelines is while CellRanger uses the conventional splice aware aligner STAR, kallisto uses a pseudoalignment process. Pseudoalignment a rapid k-mer based algorithm that uses a de Bruijn Graph of the reference database to identify potential matches for a query sequence without actually aligning the whole query sequence and uses an expectation maximization (EM) algorithm to resolve multiply-mapped reads.</p>
+<p>In order to validate our choice of preprocessing pipeline we compared the count matrices from two commonly utilized scRNA-seq preprocessing pipelines CellRanger and kallisto | bustools. The main difference between these pipelines is while CellRanger uses the conventional splice aware aligner STAR, kallisto uses a pseudoalignment process. Pseudoalignment is a rapid k-mer based algorithm that uses a de Bruijn Graph of the reference database to identify potential matches for a query sequence without actually aligning the whole query sequence and uses an expectation maximization (EM) algorithm to resolve multiply-mapped reads.</p>
 <p>For additional documentation of how we installed and ran these pipelines click the following links:<br />
 <a href="https://natalie-23-gill.github.io/scRNA_Murine_Olfactory_Bulb/Preprocessing/cellranger/cellranger.html">CellRanger</a><br />
 <a href="https://natalie-23-gill.github.io/scRNA_Murine_Olfactory_Bulb/Preprocessing/kallisto_bustools/kallisto_bustools.html">kallisto | bustools</a></p>

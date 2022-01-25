@@ -12,8 +12,9 @@ knitr::opts_chunk$set(echo = TRUE,
                       warning = FALSE,
                       message = FALSE,
                       dev = "png",
-                      fig.width = 10,
-                      fig.height = 8)
+                      dpi = 400,
+                      fig.align = 'center',
+                      fig.topcaption = TRUE, fig.height = 5,fig.width = 6)
 library(tidyverse)
 library(Seurat)
 library(kableExtra)
@@ -52,12 +53,12 @@ interneurons = FindClusters(interneurons, resolution = .9)
 ```
 
 
-```{r interneuron_seurat_clusters}
-DimPlot(interneurons, reduction = "umap", label = TRUE, repel = TRUE,pt.size = 1)
+```{r interneuron_seurat_clusters, fig.cap="Figure 1. sNN Clusters for Interneuron Subset"}
+DimPlot(interneurons, reduction = "umap", label = TRUE, repel = TRUE,pt.size = .6)
 
 ```
 
-```{r interneuron_timepoints,dpi=400}
+```{r interneuron_timepoints,fig.cap="Figure 2. UMAP Grouped by Timepoint"}
 plot_colors = read_delim("../../data/palettes/interneuron_timepoint_pal.txt",
                          delim = "/n",col_names = F) %>% pull(X1)
 
@@ -70,14 +71,14 @@ DimPlot(interneurons,
         reduction = "umap",
         repel = TRUE,
         group.by = "timepoint",
-        pt.size = 2,
+        pt.size = .6,
         cols = col_n,order = rev(levels(time_points)))+
-  ggtitle(label = "")+ theme(legend.position = "none")
+  ggtitle(label = "")
 ```
 
 
 
-```{r}
+```{r,fig.cap="Figure 3. UMAP Grouped by Pre-Critical Period and Post-Critical Period "}
 
 pre.critical <- levels(time_points)[1:5]
 
@@ -117,16 +118,17 @@ write_csv(sig.markers, file = "sig_markers_1.csv")
 
 
 
-```{r}
+```{r, fig.cap="Figure 4. Heatmaps for First 5 Principle Components"}
 
 table(Idents(interneurons)) %>% kbl(col.names = c("Cluster","Cell Count")) %>% kable_minimal()
 
-DimHeatmap(interneurons, dims = 1:15, cells = 500, balanced = TRUE)
+DimHeatmap(interneurons, dims = 1:5, cells = 500, balanced = TRUE)
 
 ```
 
 
-```{r}
+```{r,fig.cap="Figure 5. Heatmaps for First 5 Principle Components"}
+
 DimPlot(interneurons, reduction = "pca", group.by = "timepoint",pt.size = 1)
 DimPlot(interneurons, reduction = "pca", group.by = "timepoint",pt.size = 1,dims=c(2,3))
 DimPlot(interneurons, reduction = "pca", group.by = "timepoint",pt.size = 1,dims=c(3,4))
@@ -134,15 +136,6 @@ DimPlot(interneurons, reduction = "pca", group.by = "timepoint",pt.size = 1,dims
 DimPlot(interneurons, reduction = "pca", group.by = "timepoint",pt.size = 1,dims=c(5,6))
 DimPlot(interneurons, reduction = "pca", group.by = "timepoint",pt.size = 1,dims=c(5,7))
 DimPlot(interneurons, reduction = "pca", group.by = "timepoint",pt.size = 1,dims=c(7,8))
-```
-
-
-```{r}
-interneurons[["percent.olf"]] <- PercentageFeatureSet(interneurons, pattern = "^Olfr")
-interneurons[["percent.vmn"]] <- PercentageFeatureSet(interneurons, pattern = "^Vmn")
-
-FeaturePlot(interneurons,features = "percent.olf",label = TRUE, repel = TRUE, min.cutoff = "q10", max.cutoff = "q90",pt.size = 1)
-FeaturePlot(interneurons,features = "percent.vmn",label = TRUE, repel = TRUE, min.cutoff = "q10", max.cutoff = "q90",pt.size = 1)
 ```
 
 

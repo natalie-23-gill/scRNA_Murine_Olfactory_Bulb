@@ -131,7 +131,7 @@ pipeline_comparison %>%
 
 ```
 
-In order to validate our choice of preprocessing pipeline we compared the count matrices from two commonly utilized scRNA-seq preprocessing pipelines CellRanger and kallisto | bustools. The main difference between these pipelines is while CellRanger uses the conventional splice aware aligner STAR, kallisto uses a pseudoalignment process. Pseudoalignment a rapid k-mer based algorithm that uses a de Bruijn Graph of the reference database to identify potential matches for a query sequence without actually aligning the whole query sequence and uses an expectation maximization (EM) algorithm to resolve multiply-mapped reads.
+In order to validate our choice of preprocessing pipeline we compared the count matrices from two commonly utilized scRNA-seq preprocessing pipelines CellRanger and kallisto | bustools. The main difference between these pipelines is while CellRanger uses the conventional splice aware aligner STAR, kallisto uses a pseudoalignment process. Pseudoalignment is a rapid k-mer based algorithm that uses a de Bruijn Graph of the reference database to identify potential matches for a query sequence without actually aligning the whole query sequence and uses an expectation maximization (EM) algorithm to resolve multiply-mapped reads.
 
    
    

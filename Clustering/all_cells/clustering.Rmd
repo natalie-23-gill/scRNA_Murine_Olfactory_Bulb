@@ -7,12 +7,13 @@ output:
     theme: cayman
 ---
 
-```{r setup, include=FALSE}
+```{r setup,cache=TRUE, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE,
                       warning = FALSE,
                       message = FALSE,
-                      fig.width = 10,
-                      fig.height = 10)
+                      dpi = 400,
+                      fig.align = 'center',
+                      fig.topcaption = TRUE, fig.height = 5,fig.width = 6)
 library(tidyverse)
 library(Seurat)
 library(kableExtra)
@@ -23,7 +24,7 @@ plan("multicore", workers = 4,future.seed=TRUE)
 set.seed(423)
 ```
 
-```{r}
+```{r Read in Data}
 #read in marker genes
 markergenes = read_tsv("../../data/ob_markergenes.tsv", col_names = FALSE) %>%
   rename(Cell_type = X1, gene = X2)
@@ -38,50 +39,44 @@ for (i in 1:nrow(markergenes)) {
   }
 }
 
-```
-
-
-```{r}
 combined.sct = readRDS("../../data/combined_kb_filtered.rds")
-
-
 
 # Set timepoint metadata to right order
 combined.sct$timepoint = factor(combined.sct$timepoint,levels = c("E14","E18","P0","P3","P5","P7","P10","P14","P21","Adult"))
 
-
-
 ```
+
 
 
 ```{r}
 # Batch Corrected workflow for visualization and clustering
 DefaultAssay(combined.sct) = "integrated"
+
 combined.sct = RunPCA(combined.sct, npcs = 30, verbose = FALSE)
+
 combined.sct = RunUMAP(combined.sct, reduction = "pca", dims = 1:30, verbose = FALSE)
+
 combined.sct= FindNeighbors(combined.sct, reduction = "pca", dims = 1:30, verbose = FALSE)
-
-```
-
-
-
-
-
-```{r UMAP}
-
-
 combined.sct = FindClusters(combined.sct, resolution = 1, verbose = FALSE)
 
-DimPlot(combined.sct, reduction = "umap", label = TRUE, repel = TRUE,pt.size = 1)
-
-#DimPlot(combined.sct, reduction = "umap", group.by = "timepoint")
 ```
 
-```{r}
+
+```{r UMAP, fig.cap = "Figure 1.kNN Clusters For All 10 Timepoints"}
+
+DimPlot(combined.sct,
+        reduction = "umap",
+        label = TRUE,
+        repel = TRUE,
+        pt.size = .5)
+
+```
+
+```{r Differential Expression}
 
 DefaultAssay(combined.sct) <- "RNA"
 
-all.markers <- FindAllMarkers(combined.sct,only.pos = TRUE,logfc.threshold = 0.25)%>%
+all.markers <- FindAllMarkers(combined.sct,only.pos = TRUE,logfc.threshold = 0.25) %>%
   filter(p_val_adj < 0.05)
 
 mgene_res <- all.markers %>%
@@ -98,16 +93,14 @@ mgene_res_all <- all.markers %>%
   group_by(cluster)
 
 write_csv(all.markers, file = "diff_exp_results_all_cells.csv")
-```
 
-```{r}
 found_celltypes <- mgene_res %>%
   select(Cell_type,cluster) %>% distinct()
 
 ```
 
 
-```{r}
+```{r Assign Cells}
 max_c <- levels(unique(combined.sct@meta.data$seurat_clusters)) %>% as.vector() %>% as.numeric() %>% max()
 min_c <- levels(unique(combined.sct@meta.data$seurat_clusters)) %>% as.vector() %>% as.numeric() %>% min()
 
@@ -116,10 +109,6 @@ clusters <- seq(min_c,max_c)
 cells_f <- found_celltypes$cluster %>% as.character() %>% as.numeric()
 
 unknown_clusters <- union(setdiff(cells_f,clusters),setdiff(clusters,cells_f))
-```
-
-```{r}
-
 
 assign_cells <-found_celltypes %>%
   rbind(tibble(Cell_type = "Unknown", cluster = factor(unknown_clusters)))
@@ -129,25 +118,43 @@ name_list <- set_names(assign_cells$Cell_type,assign_cells$cluster)
 
 combined.sct <- RenameIdents(combined.sct,name_list)
 
+saveRDS(combined.sct,"labeled_all_cells.rds")
+```
 
+```{r, fig.cap = "Figure 2. Cell Types Found Through DE"}
+# Read in palette for the cell type plot
 colors <- read_delim("../../data/palettes/all_cells_umap_pal.txt",delim = "/n",col_names = F) %>% pull(X1)
 
 colors <- sample(colors,size = length(unique(assign_cells$Cell_type)))
 
 col_n <-set_names(colors,unique(assign_cells$Cell_type))
 
-DimPlot(combined.sct, reduction = "umap", label = F, repel = TRUE,cols = col_n,pt.size = 1,label.size = 7)
-
-
-table(Idents(combined.sct)) %>% kbl(col.names = c("Cluster","Cell Count")) %>% kable_minimal()
-
+DimPlot(combined.sct,
+        reduction = "umap",
+        label = F,
+        repel = TRUE,
+        cols = col_n,pt.size = .5)
 ```
 
 
 ```{r}
-saveRDS(combined.sct,"labeled_all_cells.rds")
+table(Idents(combined.sct)) %>%
+  kbl(col.names = c("Cluster","Cell Count"),caption="Table 1. Cell Counts By Type") %>%
+  kable_minimal()
+```
 
 
+```{r, fig.cap = "Figure 3. UMAP Grouped by Timepoint"}
+DimPlot(combined.sct,
+        reduction = "umap",
+        label = TRUE,
+        repel = TRUE,
+        pt.size = .5,
+        group.by =  "timepoint")
+```
+
+
+```{r}
 pre.critical <- unique(combined.sct@meta.data["timepoint"]) %>% pull(timepoint) 
 
 pre.critical <- pre.critical[0:5]
@@ -157,13 +164,8 @@ combined.sct@meta.data <- combined.sct@meta.data %>%
                              "E14-P5",
                              "P7-Adult"))
 
-
-DimPlot(combined.sct, reduction = "umap", label = TRUE, repel = TRUE,pt.size = 1, group.by =  "timepoint")
-
 combined.sct[["percent.olf"]] <- PercentageFeatureSet(combined.sct, pattern = "^Olfr")
 combined.sct[["percent.vmn"]] <- PercentageFeatureSet(combined.sct, pattern = "^Vmn")
-
-
 
 ```
 

@@ -91,6 +91,11 @@ This work benefited from access to the University of Oregon high-performance com
 6. Bray, N. L., Pimentel, H., Melsted, P. & Pachter, L. Near-optimal probabilistic RNA-seq quantification. Nat Biotechnol 34, 525–527 (2016).  
 
 
+## Note:  
+
+The data for this project is part of ongioing research that has not been published yet so it has been removed from the repository.    
+
+
 ## Created: 10/07/2021
 ## Updated: 01/25/2022
 

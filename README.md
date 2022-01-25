@@ -8,7 +8,7 @@
 
 Interneurons are a diverse cell population that make up the majority of neurons in the body. They relay information between sensory and motor neurons, making them necessary for complex processing and response. Interneurons are indispensable for learning, memory, and cognition. The critical period is a short time period, closing 7 days after birth, where sensory inputs help shape a functional olfactory system. Perturbations targeting axon projections after the critical period disrupt olfactory map formation<sup>3, 5</sup>. Here we used single-cell RNA-sequencing (scRNA-Seq) data from the mouse olfactory bulb (OB) to identify cell types and conducted differential expression (DE) analysis in the interneuron subpopulation across 10 developmental timepoints, spanning embryonic (E14 and E18) and post-birth  (P0 to Adult) timepoints. 
 
-<br></br>
+
 
 ## Workflow 
 
@@ -19,14 +19,14 @@ OBs of mice from 10 timepoints were dissected and sequenced using scRNA-Seq usin
   
 ![Workflow Diagram](./assets/images/workflow.png)   
 
-<br></br>
+
 
 ## Results  
 
 
 
 
-<br></br>
+
 
 | Figure 1. UMAP of interneurons by timepoint.| 
 |:--:|
@@ -40,7 +40,7 @@ OBs of mice from 10 timepoints were dissected and sequenced using scRNA-Seq usin
 | ![Figure 2](Clustering/interneurons/P7_GO_analysis_files/figure-html/P7_GO-1.png) |
 | *Genes that were differentially overexpressed in the P7 cluster at least 2-fold on average (p < 0.01) were used for over representation analysis (ORA). The 20 terms with the most genes are shown here.*|
 
-<br></br>
+
 
 
 
@@ -49,7 +49,7 @@ OBs of mice from 10 timepoints were dissected and sequenced using scRNA-Seq usin
 
 A distinct sNN cluster identified as timepoint P7, the closing of the critical period, was isolated from the other interneuron clusters in the UMAP projecttion when grouped by timepoint. This subset of interneurons expresses genes associated with the exuberant axon growth and neuron migration associated with the closing of the critical period<sup>2</sup>. Future directions should identify genes associated with this distinct P7 cluster for targeted perturbation experiments.
 
-<br></br>
+
 ## Methods   
 
 
@@ -70,7 +70,7 @@ After running the kallisto \| bustools preprocessing pipeline, we filtered each 
 Differential expression was performed on the interneuron sNN clusters and genes that had at least 2-fold higher expression in the distinct P7 cluster (avgerage log2 fold change > 1, FDR adjusted p value < 0.01 and pct.1 > .5) were used for ORA with the R package clusterProfiler. The GO terms with p value < 0.01  and the highest gene counts are shown in Figure 2.  
 
 
-<br></br>
+#
 
 ## Acknowledgements   
 

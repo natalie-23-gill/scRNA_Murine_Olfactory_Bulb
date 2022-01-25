@@ -2,10 +2,27 @@
 
 ## Background   
 
-Interneurons are a diverse cell population and make up the majority of neurons in the body. They relay information between sensory and motor neurons, making them necessary for complex processing and response. Interneurons are indispensable for learning, memory, and cognition. Here we used single-cell RNA-sequencing data from the mouse olfactory bulb (OB) to identify cell types and investigated the  differences in gene expression  within the subpopulation  of interneurons across 10 developmental timepoints (E14, E18, P0, P3, P5, P7, P10, P14, P21, and Adult).
+Interneurons are a diverse cell population that make up the majority of neurons in the body. They relay information between sensory and motor neurons, making them necessary for complex processing and response. Interneurons are indispensable for learning, memory, and cognition. The critical period is a short time period, closing 7 days after birth, where sensory inputs help shape a functional olfactory system. Perturbations targeting axon projections after the critical period disrupt olfactory map formation<sup>3, 5</sup>. Here we used single-cell RNA-sequencing (scRNA-Seq) data from the mouse olfactory bulb (OB) to identify cell types and conducted differential expression (DE) analysis in the interneuron subpopulation across 10 developmental timepoints, spanning embryonic (E14 and E18) and post-birth  (P0 to Adult) timepoints.   
 
-![Workflow Diagram](./assets/images/workflow.png)
-   
+## Workflow    
+  
+  
+ OBs of mice from 10 timepoints were dissected and sequenced using scRNA-Seq using the 10X Chromium droplet based library preparation<sup>1</sup>. Data from merged technical replicates was pseudoaligned <sup>4, 6</sup>. Clustering,  differential expression analysis, and cell type identification using marker genes was performed on 37,730 cells, followed by additional analysis on the subset of 19,554 interneuron cells.    
+
+  
+![Workflow Diagram](./assets/images/workflow.png)   
+
+
+
+## Results   
+
+![Figure 1](Clustering\interneurons\interneuron_analysis_1_files\figure-html\interneuron_timepoints-1.png)  
+
+
+![Figure 2](Clustering\interneurons\P7_GO_analysis_files\figure-html\P7_GO-1.png)
+
+
+
 ## Methods   
 
 ### Preprocessing  

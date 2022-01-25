@@ -70,7 +70,7 @@ After running the kallisto \| bustools preprocessing pipeline, we filtered each 
 Differential expression was performed on the interneuron sNN clusters and genes that had at least 2-fold higher expression in the distinct P7 cluster (avgerage log2 fold change > 1, FDR adjusted p value < 0.01 and pct.1 > .5) were used for ORA with the R package clusterProfiler. The GO terms with p value < 0.01  and the highest gene counts are shown in Figure 2.  
 
 
-#
+
 
 ## Acknowledgements   
 

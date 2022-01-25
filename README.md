@@ -25,8 +25,8 @@ After running the kallisto \| bustools preprocessing pipeline, we filtered each 
 
 ## Acknowledgements   
 
-Thank you to Dr. Ron Yu, Max Hills, and Annie Wang of the Yu Lab at Stowers Institute for Medical Research.   
-Our BGMP instructors: Pete Batzel, Dr. Leslie Coonrod, Dr. Stacey Wagner, and Jason Sydes.   
+Thank you to Dr. Ron Yu, Max Hills, and Annie Wang of the Yu Lab at the Stowers Institute for Medical Research.   
+Instructors at the Knight Campus Graduate Internship Program Bioinformatics Track at the University of Oregon: Pete Batzel, Dr. Leslie Coonrod, Dr. Stacey Wagner, and Jason Sydes.   
 This work benefited from access to the University of Oregon high performance computing cluster, Talapas.   
   
 ## References   

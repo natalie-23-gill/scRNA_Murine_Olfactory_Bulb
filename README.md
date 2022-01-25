@@ -4,14 +4,14 @@
 <br></br>
 
 ## Background   
-#
+
 
 Interneurons are a diverse cell population that make up the majority of neurons in the body. They relay information between sensory and motor neurons, making them necessary for complex processing and response. Interneurons are indispensable for learning, memory, and cognition. The critical period is a short time period, closing 7 days after birth, where sensory inputs help shape a functional olfactory system. Perturbations targeting axon projections after the critical period disrupt olfactory map formation<sup>3, 5</sup>. Here we used single-cell RNA-sequencing (scRNA-Seq) data from the mouse olfactory bulb (OB) to identify cell types and conducted differential expression (DE) analysis in the interneuron subpopulation across 10 developmental timepoints, spanning embryonic (E14 and E18) and post-birth  (P0 to Adult) timepoints. 
 
 <br></br>
 
 ## Workflow 
-#   
+
   
   
 OBs of mice from 10 timepoints were dissected and sequenced using scRNA-Seq using the 10X Chromium droplet based library preparation<sup>1</sup>. Data from merged technical replicates was pseudoaligned <sup>4, 6</sup>. Clustering,  differential expression analysis, and cell type identification using marker genes was performed on 37,730 cells, followed by additional analysis on the subset of 19,554 interneuron cells.    
@@ -22,7 +22,7 @@ OBs of mice from 10 timepoints were dissected and sequenced using scRNA-Seq usin
 <br></br>
 
 ## Results  
-#
+
 
 
 
@@ -43,7 +43,7 @@ OBs of mice from 10 timepoints were dissected and sequenced using scRNA-Seq usin
 <br></br>
 
 ## Methods   
-#
+
 
 ### Preprocessing  
 
@@ -65,7 +65,7 @@ Differential expression was performed on the interneuron sNN clusters and genes 
 <br></br>
 
 ## Acknowledgements   
-#
+
 
 Thank you to Dr. Ron Yu, Max Hills, and Annie Wang of the Yu Lab at the Stowers Institute for Medical Research, who provided the data and mentorship for this project.   
 
@@ -74,8 +74,7 @@ Our Instructors at the Knight Campus Graduate Internship Program Bioinformatics 
 This work benefited from access to the University of Oregon high-performance computing cluster, Talapas.   
    
   
-## References  
-# 
+## References   
 
 1. Zheng, G. X. Y. et al. Massively parallel digital transcriptional profiling of single cells. Nat Commun 8, 14049 (2017).  
 2. Wu, Y. et al. A Population of Navigator Neurons Is Essential for Olfactory Map Formation during the Critical Period. Neuron 100, 1066-1082.e6 (2018).  

@@ -5,9 +5,9 @@ account: czakarian
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 5382720
-bundleId: 5427814
+bundleId: 5507432
 url: https://czakarian.shinyapps.io/interactive_3d_umap_app/
-when: 1641172207.43105
-lastSyncTime: 1641172207.43108
+when: 1643139005.72058
+lastSyncTime: 1643139005.72062
 asMultiple: FALSE
 asStatic: FALSE

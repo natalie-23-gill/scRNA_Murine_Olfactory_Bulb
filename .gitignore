@@ -13,3 +13,5 @@ data/combined_kb_filtered.rds
 *cache*
 Clustering/all_cells/labeled_all_cells.rds
 data/labeled_all_cells.rds
+data/cr_rds/
+data/kb_rds/

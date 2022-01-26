@@ -1,5 +1,5 @@
 ## Characterizing Interneuron Expression in the Developing Olfactory Bulb  
-#### Contributors: Laura Paez, Natalie Elphick and Christina Zakarian  
+#### Contributors: Laura Paez, Natalie Elphick, and Christina Zakarian  
 
 
 

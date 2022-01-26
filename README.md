@@ -92,7 +92,7 @@ This work benefited from access to the University of Oregon high-performance com
 
 ## Notes:  
 
-The data used for this project is part of ongioing research that has not been published yet so it has been removed from the repository. This webpage and repository were created as to accomany a poster presented at the 2022 Genomics in Action conference at the University of Oregon. The original poster can be viewed by clicking <a href="https://natalie-23-gill.github.io/scRNA_Murine_Olfactory_Bulb/assets/images/scRNA_poster.jpg">here</a>.
+The data used for this project is part of ongioing research that has not been published yet so it has been removed from the repository. This webpage and repository were created to accomany a poster presented at the 2022 Genomics in Action conference at the University of Oregon. The original poster can be viewed by clicking <a href="https://natalie-23-gill.github.io/scRNA_Murine_Olfactory_Bulb/assets/images/scRNA_poster.jpg">here</a>.
 
 
 ## Created: 10/07/2021

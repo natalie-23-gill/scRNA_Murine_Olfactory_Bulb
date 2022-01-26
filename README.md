@@ -47,7 +47,7 @@ OBs of mice from 10 timepoints were dissected and sequenced using scRNA-Seq usin
 ## Conclusions   
 
 
-A distinct sNN cluster identified as timepoint P7, the closing of the critical period, was isolated from the other interneuron clusters in the UMAP projecttion when grouped by timepoint. This subset of interneurons expresses genes associated with the exuberant axon growth and neuron migration associated with the closing of the critical period<sup>2</sup>. Future directions should identify genes associated with this distinct P7 cluster for targeted perturbation experiments.
+A distinct sNN cluster identified as timepoint P7, the closing of the critical period, was isolated from the other interneuron clusters in the UMAP projection when grouped by timepoint. This subset of interneurons overexpresses genes associated with the axon growth, projection, and neuron migration which has previously been characterized during the closing of the critical period<sup>2</sup>. Future directions should identify genes associated with this distinct P7 cluster for targeted perturbation experiments.
 
 
 ## Methods   

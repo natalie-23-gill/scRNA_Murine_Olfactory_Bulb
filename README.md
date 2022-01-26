@@ -70,18 +70,6 @@ After running the kallisto \| bustools preprocessing pipeline, we filtered each 
 Differential expression was performed on the interneuron sNN clusters and genes that had at least 2-fold higher expression in the distinct P7 cluster (avgerage log2 fold change > 1, FDR adjusted p value < 0.01 and pct.1 > .5) were used for ORA with the R package clusterProfiler. The GO terms with p value < 0.01  and the highest gene counts are shown in Figure 2.  
 
 
-
-
-## Acknowledgements   
-
-
-Thank you to Dr. Ron Yu, Max Hills, and Annie Wang of the Yu Lab at the Stowers Institute for Medical Research, who provided the data and mentorship for this project.   
-
-Our Instructors at the Knight Campus Graduate Internship Program Bioinformatics Track at the University of Oregon: Pete Batzel, Dr. Leslie Coonrod, Dr. Stacey Wagner, and Jason Sydes.  
-
-This work benefited from access to the University of Oregon high-performance computing cluster, Talapas.   
-   
-  
 ## References   
 
 1. Zheng, G. X. Y. et al. Massively parallel digital transcriptional profiling of single cells. Nat Commun 8, 14049 (2017).  
@@ -91,10 +79,20 @@ This work benefited from access to the University of Oregon high-performance com
 5. Ma, L. et al. A developmental switch of axon targeting in the continuously regenerating mouse olfactory system. Science 344, 194–197 (2014).  
 6. Bray, N. L., Pimentel, H., Melsted, P. & Pachter, L. Near-optimal probabilistic RNA-seq quantification. Nat Biotechnol 34, 525–527 (2016).  
 
+## Acknowledgements   
 
-## Data Availability:  
 
-The data used for this project is part of ongioing research that has not been published yet so it has been removed from the repository.   
+Thank you to Dr. Ron Yu, Max Hills, and Annie Wang of the Yu Lab at the Stowers Institute for Medical Research, who provided the data and mentorship for this project.   
+
+Our Instructors at the Knight Campus Graduate Internship Program Bioinformatics Track at the University of Oregon: Pete Batzel, Dr. Leslie Coonrod, Dr. Stacey Wagner, and Jason Sydes.  
+
+This work benefited from access to the University of Oregon high-performance computing cluster, Talapas.   
+
+
+
+## Notes:  
+
+The data used for this project is part of ongioing research that has not been published yet so it has been removed from the repository. This webpage and repository were created as to accomany a poster presented at the 2022 Genomics in Action conference at the University of Oregon. The original poster can be viewed by clicking<a href="https://natalie-23-gill.github.io/scRNA_Murine_Olfactory_Bulb/assets/images/scRNA_poster.jpg">here</a>.
 
 
 ## Created: 10/07/2021

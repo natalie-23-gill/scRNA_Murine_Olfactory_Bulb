@@ -28,14 +28,14 @@ OBs of mice from 10 timepoints were dissected and sequenced using scRNA-Seq usin
 
 
 
-| Figure 1. UMAP of interneurons by timepoint.| 
+| Figure 1. UMAP of interneurons by timepoint | 
 |:--:|
 | ![Figure 1](Clustering/interneurons/interneuron_analysis_1_files/figure-html/interneuron_timepoints-1_arrow.png)   | 
 |  *Interneurons identified through DE analysis  were re-clustered and labeled by timepoint. Timepoints segregate between pre-critical (E14 to P5) and post-critical period (P7 to Adult). P7 has a distinct shared nearest neighbor (sNN) cluster (arrow).* |
 
 &nbsp;
 
-| Figure 2. GO term analysis of overexpressed genes in the P7 cluster.| 
+| Figure 2. GO term analysis of overexpressed genes in the P7 cluster | 
 |:--:|
 | ![Figure 2](Clustering/interneurons/P7_GO_analysis_files/figure-html/P7_GO-1.png) |
 | *Genes that were differentially overexpressed in the P7 cluster at least 2-fold on average (p < 0.01) were used for over representation analysis (ORA). The 20 terms with the most genes are shown here.*|

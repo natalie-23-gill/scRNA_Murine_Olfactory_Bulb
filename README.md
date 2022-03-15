@@ -40,11 +40,12 @@ OBs of mice from 10 timepoints were dissected and sequenced using scRNA-Seq usin
 | ![Figure 2](Clustering/interneurons/P7_GO_KEGG_analysis_files/figure-html/GO_barplot_%20cluster5-1.png) |
 | *Genes that were differentially overexpressed in the P7 cluster at least 2-fold on average (p < 0.01) were used for over representation analysis (ORA). The 20 terms with the most genes are shown here.*|
 
+&nbsp;
 
 | Figure 3. KEGG Pathways overexpressed in the P7 cluster |  
 |:--:|
 | ![Figure 3](Clustering/interneurons/P7_GO_KEGG_analysis_files/figure-html/kegg_barplot_cluster5-1.png) |
-| *Genes that were differentially overexpressed in the P7 cluster (p<0.01) were used for over representation analysis (ORA).*|
+| *Genes that were differentially overexpressed in the P7 cluster (p<0.01) were used for over representation analysis (ORA). Not included in the original poster.*|
 
 
 ## Conclusions   
@@ -101,5 +102,5 @@ The data used for this project is part of ongioing research that has not been pu
 
 
 ## Created: 10/07/2021
-## Updated: 01/25/2022
+## Updated: 03/15/2022
 

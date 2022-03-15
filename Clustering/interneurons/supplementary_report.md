@@ -22,7 +22,7 @@
 
 &nbsp;
 
-| Figure 3 GO Term Axonogenesis Genes by Timepoint| 
+| Figure 3. GO Term Axonogenesis Genes by Timepoint| 
 |:--:|
 | ![Figure 3](./P7_GO_KEGG_analysis_files/figure-html/dotplot_GO_axonogeneis_timepoint-1.png) |
 | *There is clear higher average expression in P7 interneurons for GO axonogenesis genes with the exception of Auts2.*|
@@ -57,4 +57,4 @@
 | ![Figure 7](./P7_GO_KEGG_analysis_files/figure-html/dotplot_KEGG_axonGuidance_timepoint-1.png) |  
 | *The P7 interneurons have higher average expresssion across all of the genes in the axon guidance KEGG pathway.*|
 
-Genes involved in axonogenesis and RNA splicing have higher average expression in the P7 interneurons found through both KEGG pathway and GO term ORA . These results suggest that there may be P7 specific RNA splicing involved in the critical period of olfactory map formation.
+Genes involved in axonogenesis and RNA splicing have higher average expression in the P7 interneurons found through both KEGG pathway and GO term ORA. These results suggest that RNA splicing may play a role in axonogenesis and axon targeting of OSNs during the crtical perod of olfactory map formation.

@@ -1,0 +1,229 @@
+---
+title: "GO Term Analysis For P7 cluster"
+author: "Natalie Elphick, Laura Paez, Christina Zakarian"
+date: "Updated: `r format(Sys.time(), '%d/%m/%y')`"
+output:  
+  prettydoc::html_pretty:
+    theme: cayman
+---
+
+
+```{r setup,include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      warning = FALSE,
+                      message = FALSE,
+                      fig.width = 9,
+                      fig.height = 6,
+                      dev = "png", dpi = 400)
+library(tidyverse)
+library(Seurat)
+library(kableExtra)
+library(clusterProfiler)
+library(org.Mm.eg.db)
+library(AnnotationHub)
+
+
+```
+
+
+```{r,cache=TRUE}
+sig.markers<-read_csv("sig_markers_1.csv")
+```
+
+
+
+```{r GO_barplot_ cluster5}
+# genes in the P7 clusters that have a log2 fold change >= 1
+P7_genes_up  = sig.markers %>%
+  filter(cluster ==5 & avg_log2FC >=1 & pct.1 >= .5) 
+
+
+
+# Convert gene symbols to ENSEMBL
+geneconvert_up = bitr(P7_genes_up$gene, fromType="SYMBOL", toType="ENSEMBL", OrgDb="org.Mm.eg.db")
+
+df2 = P7_genes_up[P7_genes_up$gene %in% geneconvert_up$SYMBOL,]
+
+# Create a vector of the gene
+gene_list <- df2$avg_log2FC
+
+# Name vector with ENTREZ ids
+names(gene_list) <- geneconvert_up$ENSEMBL
+
+# omit any NA values 
+gene_list<-na.omit(gene_list)
+
+# sort the list in decreasing order (required for clusterProfiler)
+gene_list = sort(gene_list, decreasing = TRUE)
+
+
+go_enrich_up <- enrichGO(gene = geneconvert_up$ENSEMBL,
+                      OrgDb = org.Mm.eg.db,
+                      keyType = "ENSEMBL",
+                      pvalueCutoff = 0.01,
+                      ont = "BP",pAdjustMethod = "BH",readable = TRUE)
+
+go_enrich_up <- clusterProfiler::simplify(go_enrich_up)
+
+
+# Filter results, removing synonymous terms keeping the one with the the lowest p-value
+ up_res <-go_enrich_up@result #%>%
+#   as_tibble() %>%
+#   dplyr::select(Description,p.adjust,Count,GeneRatio,geneID,qvalue) %>%
+#   filter(p.adjust <0.01) %>%
+#   arrange(desc(Count)) %>%
+#   filter(Description != "RNA splicing, via transesterification reactions") %>%
+#   filter(Description != "RNA splicing, via transesterification reactions with bulged adenosine as nucleophile") %>%
+#   filter(Description != "regulation of mRNA processing") %>%
+#   filter(Description != "regulation of RNA splicing") %>%
+#   head(20)
+
+
+axon_genes_GO = go_enrich_up@result %>%
+  filter(Description == "axonogenesis") %>% pull(geneID) %>% strsplit(split = "/") %>% unlist()
+
+up_res %>%
+  filter(Count>5) %>%
+  ggplot(aes(y=reorder(Description,Count),x=Count))+
+  geom_bar(stat = "identity",fill="#C70039")+
+  ylab(label = "GO Term Description")+
+  xlab(label = "# of Genes")+
+  theme_light(base_size = 16)+
+  theme(legend.position = "none",axis.text=element_text(color="black"))
+
+
+
+```
+
+```{r GO_cnetplot_cluster5}
+cnetplot(go_enrich_up,node_label="gene",
+         showCategory = c("axonogenesis",
+                          "forebrain development",
+                          "neuron migration",
+                          "cytoskeleton-dependent intracellular transport",
+                          "RNA splicing",
+                          "vesicle localization","protein-containing complex localization"),
+         colorEdge=TRUE,
+         foldChange = gene_list,cex_gene=3)+
+  scale_color_gradient(low = "grey",high = "purple",name="avg log2-fold")
+```
+
+
+
+```{r kegg_barplot_cluster5}
+
+P7_genes_up  = sig.markers %>%
+  filter(cluster ==5 & avg_log2FC > 0) 
+
+geneconvert = bitr(P7_genes_up$gene, fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Mm.eg.db")
+
+# Create a new dataframe df2 which has only the genes which were successfully mapped using the bitr function above
+df2 = P7_genes_up[P7_genes_up$gene %in% geneconvert$SYMBOL,]
+
+# Create a vector of the gene unuiverse
+kegg_gene_list <- df2$avg_log2FC
+
+# Name vector with ENTREZ ids
+names(kegg_gene_list) <- geneconvert$ENTREZID
+
+# omit any NA values 
+kegg_gene_list<-na.omit(kegg_gene_list)
+
+# sort the list in decreasing order (required for clusterProfiler)
+kegg_gene_list = sort(kegg_gene_list, decreasing = TRUE)
+
+kegg_organism = "mmu"
+kk2 <- enrichKEGG(geneconvert$ENTREZID,pvalueCutoff = 0.05,
+                  organism = kegg_organism)
+
+
+
+kk2 <- setReadable(kk2,OrgDb="org.Mm.eg.db",keyType = "ENTREZID")
+
+
+up_res =kk2@result %>%
+  filter(p.adjust <0.05)
+
+
+up_res %>%
+  ggplot(aes(y=reorder(Description,Count),x=Count))+
+  geom_bar(stat = "identity",fill="#C70039")+
+  ylab(label = "KEGG Pathway Description")+
+  xlab(label = "# of Genes")+
+  theme_light(base_size = 16)+
+  theme(legend.position = "none",axis.text=element_text(color="black"))
+  
+
+axon_genes_kegg = kk2@result %>%
+  filter(p.adjust <0.05) %>%
+  filter(Description == "Axon guidance") %>% pull(geneID) %>% strsplit(split = "/") %>% unlist()
+
+
+```
+
+
+
+
+
+```{r kegg_cnetplot_cluster5}
+p1 <- cnetplot(kk2,node_label="gene",showCategory = c("Axon guidance","Lysine degradation",
+                                                      "mRNA surveillance pathway",
+                                                      "Nucleocytoplasmic transport",
+                                                      "RNA degradation","Spliceosome"),
+               foldChange = kegg_gene_list,
+               colorEdge=TRUE,cex_gene=4)+
+  scale_color_gradient(low = "grey",high = "purple",name="avg log2-fold")
+
+p1
+```
+
+
+
+
+
+```{r}
+interneurons <- readRDS("../../data/interneurons_labeled.RDS")
+
+DefaultAssay(interneurons) <- "RNA"
+```
+
+
+
+
+# Plot of Axonogeneis Genes from GO analyis
+
+```{r dotplot_GO_axonogeneis_timepoint}
+DotPlot(interneurons,features = axon_genes_GO,group.by = "timepoint",assay = "RNA",dot.min = .1,dot.scale = 15)+ theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+# Plot of RNA Splicing Genes from GO analysis
+
+```{r dotplot_GO_RNAsplicing_timepoint}
+plot_genes = go_enrich_up@result %>%
+  filter(Description == "RNA splicing") %>% pull(geneID) %>% strsplit(split = "/") %>% unlist()
+
+
+DotPlot(interneurons,features = plot_genes,group.by = "timepoint",dot.min = .1, dot.scale = 15)+ theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+
+# Plot of Axon guidance Genes from KEGG analyis
+
+```{r dotplot_KEGG_axonGuidance_timepoint}
+DotPlot(interneurons,features = axon_genes_kegg,group.by = "timepoint",dot.min = .1,dot.scale = 15)+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+
+```
+
+```{r}
+plot_genes = kk2@result %>%
+  filter(Description == "Spliceosome") %>% pull(geneID) %>% strsplit(split = "/") %>% unlist()
+
+
+DotPlot(interneurons,features = plot_genes,group.by = "timepoint",dot.min = .1, dot.scale = 15)+ theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+
+
+

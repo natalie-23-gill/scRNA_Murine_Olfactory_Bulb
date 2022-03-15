@@ -1,5 +1,5 @@
 ## Characterizing Interneuron Expression in the Developing Olfactory Bulb  
-#### Contributors: Laura Paez, Natalie Elphick, and Christina Zakarian  
+#### Contributors: Laura Paez, Natalie Elphick and Christina Zakarian  
 
 
 
@@ -37,17 +37,20 @@ OBs of mice from 10 timepoints were dissected and sequenced using scRNA-Seq usin
 
 | Figure 2. GO term analysis of overexpressed genes in the P7 cluster | 
 |:--:|
-| ![Figure 2](Clustering/interneurons/P7_GO_analysis_files/figure-html/P7_GO-1.png) |
+| ![Figure 2](Clustering/interneurons/P7_GO_KEGG_analysis_files/figure-html/GO_barplot_%20cluster5-1.png) |
 | *Genes that were differentially overexpressed in the P7 cluster at least 2-fold on average (p < 0.01) were used for over representation analysis (ORA). The 20 terms with the most genes are shown here.*|
 
 
-
+| Figure 3. KEGG Pathways overexpressed in the P7 cluster |  
+|:--:|
+| ![Figure 3](Clustering/interneurons/P7_GO_KEGG_analysis_files/figure-html/kegg_barplot_cluster5-1.png) |
+| *Genes that were differentially overexpressed in the P7 cluster (p<0.01) were used for over representation analysis (ORA).*|
 
 
 ## Conclusions   
 
 
-A distinct sNN cluster identified as timepoint P7, the closing of the critical period, was isolated from the other interneuron clusters in the UMAP projection when grouped by timepoint. This subset of interneurons overexpresses genes associated with the axon growth, projection, and neuron migration which has previously been characterized during the closing of the critical period<sup>2</sup>. Future directions should identify genes associated with this distinct P7 cluster for targeted perturbation experiments.
+A distinct sNN cluster identified as timepoint P7, the closing of the critical period, was isolated from the other interneuron clusters in the UMAP projection when grouped by timepoint. This subset of interneurons overexpresses genes associated with the axon growth, projection, and neuron migration which has previously been characterized during the closing of the critical period<sup>2</sup>. ORA of overexpressed genes using KEGG pathways resulted in terms and pathways related to axonogenesis and RNA splicing as well, these results can be viewed in the <a href="https://natalie-23-gill.github.io/scRNA_Murine_Olfactory_Bulb/Clustering/interneurons/supplementary_report.html">supplementary report</a>  .
 
 
 ## Methods   
@@ -70,14 +73,7 @@ After running the kallisto \| bustools preprocessing pipeline, we filtered each 
 Differential expression was performed on the interneuron sNN clusters and genes that had at least 2-fold higher expression in the distinct P7 cluster (avgerage log2 fold change > 1, FDR adjusted p value < 0.01 and pct.1 > .5) were used for ORA with the R package clusterProfiler. The GO terms with p value < 0.01  and the highest gene counts are shown in Figure 2.  
 
 
-## References   
 
-1. Zheng, G. X. Y. et al. Massively parallel digital transcriptional profiling of single cells. Nat Commun 8, 14049 (2017).  
-2. Wu, Y. et al. A Population of Navigator Neurons Is Essential for Olfactory Map Formation during the Critical Period. Neuron 100, 1066-1082.e6 (2018).  
-3. Tepe, B. et al. Single-Cell RNA-Seq of Mouse Olfactory Bulb Reveals Cellular Heterogeneity and Activity-Dependent Molecular Census of Adult-Born Neurons. Cell Rep 25, 2689-2703.e3 (2018).  
-4. Melsted, P. et al. Modular, efficient and constant-memory single-cell RNA-seq preprocessing. Nat Biotechnol 39, 813–818 (2021).  
-5. Ma, L. et al. A developmental switch of axon targeting in the continuously regenerating mouse olfactory system. Science 344, 194–197 (2014).  
-6. Bray, N. L., Pimentel, H., Melsted, P. & Pachter, L. Near-optimal probabilistic RNA-seq quantification. Nat Biotechnol 34, 525–527 (2016).  
 
 ## Acknowledgements   
 
@@ -87,12 +83,21 @@ Thank you to Dr. Ron Yu, Max Hills, and Annie Wang of the Yu Lab at the Stowers 
 Our Instructors at the Knight Campus Graduate Internship Program Bioinformatics Track at the University of Oregon: Pete Batzel, Dr. Leslie Coonrod, Dr. Stacey Wagner, and Jason Sydes.  
 
 This work benefited from access to the University of Oregon high-performance computing cluster, Talapas.   
+   
+  
+## References   
+
+1. Zheng, G. X. Y. et al. Massively parallel digital transcriptional profiling of single cells. Nat Commun 8, 14049 (2017).  
+2. Wu, Y. et al. A Population of Navigator Neurons Is Essential for Olfactory Map Formation during the Critical Period. Neuron 100, 1066-1082.e6 (2018).  
+3. Tepe, B. et al. Single-Cell RNA-Seq of Mouse Olfactory Bulb Reveals Cellular Heterogeneity and Activity-Dependent Molecular Census of Adult-Born Neurons. Cell Rep 25, 2689-2703.e3 (2018).  
+4. Melsted, P. et al. Modular, efficient and constant-memory single-cell RNA-seq preprocessing. Nat Biotechnol 39, 813–818 (2021).  
+5. Ma, L. et al. A developmental switch of axon targeting in the continuously regenerating mouse olfactory system. Science 344, 194–197 (2014).  
+6. Bray, N. L., Pimentel, H., Melsted, P. & Pachter, L. Near-optimal probabilistic RNA-seq quantification. Nat Biotechnol 34, 525–527 (2016).  
 
 
+## Data Availability:  
 
-## Notes  
-
-The data used for this project is part of ongioing research that has not been published yet so it has been removed from the repository. This webpage and repository were created to accomany a poster presented at the 2022 Genomics in Action conference at the University of Oregon. The original poster can be viewed by clicking <a href="https://natalie-23-gill.github.io/scRNA_Murine_Olfactory_Bulb/assets/images/scRNA_poster.jpg">here</a>.
+The data used for this project is part of ongioing research that has not been published yet so it has been removed from the repository.   
 
 
 ## Created: 10/07/2021
